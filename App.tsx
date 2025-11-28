@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Envelope } from './components/Envelope';
 import { Hero } from './components/Hero';
 import { Gallery } from './components/Gallery';
