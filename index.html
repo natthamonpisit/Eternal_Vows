@@ -14,7 +14,7 @@
           extend: {
             colors: {
               cream: '#F2EFE9',
-              gold: '#E3B336', /* Updated to Vibrant Gold */
+              gold: '#E3B336', /* Vibrant Gold */
               'gold-light': '#F3E5AB',
               charcoal: '#36454F',
               sage: '#8A9A5B',
@@ -76,14 +76,17 @@
   <script type="importmap">
 {
   "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
+    "vite": "https://aistudiocdn.com/vite@^7.2.4"
   }
 }
 </script>
 </head>
   <body class="bg-cream text-charcoal antialiased">
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
