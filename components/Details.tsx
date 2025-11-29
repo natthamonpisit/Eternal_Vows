@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 export const Details: React.FC = () => {
@@ -37,11 +38,11 @@ export const Details: React.FC = () => {
         
         {/* Header */}
         <div className="text-center mb-16 md:mb-24 space-y-4">
-          <h2 className="font-serif text-5xl md:text-7xl text-charcoal drop-shadow-sm text-gold-shine">The Schedule</h2>
+          <h2 className="font-serif text-5xl md:text-7xl text-cream drop-shadow-sm text-gold-shine">The Schedule</h2>
           <div className="flex items-center justify-center gap-4">
-            <div className="h-px w-8 md:w-12 bg-charcoal/30"></div>
-            <p className="font-sans text-charcoal/70 uppercase tracking-[0.25em] text-xs md:text-sm font-bold">Saturday, March 21st</p>
-            <div className="h-px w-8 md:w-12 bg-charcoal/30"></div>
+            <div className="h-px w-8 md:w-12 bg-cream/30"></div>
+            <p className="font-sans text-cream/70 uppercase tracking-[0.25em] text-xs md:text-sm font-bold">Saturday, March 21st</p>
+            <div className="h-px w-8 md:w-12 bg-cream/30"></div>
           </div>
         </div>
 
@@ -51,11 +52,14 @@ export const Details: React.FC = () => {
         */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-0 relative">
           
-          {/* Center Divider Line (Only visible on Large Desktop) */}
-          <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px -ml-px bg-gradient-to-b from-transparent via-gold/40 to-transparent z-10"></div>
+          {/* Center Divider Line (Only visible on Large Desktop) 
+              Updated color to charcoal/20 for better visibility against Old Rose background
+          */}
+          <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px -ml-px bg-gradient-to-b from-transparent via-cream/30 to-transparent z-10"></div>
 
           {/* Left Column: Schedule Timeline */}
-          <div className="relative flex flex-col justify-center lg:items-end lg:pr-12 pl-6 lg:pl-0">
+          {/* Reduced lg:pr-12 to lg:pr-5 to move content closer to the center line */}
+          <div className="relative flex flex-col justify-center lg:items-end lg:pr-5 pl-6 lg:pl-0">
             {/* Local Timeline Line (Mobile & Tablet) - Hidden on Desktop */}
             <div className="absolute left-[1.65rem] md:left-[2.15rem] top-4 bottom-4 w-px bg-gold/30 lg:hidden"></div> 
             
@@ -68,19 +72,19 @@ export const Details: React.FC = () => {
                   <div className="relative z-10">
                      {/* Connector Line for Desktop Mode (Right side aligned) */}
                      {idx !== events.length - 1 && (
-                       <div className="absolute left-1/2 top-10 bottom-[-4rem] w-px bg-gold/30 -ml-px hidden lg:block"></div>
+                       <div className="absolute left-1/2 top-10 bottom-[-4rem] w-px bg-cream/30 -ml-px hidden lg:block"></div>
                      )}
                      
-                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gold bg-old-rose flex items-center justify-center text-gold shadow-sm group-hover:bg-gold group-hover:text-white transition-colors duration-500 relative z-20">
+                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-cream/50 bg-old-rose flex items-center justify-center text-cream shadow-sm group-hover:bg-cream group-hover:text-old-rose transition-colors duration-500 relative z-20">
                         {event.icon}
                      </div>
                   </div>
 
-                  {/* Content */}
+                  {/* Content - Updated to Cream/White text for better visibility */}
                   <div className="pt-1 text-left flex-1">
-                    <span className="font-serif text-4xl md:text-5xl text-charcoal leading-none block mb-2">{event.time}</span>
-                    <h3 className="font-sans font-bold text-xs md:text-sm text-charcoal/80 uppercase tracking-widest mb-1">{event.title}</h3>
-                    <p className="font-serif text-charcoal/60 italic text-lg md:text-xl">{event.desc}</p>
+                    <span className="font-serif text-4xl md:text-5xl text-cream leading-none block mb-2">{event.time}</span>
+                    <h3 className="font-sans font-bold text-xs md:text-sm text-cream/90 uppercase tracking-widest mb-1">{event.title}</h3>
+                    <p className="font-serif text-cream/80 italic text-lg md:text-xl">{event.desc}</p>
                   </div>
 
                 </div>
@@ -90,8 +94,10 @@ export const Details: React.FC = () => {
 
           {/* Right Column: The Arch Map */}
           <div className="flex items-center justify-center lg:pl-12 pt-8 lg:pt-0">
-            {/* 3. Double Arch Frame Design with Responsive Width */}
-            <div className="relative drop-shadow-2xl w-full max-w-[360px]">
+            {/* 3. Double Arch Frame Design with Responsive Width 
+                Reduced max-w to 300px (was 360px)
+            */}
+            <div className="relative drop-shadow-2xl w-full max-w-[300px]">
                
                {/* Outer Black Arch - Responsive Width */}
                <div className="w-full aspect-[360/520] bg-charcoal rounded-t-[160px] md:rounded-t-[180px] rounded-b-xl p-3 md:p-4 flex flex-col relative shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
@@ -128,10 +134,10 @@ export const Details: React.FC = () => {
 
                </div>
                
-               {/* Location Text Below */}
+               {/* Location Text Below - Updated to match new theme */}
                <div className="text-center mt-8 md:mt-10">
-                  <h3 className="font-serif text-3xl md:text-4xl text-charcoal">Dalva le ville</h3>
-                  <p className="font-sans text-xs font-bold uppercase tracking-widest text-gold mt-2">Bangkok, Thailand</p>
+                  <h3 className="font-serif text-3xl md:text-4xl text-cream">Dalva le ville</h3>
+                  <p className="font-sans text-lg md:text-xl font-bold uppercase tracking-widest text-[#FFE5B4] drop-shadow-md mt-2">Bangkok, Thailand</p>
                </div>
 
             </div>

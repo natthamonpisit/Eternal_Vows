@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 
 interface EnvelopeProps {
@@ -87,48 +88,57 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
   return (
     <div className="w-full h-full bg-[#1a1a1a] flex items-center justify-center overflow-hidden relative">
       
-      {/* Layered Background Images */}
-      
-      {/* Layer 1: Closed */}
-      <div 
-        className={`absolute inset-0 bg-cover bg-center transition-none ${stage === 'closed' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-        style={{ backgroundImage: `url("${getUrl(CLOSED_ID)}")` }}
-      ></div>
-
-      {/* Layer 2: Half */}
-      <div 
-        className={`absolute inset-0 bg-cover bg-center transition-none ${stage === 'half' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-        style={{ backgroundImage: `url("${getUrl(HALF_ID)}")` }}
-      ></div>
-
-      {/* Layer 3: Open */}
-      <div 
-        className={`absolute inset-0 bg-cover bg-center transition-none ${stage === 'open' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-        style={{ backgroundImage: `url("${getUrl(OPEN_ID)}")` }}
-      ></div>
-
-
-      {/* Controls Container */}
-      <div className={`relative z-20 w-full h-full flex flex-col items-center justify-end pb-12 transition-opacity duration-300 ${stage !== 'closed' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      {/* 
+        Container ที่ล็อค Aspect Ratio 16:9 ให้ตรงกับรูปภาพซองจดหมาย 
+        ทำให้เราสามารถวางตำแหน่ง Text ได้แม่นยำ (Responsive Locking)
+      */}
+      <div className="relative w-full max-w-[177.78vh] aspect-[16/9] shadow-2xl">
         
-        {/* Invisible Click Area */}
-        <button 
-          onClick={handleSequence}
-          disabled={!imagesLoaded}
-          className="absolute inset-0 w-full h-full bg-transparent cursor-pointer z-20"
-          aria-label="Open Invitation"
-        ></button>
+        {/* Layer 1: Closed */}
+        <div 
+          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-none ${stage === 'closed' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+          style={{ backgroundImage: `url("${getUrl(CLOSED_ID)}")` }}
+        ></div>
 
-        {/* Text at the bottom */}
-        <div className="text-center pointer-events-none z-10 w-full px-4 mb-8">
-           <p className="text-white/90 font-serif italic text-2xl md:text-3xl animate-pulse tracking-wide drop-shadow-lg">
-             {imagesLoaded ? "Tap to open" : "Loading..."}
-           </p>
+        {/* Layer 2: Half */}
+        <div 
+          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-none ${stage === 'half' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+          style={{ backgroundImage: `url("${getUrl(HALF_ID)}")` }}
+        ></div>
+
+        {/* Layer 3: Open */}
+        <div 
+          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-none ${stage === 'open' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+          style={{ backgroundImage: `url("${getUrl(OPEN_ID)}")` }}
+        ></div>
+
+
+        {/* Controls Layer */}
+        <div className={`absolute inset-0 z-20 transition-opacity duration-300 ${stage !== 'closed' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          
+          {/* Invisible Click Area */}
+          <button 
+            onClick={handleSequence}
+            disabled={!imagesLoaded}
+            className="absolute inset-0 w-full h-full bg-transparent cursor-pointer"
+            aria-label="Open Invitation"
+          ></button>
+
+          {/* 
+              Text Positioned Relative to Image
+              top-[22%] positions it higher on the upper flap.
+          */}
+          <div className="absolute top-[22%] left-0 right-0 text-center px-4 pointer-events-none">
+             <p className="font-script text-3xl sm:text-4xl md:text-5xl text-white/80 drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)] animate-float">
+               {imagesLoaded ? "Tap to Open" : "Loading..."}
+             </p>
+          </div>
         </div>
+
       </div>
 
-      {/* Magical White Flash Overlay (Glitter Dust Effect) */}
-      <div className={`absolute inset-0 z-50 pointer-events-none flex items-center justify-center overflow-hidden transition-all duration-[1000ms] ease-out ${isWhiteFlash ? 'opacity-100' : 'opacity-0'}`}>
+      {/* Magical White Flash Overlay (Glitter Dust Effect) - Covers entire screen */}
+      <div className={`fixed inset-0 z-50 pointer-events-none flex items-center justify-center overflow-hidden transition-all duration-[1000ms] ease-out ${isWhiteFlash ? 'opacity-100' : 'opacity-0'}`}>
         
         {/* Base Cream/White Layer with Blur */}
         <div className="absolute inset-0 bg-[#FDFBF7] backdrop-blur-xl"></div>
@@ -136,7 +146,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
         {/* Misty/Glow Effect */}
         <div className={`absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,1)_0%,rgba(253,251,247,0.8)_60%,transparent_100%)] transition-transform duration-[1500ms] ease-out ${isWhiteFlash ? 'scale-150 opacity-100' : 'scale-50 opacity-0'}`}></div>
 
-        {/* Glitter Particles (แทนที่ดาวดวงใหญ่) */}
+        {/* Glitter Particles */}
         {isWhiteFlash && (
           <div className="absolute inset-0">
              {/* Center Light Burst */}

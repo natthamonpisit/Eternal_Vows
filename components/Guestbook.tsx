@@ -24,25 +24,65 @@ export const Guestbook: React.FC = () => {
   return (
     <section className="max-w-6xl mx-auto px-4">
       <div className="text-center mb-12">
-        <h2 className="font-serif text-5xl text-charcoal mb-4">Guestbook</h2>
-        <div className="flex justify-center gap-6 font-sans text-sm tracking-widest uppercase">
+        <h2 className="font-serif text-5xl text-charcoal mb-6">Guestbook</h2>
+        
+        {/* Navigation Tabs with Enhanced Visual Cue */}
+        <div className="flex justify-center gap-4 sm:gap-8 font-sans text-sm tracking-widest uppercase bg-white/50 p-2 rounded-full inline-block backdrop-blur-sm border border-gold/10 shadow-sm">
           <button 
             onClick={() => setActiveTab('wall')}
-            className={`pb-2 border-b-2 transition-colors ${activeTab === 'wall' ? 'border-gold text-charcoal' : 'border-transparent text-gray-400 hover:text-gold'}`}
+            className={`px-6 py-3 rounded-full transition-all duration-300 ${
+              activeTab === 'wall' 
+                ? 'bg-gold text-white shadow-md' 
+                : 'bg-transparent text-gray-500 hover:text-gold hover:bg-gold/5'
+            }`}
           >
             Live Wall
           </button>
           <button 
             onClick={() => setActiveTab('form')}
-            className={`pb-2 border-b-2 transition-colors ${activeTab === 'form' ? 'border-gold text-charcoal' : 'border-transparent text-gray-400 hover:text-gold'}`}
+            className={`px-6 py-3 rounded-full transition-all duration-300 flex items-center gap-2 group ${
+              activeTab === 'form' 
+                ? 'bg-charcoal text-white shadow-md' 
+                : 'bg-transparent text-gold font-bold hover:bg-gold/10'
+            }`}
           >
-            Leave a Wish
+            <span>Leave a Wish</span>
+            {/* Bouncing Pen Icon Effect */}
+            <svg 
+              className={`w-4 h-4 ${activeTab !== 'form' ? 'animate-bounce' : ''}`} 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
           </button>
         </div>
+        
+        {/* Helper Text below tabs */}
+        {activeTab === 'wall' && (
+           <p className="font-serif text-charcoal/40 italic text-sm mt-4 animate-fade-in">
+             Tap the button above or the card below to sign
+           </p>
+        )}
       </div>
 
       {activeTab === 'wall' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in pb-12">
+          
+          {/* 1. CTA Card (First Item) - "Write a Wish" Button */}
+          <div 
+            onClick={() => setActiveTab('form')}
+            className="bg-[#FAF9F6] p-6 rounded-lg border-2 border-dashed border-gold/40 flex flex-col items-center justify-center cursor-pointer group hover:bg-white hover:border-gold hover:shadow-lg transition-all min-h-[200px]"
+          >
+            <div className="w-14 h-14 rounded-full bg-gold/10 text-gold flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-gold group-hover:text-white transition-all duration-300">
+               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+            </div>
+            <h3 className="font-script text-2xl text-charcoal group-hover:text-gold transition-colors">Write your blessing</h3>
+            <p className="font-sans text-[10px] uppercase tracking-widest text-gray-400 mt-2 group-hover:text-gold/70">Join the celebration</p>
+          </div>
+
+          {/* Existing Wishes */}
           {wishes.map((wish, idx) => (
             <div key={idx} className="bg-white p-6 rounded-lg shadow-md border border-gray-100 break-inside-avoid transform transition hover:-translate-y-1 hover:shadow-lg">
               {wish.imageUrl && (
@@ -58,18 +98,13 @@ export const Guestbook: React.FC = () => {
               )}
               <p className="font-serif text-lg text-charcoal italic mb-4 leading-relaxed">"{wish.message}"</p>
               <div className="flex justify-between items-end border-t border-gray-100 pt-3">
-                <span className="font-sans font-bold text-xs uppercase text-gold tracking-wider">{wish.name}</span>
+                <span className="font-sans font-bold text-xs uppercase text-gold tracking-wider truncate max-w-[150px]">{wish.name}</span>
                 <span className="font-sans text-[10px] text-gray-400">
                   {new Date(wish.timestamp).toLocaleDateString()}
                 </span>
               </div>
             </div>
           ))}
-          {wishes.length === 0 && (
-            <div className="col-span-full text-center py-20 text-gray-400 font-serif italic bg-white/50 rounded-lg border border-dashed border-gray-300">
-              No wishes yet. Be the first to sign!
-            </div>
-          )}
         </div>
       ) : (
         <GuestbookForm onSuccess={() => {
@@ -204,7 +239,7 @@ const GuestbookForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
           <input 
             type="text" 
             required
-            className="w-full bg-white text-charcoal border-b-2 border-gray-200 py-2 px-3 focus:border-gold focus:outline-none font-serif text-lg transition-colors placeholder-gray-300"
+            className="w-full bg-white text-charcoal border-b-2 border-gray-200 py-2 px-3 focus:border-gold focus:outline-none font-serif text-lg transition-colors placeholder-gray-300 rounded-none"
             placeholder="e.g. Auntie May"
             value={name}
             onChange={e => setName(e.target.value)}

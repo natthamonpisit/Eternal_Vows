@@ -33,10 +33,10 @@ export const Hero: React.FC = () => {
 
   const TimeUnit = ({ value, label }: { value: number, label: string }) => (
     <div className="flex flex-col items-center mx-2 md:mx-4">
-      <span className="font-serif text-3xl sm:text-4xl md:text-5xl text-charcoal font-medium tabular-nums leading-none">
+      <span className="font-serif text-2xl sm:text-3xl md:text-4xl text-charcoal font-medium tabular-nums leading-none">
         {String(value).padStart(2, '0')}
       </span>
-      <span className="font-sans text-[10px] sm:text-xs text-gold uppercase tracking-[0.2em] mt-2">
+      <span className="font-sans text-[8px] sm:text-[10px] text-gold uppercase tracking-[0.2em] mt-1 sm:mt-2">
         {label}
       </span>
     </div>
@@ -48,7 +48,9 @@ export const Hero: React.FC = () => {
       <div className="absolute inset-0 opacity-40 pointer-events-none" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
 
       {/* Main Content Area - Top Aligned with Padding */}
-      <div className="pt-28 sm:pt-32 md:pt-40 animate-slide-up space-y-6 sm:space-y-8 max-w-5xl flex flex-col items-center relative z-10 w-full">
+      {/* Reduced padding-top to move content up and prevent overlap with bottom arrow */}
+      {/* Reduced space-y to bring Date/Location closer to Names */}
+      <div className="pt-20 sm:pt-24 md:pt-32 animate-slide-up space-y-2 sm:space-y-3 md:space-y-4 max-w-5xl flex flex-col items-center relative z-10 w-full">
         <div className="space-y-4 w-full">
           {/* Responsive Font Size for Header */}
           <p className="text-gold-shine font-sans tracking-[0.2em] uppercase text-sm sm:text-xl md:text-3xl font-bold">The Wedding Of</p>
@@ -60,7 +62,8 @@ export const Hero: React.FC = () => {
           </h1>
         </div>
 
-        <div className="flex flex-col items-center gap-4 sm:gap-6 w-full">
+        {/* Tightened gap to move time up */}
+        <div className="flex flex-col items-center gap-2 sm:gap-4 w-full">
           {/* Responsive Font Size for Date/Location */}
           <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-8 text-lg sm:text-2xl md:text-3xl lg:text-4xl font-serif text-charcoal/80">
             <span>March 21, 2026</span>
@@ -68,16 +71,17 @@ export const Hero: React.FC = () => {
             <span>Dalva le ville, Bangkok</span>
           </div>
           
-          <div className="w-12 sm:w-16 h-px bg-gold/30 my-2"></div>
+          {/* Reduced vertical margin for divider */}
+          <div className="w-12 sm:w-16 h-px bg-gold/30 my-1"></div>
 
-          {/* Countdown Timer */}
-          <div className="flex items-center justify-center mt-2 scale-90 sm:scale-100">
+          {/* Countdown Timer - Removed top margin to pull it closer */}
+          <div className="flex items-center justify-center mt-0 scale-90 sm:scale-100">
             <TimeUnit value={timeLeft.days} label="Days" />
-            <span className="font-serif text-2xl text-gold/50 -mt-4">:</span>
+            <span className="font-serif text-xl sm:text-2xl text-gold/50 -mt-3 sm:-mt-4">:</span>
             <TimeUnit value={timeLeft.hours} label="Hours" />
-            <span className="font-serif text-2xl text-gold/50 -mt-4">:</span>
+            <span className="font-serif text-xl sm:text-2xl text-gold/50 -mt-3 sm:-mt-4">:</span>
             <TimeUnit value={timeLeft.minutes} label="Minutes" />
-            <span className="font-serif text-2xl text-gold/50 -mt-4">:</span>
+            <span className="font-serif text-xl sm:text-2xl text-gold/50 -mt-3 sm:-mt-4">:</span>
             <TimeUnit value={timeLeft.seconds} label="Seconds" />
           </div>
         </div>
