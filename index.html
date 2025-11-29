@@ -13,11 +13,13 @@
         theme: {
           extend: {
             colors: {
-              cream: '#F2EFE9',
-              gold: '#E3B336', /* Vibrant Gold */
-              'gold-light': '#F3E5AB',
+              cream: '#FDFBF7', /* Cream Beige - Extra Light Shade */
+              gold: '#B78A7D', /* Rose Gold Accent */
+              'gold-light': '#EBCBC5', /* Light Rose/Copper Highlight */
               charcoal: '#36454F',
-              sage: '#8A9A5B',
+              sage: '#9EA996', /* Silver Sage Green */
+              'old-rose': '#C08E86', /* Muted Old Rose */
+              'taupe': '#CFC1B3', /* Warm Taupe */
             },
             fontFamily: {
               serif: ['"Cormorant Garamond"', 'serif'],
@@ -44,23 +46,26 @@
       }
     </script>
     <style>
+      html {
+        scroll-behavior: smooth;
+      }
       /* Custom scrollbar for webkit */
       ::-webkit-scrollbar {
         width: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #F2EFE9; 
+        background: #FDFBF7; 
       }
       ::-webkit-scrollbar-thumb {
-        background: #E3B336; 
+        background: #B78A7D; 
         border-radius: 4px;
       }
       body {
-        background-color: #F2EFE9;
+        background-color: #FDFBF7; /* Cream Beige Base - Extra Light */
       }
-      /* Metallic Gold Shine Effect */
+      /* Metallic Rose Gold Shine Effect */
       .text-gold-shine {
-        background: linear-gradient(to right, #B68D25, #E3B336, #F9E29C, #E3B336, #B68D25);
+        background: linear-gradient(to right, #8E5B50, #B78A7D, #EBCBC5, #B78A7D, #8E5B50);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;

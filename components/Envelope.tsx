@@ -38,7 +38,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
       size: `${Math.random() * 3 + 2}px`, // ขนาดเล็กๆ 2-5px เหมือนกลิตเตอร์
       delay: `${Math.random() * 500}ms`,
       duration: `${Math.random() * 1000 + 500}ms`,
-      color: Math.random() > 0.4 ? '#E3B336' : '#FFFFFF' // ผสมสีทองกับสีขาว
+      color: Math.random() > 0.4 ? '#B78A7D' : '#FFFFFF' // Rose Gold & White glitter
     }));
   }, []);
 
@@ -131,10 +131,10 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
       <div className={`absolute inset-0 z-50 pointer-events-none flex items-center justify-center overflow-hidden transition-all duration-[1000ms] ease-out ${isWhiteFlash ? 'opacity-100' : 'opacity-0'}`}>
         
         {/* Base Cream/White Layer with Blur */}
-        <div className="absolute inset-0 bg-[#F2EFE9] backdrop-blur-xl"></div>
+        <div className="absolute inset-0 bg-[#FDFBF7] backdrop-blur-xl"></div>
 
         {/* Misty/Glow Effect */}
-        <div className={`absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,1)_0%,rgba(242,239,233,0.8)_60%,transparent_100%)] transition-transform duration-[1500ms] ease-out ${isWhiteFlash ? 'scale-150 opacity-100' : 'scale-50 opacity-0'}`}></div>
+        <div className={`absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,1)_0%,rgba(253,251,247,0.8)_60%,transparent_100%)] transition-transform duration-[1500ms] ease-out ${isWhiteFlash ? 'scale-150 opacity-100' : 'scale-50 opacity-0'}`}></div>
 
         {/* Glitter Particles (แทนที่ดาวดวงใหญ่) */}
         {isWhiteFlash && (

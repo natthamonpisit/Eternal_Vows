@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Envelope } from './components/Envelope';
 import { Hero } from './components/Hero';
 import { Gallery } from './components/Gallery';
@@ -109,13 +109,22 @@ const FloatingCTA = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const element = document.getElementById('rsvp-section');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   if (!visible) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-40 md:hidden animate-fade-in">
       <a 
         href="#rsvp-section"
-        className="bg-gold text-white font-sans uppercase tracking-widest text-xs font-bold py-4 px-6 rounded-full shadow-xl hover:bg-yellow-600 transition-colors"
+        onClick={handleClick}
+        className="bg-gold text-white font-sans uppercase tracking-widest text-xs font-bold py-4 px-6 rounded-full shadow-xl hover:bg-yellow-600 transition-colors cursor-pointer"
       >
         RSVP Now
       </a>

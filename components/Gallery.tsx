@@ -26,11 +26,11 @@ export const Gallery: React.FC = () => {
   };
 
   return (
-    <section className="py-24 px-4 relative min-h-screen bg-cream/50">
-      <div className="text-center mb-16 animate-slide-up">
-        <p className="font-sans text-gold text-sm tracking-[0.3em] uppercase mb-4">Pre-Wedding Gallery</p>
+    <section className="py-16 md:py-24 px-4 relative min-h-screen bg-taupe/50">
+      <div className="text-center mb-12 md:mb-16 animate-slide-up">
+        <p className="font-sans text-gold text-xs md:text-sm tracking-[0.3em] uppercase mb-4">Pre-Wedding Gallery</p>
         <h2 className="font-serif text-5xl md:text-7xl text-charcoal mb-8 text-gold-shine">Our Moments</h2>
-        <div className="w-px h-16 bg-gold mx-auto"></div>
+        <div className="w-px h-12 md:h-16 bg-gold mx-auto"></div>
       </div>
 
       {loading ? (
@@ -40,8 +40,11 @@ export const Gallery: React.FC = () => {
         </div>
       ) : (
         <div className="max-w-7xl mx-auto">
-          {/* Mosaic Grid Layout */}
-          <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[200px] md:auto-rows-[280px] gap-2 md:gap-3 grid-flow-dense">
+          {/* Mosaic Grid Layout 
+              Refined columns for Tablet: md:grid-cols-4 might be too tight, but keeping it to maintain mosaic pattern integrity.
+              Adjusted auto-rows for responsiveness.
+          */}
+          <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[160px] md:auto-rows-[240px] lg:auto-rows-[280px] gap-2 md:gap-3 grid-flow-dense">
             {images.map((url, index) => (
               <GalleryItem 
                 key={index}
@@ -77,7 +80,7 @@ export const Gallery: React.FC = () => {
           <img 
             src={selectedImage} 
             alt="Full screen moment" 
-            className="max-w-full max-h-[90vh] object-contain shadow-2xl rounded-sm border-[8px] border-white"
+            className="max-w-full max-h-[90vh] object-contain shadow-2xl rounded-sm border-[4px] md:border-[8px] border-white"
             referrerPolicy="no-referrer"
           />
         </div>
@@ -99,12 +102,10 @@ const GalleryItem: React.FC<{
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        // Update visibility state based on intersection status every time
-        // This ensures animation replays when scrolling back
         setIsVisible(entry.isIntersecting);
       });
     }, {
-      threshold: 0.15, // Slightly higher threshold to avoid flickering
+      threshold: 0.15,
     });
 
     if (domRef.current) {
@@ -119,18 +120,17 @@ const GalleryItem: React.FC<{
   return (
     <div 
       ref={domRef}
-      className={`${gridClass} relative group cursor-pointer overflow-hidden rounded-sm transition-all duration-1000 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${
+      className={`${gridClass} relative group cursor-pointer overflow-hidden rounded-sm transition-all duration-[1200ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${
         isVisible 
-          ? 'opacity-100 translate-y-0' 
-          : 'opacity-0 translate-y-24'
+          ? 'opacity-100 translate-y-0 blur-0' 
+          : 'opacity-0 translate-y-32 blur-md'
       }`}
       onClick={onClick}
       style={{
-        transitionDelay: isVisible ? `${(index % 6) * 100}ms` : '0ms' // Only delay on enter
+        transitionDelay: isVisible ? `${(index % 6) * 100}ms` : '0ms'
       }}
     >
-      {/* Added border frame and shadow here */}
-      <div className="w-full h-full relative overflow-hidden bg-gray-100 border-[6px] border-white shadow-sm box-border">
+      <div className="w-full h-full relative overflow-hidden bg-gray-100 border-[3px] md:border-[6px] border-white shadow-sm box-border">
         <img 
           src={url} 
           alt={`Moment ${index + 1}`} 
