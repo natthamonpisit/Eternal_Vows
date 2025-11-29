@@ -55,7 +55,7 @@ export const Details: React.FC = () => {
           {/* Center Divider Line (Only visible on Large Desktop) 
               Updated color to charcoal/20 for better visibility against Old Rose background
           */}
-          <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px -ml-px bg-gradient-to-b from-transparent via-cream/30 to-transparent z-10"></div>
+          <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px -ml-px bg-gradient-to-b from-transparent via-charcoal/20 to-transparent z-10"></div>
 
           {/* Left Column: Schedule Timeline */}
           {/* Reduced lg:pr-12 to lg:pr-5 to move content closer to the center line */}
@@ -136,14 +136,44 @@ export const Details: React.FC = () => {
                
                {/* Location Text Below - Updated to match new theme */}
                <div className="text-center mt-8 md:mt-10">
-                  <h3 className="font-serif text-3xl md:text-4xl text-cream">Dalva le ville</h3>
-                  <p className="font-sans text-lg md:text-xl font-bold uppercase tracking-widest text-[#FFE5B4] drop-shadow-md mt-2">Bangkok, Thailand</p>
+                  <h3 className="font-serif text-3xl md:text-4xl text-[#F9E4B7] drop-shadow-md font-medium">Dalva le ville</h3>
+                  <p className="font-sans text-xl md:text-2xl font-bold uppercase tracking-widest text-[#F9E4B7] drop-shadow-md mt-2">Bangkok, Thailand</p>
                </div>
 
             </div>
           </div>
 
         </div>
+
+        {/* DRESS CODE SECTION */}
+        {/* Updated Background to Charcoal to contrast with Old Rose page and make swatches visible */}
+        <div className="mt-20 md:mt-24 py-12 bg-charcoal rounded-xl shadow-2xl text-center relative mx-4 md:mx-0">
+          <h3 className="font-serif text-4xl md:text-5xl text-gold-shine mb-4">Dress Code</h3>
+          <p className="font-sans text-sm md:text-base text-cream/80 uppercase tracking-[0.2em] mb-8 font-medium">
+            Old Rose • Gold • Sage Green • Earth Tones
+          </p>
+          
+          <div className="flex justify-center items-center gap-4 md:gap-8 flex-wrap">
+             {[
+               { color: '#C08E86', name: 'Old Rose' }, // Old Rose
+               { color: '#B78A7D', name: 'Gold' }, // Gold
+               { color: '#CFC1B3', name: 'Taupe' }, // Taupe
+               { color: '#9EA996', name: 'Sage' }, // Sage
+               { color: '#F3E5AB', name: 'Cream' }, // Cream - Adjusted to Vanilla Cream
+             ].map((swatch, i) => (
+               <div key={i} className="flex flex-col items-center gap-3 group">
+                 <div 
+                   className="w-12 h-12 md:w-16 md:h-16 rounded-full shadow-xl border-2 border-white/30 group-hover:scale-110 group-hover:border-white transition-all duration-300"
+                   style={{ backgroundColor: swatch.color }}
+                 ></div>
+                 <span className="font-sans text-[10px] uppercase tracking-wider text-cream/60 opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-6 whitespace-nowrap">
+                   {swatch.name}
+                 </span>
+               </div>
+             ))}
+          </div>
+        </div>
+
       </div>
     </section>
   );

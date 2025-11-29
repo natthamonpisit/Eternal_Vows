@@ -129,7 +129,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
               top-[22%] positions it higher on the upper flap.
           */}
           <div className="absolute top-[22%] left-0 right-0 text-center px-4 pointer-events-none">
-             <p className="font-script text-3xl sm:text-4xl md:text-5xl text-white/80 drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)] animate-float">
+             <p className="font-sans text-xs sm:text-sm md:text-lg tracking-[0.25em] uppercase font-bold text-white/80 drop-shadow-md animate-float">
                {imagesLoaded ? "Tap to Open" : "Loading..."}
              </p>
           </div>
