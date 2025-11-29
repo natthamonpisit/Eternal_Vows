@@ -6,6 +6,10 @@ export const Gallery: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  // Header Animation State
+  const [isHeaderVisible, setIsHeaderVisible] = useState(false);
+  const headerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const loadImages = async () => {
       const urls = await fetchGallery();
@@ -13,6 +17,25 @@ export const Gallery: React.FC = () => {
       setLoading(false);
     };
     loadImages();
+  }, []);
+
+  // Intersection Observer for Header Animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsHeaderVisible(true);
+          observer.disconnect(); // Animate only once
+        }
+      },
+      { threshold: 0.2 } // Trigger when 20% visible
+    );
+
+    if (headerRef.current) {
+      observer.observe(headerRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   // ฟังก์ชันคำนวณขนาดของแต่ละรูปตามลำดับ (Mosaic Pattern)
@@ -27,7 +50,14 @@ export const Gallery: React.FC = () => {
 
   return (
     <section className="py-16 md:py-24 px-4 relative min-h-screen bg-taupe/50">
-      <div className="text-center mb-12 md:mb-16 animate-slide-up">
+      <div 
+        ref={headerRef}
+        className={`text-center mb-12 md:mb-16 transition-all duration-[1200ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${
+          isHeaderVisible 
+            ? 'opacity-100 translate-y-0 blur-0' 
+            : 'opacity-0 translate-y-32 blur-md'
+        }`}
+      >
         <p className="font-sans text-gold text-xs md:text-sm tracking-[0.3em] uppercase mb-4">Pre-Wedding Gallery</p>
         <h2 className="font-serif text-5xl md:text-7xl text-charcoal mb-8 text-gold-shine">Our Moments</h2>
         <div className="w-px h-12 md:h-16 bg-gold mx-auto"></div>

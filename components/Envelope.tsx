@@ -159,7 +159,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
               Text Positioned Relative to Image
               Adjust position based on orientation if needed
           */}
-          <div className={`absolute left-0 right-0 text-center px-4 pointer-events-none ${isPortrait ? 'top-[35%]' : 'top-[22%]'}`}>
+          <div className={`absolute left-0 right-0 text-center px-4 pointer-events-none ${isPortrait ? 'top-[30%]' : 'top-[22%]'}`}>
              <p className="font-sans text-xs sm:text-sm md:text-lg tracking-[0.25em] uppercase font-bold text-white/90 drop-shadow-md animate-float">
                {imagesLoaded ? "Tap to Open" : "Loading..."}
              </p>

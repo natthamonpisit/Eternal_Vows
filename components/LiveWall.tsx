@@ -51,9 +51,9 @@ export const LiveWall: React.FC = () => {
                 key={`${idx}-${wish.timestamp}`} 
                 className="bg-white p-6 rounded-lg shadow-lg border border-gold/10 break-inside-avoid animate-fade-in flex flex-col"
               >
-                {/* Image Section */}
+                {/* Image Section - Enforced 1:1 Aspect Ratio */}
                 {wish.imageUrl && (
-                  <div className="mb-4 rounded-md overflow-hidden bg-gray-50 border border-gray-100 aspect-video relative group">
+                  <div className="mb-4 rounded-md overflow-hidden bg-gray-50 border border-gray-100 aspect-square relative group">
                     <img 
                       src={wish.imageUrl} 
                       alt="Guest memory" 

@@ -6,6 +6,7 @@ import { GuestWishes } from '../types';
 export const Guestbook: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'form' | 'wall'>('wall');
   const [wishes, setWishes] = useState<GuestWishes[]>([]);
+  const [currentWishIndex, setCurrentWishIndex] = useState(0);
 
   useEffect(() => {
     // Initial fetch
@@ -16,10 +17,22 @@ export const Guestbook: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Auto-rotate wishes every 3 seconds
+  useEffect(() => {
+    if (activeTab === 'wall' && wishes.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentWishIndex((prev) => (prev + 1) % wishes.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [activeTab, wishes.length]);
+
   const loadWishes = async () => {
     const data = await fetchWishes();
     setWishes(data);
   };
+
+  const currentWish = wishes.length > 0 ? wishes[currentWishIndex % wishes.length] : null;
 
   return (
     <section className="max-w-6xl mx-auto px-4">
@@ -61,50 +74,59 @@ export const Guestbook: React.FC = () => {
         
         {/* Helper Text below tabs */}
         {activeTab === 'wall' && (
-           <p className="font-serif text-charcoal/40 italic text-sm mt-4 animate-fade-in">
-             Tap the button above or the card below to sign
+           <p className="font-serif text-charcoal/60 italic text-lg md:text-xl mt-6 animate-fade-in">
+             {wishes.length > 1 ? "Wishes from our loved ones..." : "Tap the button above or the card below to sign"}
            </p>
         )}
       </div>
 
       {activeTab === 'wall' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in pb-12">
-          
-          {/* 1. CTA Card (First Item) - "Write a Wish" Button */}
-          <div 
-            onClick={() => setActiveTab('form')}
-            className="bg-[#FAF9F6] p-6 rounded-lg border-2 border-dashed border-gold/40 flex flex-col items-center justify-center cursor-pointer group hover:bg-white hover:border-gold hover:shadow-lg transition-all min-h-[200px]"
-          >
-            <div className="w-14 h-14 rounded-full bg-gold/10 text-gold flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-gold group-hover:text-white transition-all duration-300">
-               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-            </div>
-            <h3 className="font-script text-2xl text-charcoal group-hover:text-gold transition-colors">Write your blessing</h3>
-            <p className="font-sans text-[10px] uppercase tracking-widest text-gray-400 mt-2 group-hover:text-gold/70">Join the celebration</p>
-          </div>
-
-          {/* Existing Wishes */}
-          {wishes.map((wish, idx) => (
-            <div key={idx} className="bg-white p-6 rounded-lg shadow-md border border-gray-100 break-inside-avoid transform transition hover:-translate-y-1 hover:shadow-lg">
-              {wish.imageUrl && (
-                <div className="mb-4 rounded-md overflow-hidden h-48 w-full bg-gray-50 border border-gray-100">
-                  <img 
-                    src={wish.imageUrl} 
-                    alt="Guest upload" 
-                    className="w-full h-full object-cover" 
-                    referrerPolicy="no-referrer"
-                    loading="lazy"
-                  />
-                </div>
-              )}
-              <p className="font-serif text-lg text-charcoal italic mb-4 leading-relaxed">"{wish.message}"</p>
-              <div className="flex justify-between items-end border-t border-gray-100 pt-3">
-                <span className="font-sans font-bold text-xs uppercase text-gold tracking-wider truncate max-w-[150px]">{wish.name}</span>
-                <span className="font-sans text-[10px] text-gray-400">
-                  {new Date(wish.timestamp).toLocaleDateString()}
-                </span>
+        <div className="min-h-[400px] flex justify-center pb-12">
+          {wishes.length === 0 ? (
+            // Empty State: Show CTA Card centered
+            <div 
+              onClick={() => setActiveTab('form')}
+              className="w-full max-w-md bg-[#FAF9F6] p-6 rounded-lg border-2 border-dashed border-gold/40 flex flex-col items-center justify-center cursor-pointer group hover:bg-white hover:border-gold hover:shadow-lg transition-all min-h-[300px]"
+            >
+              <div className="w-14 h-14 rounded-full bg-gold/10 text-gold flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-gold group-hover:text-white transition-all duration-300">
+                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
               </div>
+              <h3 className="font-script text-2xl text-charcoal group-hover:text-gold transition-colors">Write your blessing</h3>
+              <p className="font-sans text-[10px] uppercase tracking-widest text-gray-400 mt-2 group-hover:text-gold/70">Join the celebration</p>
             </div>
-          ))}
+          ) : (
+            // Carousel: Show Single Wish Card
+            currentWish && (
+              <div 
+                key={`${currentWishIndex}-${currentWish.timestamp}`} 
+                className="w-full max-w-md bg-white p-6 rounded-lg shadow-xl border border-gray-100 animate-fade-in transition-all duration-700 hover:shadow-2xl"
+              >
+                {currentWish.imageUrl && (
+                  <div className="mb-6 rounded-md overflow-hidden aspect-square w-full bg-gray-50 border border-gray-100 relative shadow-inner">
+                    <img 
+                      src={currentWish.imageUrl} 
+                      alt="Guest upload" 
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[3000ms] hover:scale-110" 
+                      referrerPolicy="no-referrer"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+                <div className="text-center px-2">
+                  <div className="mb-4">
+                     <svg className="w-8 h-8 text-gold/20 mx-auto mb-2" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 13.1216 16 12.017 16H9C9.04875 12.2882 11.2359 10.3204 12.8225 9.7042L12.0833 7.79979C9.25625 8.89708 7 12.1932 7 16V21H14.017ZM21 21L21 18C21 16.8954 20.1046 16 19 16H15.9829C16.0317 12.2882 18.2189 10.3204 19.8054 9.7042L19.0662 7.79979C16.2392 8.89708 13.9829 12.1932 13.9829 16V21H21Z" /></svg>
+                     <p className="font-serif text-xl md:text-2xl text-charcoal italic leading-relaxed">"{currentWish.message}"</p>
+                  </div>
+                  <div className="flex flex-col items-center border-t border-gray-100 pt-4 mt-6">
+                    <span className="font-sans font-bold text-sm uppercase text-gold tracking-widest">{currentWish.name}</span>
+                    <span className="font-sans text-[10px] text-gray-400 mt-1">
+                      {new Date(currentWish.timestamp).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )
+          )}
         </div>
       ) : (
         <GuestbookForm onSuccess={() => {
