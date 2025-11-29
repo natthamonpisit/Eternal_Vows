@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 
 interface EnvelopeProps {
@@ -7,109 +6,141 @@ interface EnvelopeProps {
 
 export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
   // ---------------------------------------------------------------------------
-  // รหัสรูปภาพ Stop Motion Animation (จาก Google Drive ของพี่นัท)
+  // DESKTOP IMAGES (Horizontal 16:9)
   // ---------------------------------------------------------------------------
-  
-  // 1. รูปซองปิด (Closed)
-  const CLOSED_ID = "1TT6MKgz1RV70T1PmRj_I5QH49pbqQpxf"; 
+  const DESKTOP_CLOSED_ID = "1TT6MKgz1RV70T1PmRj_I5QH49pbqQpxf"; 
+  const DESKTOP_HALF_ID = "1QPx4ifFYd__PL9O_LJn-hBKkjNaDL451"; 
+  const DESKTOP_OPEN_ID = "1W0hljkGqWNVvBa1EpL4NcMXnHa1COYf4"; 
 
-  // 2. รูปซองเปิดครึ่งนึง (Half Open)
-  const HALF_ID = "1QPx4ifFYd__PL9O_LJn-hBKkjNaDL451"; 
-
-  // 3. รูปซองเปิดเกือบสุด (Fully Open)
-  const OPEN_ID = "1W0hljkGqWNVvBa1EpL4NcMXnHa1COYf4"; 
+  // ---------------------------------------------------------------------------
+  // MOBILE IMAGES (Vertical/Portrait)
+  // ---------------------------------------------------------------------------
+  const MOBILE_CLOSED_ID = "1KfTaVMYxnL0NXvYaG8h9huXtSPuLgFkc";
+  const MOBILE_HALF_ID = "1JGif_jjP3G602pJ-km_DfPSRZ7YfHyYu";
+  const MOBILE_OPEN_ID = "1v9smiaD_f3gKAMWKK1KGbg0Sp-axbqWf";
 
 
   // ---------------------------------------------------------------------------
   const getUrl = (id: string) => {
-    if (id.startsWith("REPLACE")) return "https://via.placeholder.com/1920x1080/e3b336/ffffff?text=Please+Insert+Image+ID";
     return `https://drive.google.com/thumbnail?id=${id}&sz=w1920`;
   };
 
   const [stage, setStage] = useState<'closed' | 'half' | 'open'>('closed');
   const [isWhiteFlash, setIsWhiteFlash] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  
+  // Detect Orientation
+  const [isPortrait, setIsPortrait] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerHeight > window.innerWidth;
+    }
+    return false;
+  });
 
-  // Pre-calculate glitter particles to avoid re-render jumps (Random dust effect)
+  useEffect(() => {
+    const handleResize = () => {
+      setIsPortrait(window.innerHeight > window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Determine which set of images to use
+  const currentImages = useMemo(() => {
+    if (isPortrait) {
+      return {
+        closed: MOBILE_CLOSED_ID,
+        half: MOBILE_HALF_ID,
+        open: MOBILE_OPEN_ID
+      };
+    }
+    return {
+      closed: DESKTOP_CLOSED_ID,
+      half: DESKTOP_HALF_ID,
+      open: DESKTOP_OPEN_ID
+    };
+  }, [isPortrait]);
+
+  // Pre-calculate glitter particles
   const glitterParticles = useMemo(() => {
     return Array.from({ length: 50 }).map((_, i) => ({
       id: i,
       top: `${Math.random() * 100}%`,
       left: `${Math.random() * 100}%`,
-      size: `${Math.random() * 3 + 2}px`, // ขนาดเล็กๆ 2-5px เหมือนกลิตเตอร์
+      size: `${Math.random() * 3 + 2}px`,
       delay: `${Math.random() * 500}ms`,
       duration: `${Math.random() * 1000 + 500}ms`,
-      color: Math.random() > 0.4 ? '#B78A7D' : '#FFFFFF' // Rose Gold & White glitter
+      color: Math.random() > 0.4 ? '#B78A7D' : '#FFFFFF'
     }));
   }, []);
 
-  // Preload Images
+  // Preload Images whenever orientation changes
   useEffect(() => {
-    const imageUrls = [getUrl(CLOSED_ID), getUrl(HALF_ID), getUrl(OPEN_ID)];
-    let loadedCount = 0;
+    setImagesLoaded(false);
+    const imageUrls = [
+      getUrl(currentImages.closed), 
+      getUrl(currentImages.half), 
+      getUrl(currentImages.open)
+    ];
     
+    let loadedCount = 0;
+    const checkLoaded = () => {
+      loadedCount++;
+      if (loadedCount === imageUrls.length) setImagesLoaded(true);
+    };
+
     imageUrls.forEach(url => {
       const img = new Image();
       img.src = url;
-      img.onload = () => {
-        loadedCount++;
-        if (loadedCount === imageUrls.length) setImagesLoaded(true);
-      };
-      img.onerror = () => {
-        loadedCount++;
-        if (loadedCount === imageUrls.length) setImagesLoaded(true);
-      };
+      img.onload = checkLoaded;
+      img.onerror = checkLoaded;
     });
-  }, []);
+  }, [currentImages]);
 
   const handleSequence = () => {
-    // จังหวะที่ 1: เปลี่ยนเป็นรูปเปิดครึ่ง
     setStage('half');
-
-    // เร่งจังหวะ Stop Motion ให้เร็วขึ้น (200ms)
     setTimeout(() => {
-      // จังหวะที่ 2: เปลี่ยนเป็นรูปเปิดสุด
       setStage('open');
-      
-      // เปิดสุดแล้วรอแป๊บเดียว (300ms) พอให้ตาเห็น แล้ววาบเลย
       setTimeout(() => {
-        // จังหวะที่ 3: จอขาววาบแบบฟุ้งๆ วิ้งๆ
         setIsWhiteFlash(true);
-        
-        // รอเอฟเฟกต์ทำงาน (1000ms) ให้เห็นวิ้งๆ ก่อน แล้วค่อยเข้าเว็บ
         setTimeout(() => {
           onOpen();
         }, 1000);
       }, 300);
-
     }, 200);
   };
 
   return (
-    <div className="w-full h-full bg-[#1a1a1a] flex items-center justify-center overflow-hidden relative">
+    <div className="w-full h-full flex items-center justify-center overflow-hidden relative bg-[#D5C7BC]">
       
       {/* 
-        Container ที่ล็อค Aspect Ratio 16:9 ให้ตรงกับรูปภาพซองจดหมาย 
-        ทำให้เราสามารถวางตำแหน่ง Text ได้แม่นยำ (Responsive Locking)
+         Responsive Container 
+         - Mobile/Portrait: w-full h-full (Fill Screen)
+         - Desktop/Landscape: aspect-[16/9] (Constrained Cinematic Ratio)
       */}
-      <div className="relative w-full max-w-[177.78vh] aspect-[16/9] shadow-2xl">
+      <div className={`relative transition-all duration-300 shadow-2xl z-10 
+        ${isPortrait 
+           ? 'w-full h-full' 
+           : 'w-full max-w-[177.78vh] aspect-[16/9]' 
+        }
+      `}>
         
         {/* Layer 1: Closed */}
         <div 
           className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-none ${stage === 'closed' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-          style={{ backgroundImage: `url("${getUrl(CLOSED_ID)}")` }}
+          style={{ backgroundImage: `url("${getUrl(currentImages.closed)}")` }}
         ></div>
 
         {/* Layer 2: Half */}
         <div 
           className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-none ${stage === 'half' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-          style={{ backgroundImage: `url("${getUrl(HALF_ID)}")` }}
+          style={{ backgroundImage: `url("${getUrl(currentImages.half)}")` }}
         ></div>
 
         {/* Layer 3: Open */}
         <div 
           className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-none ${stage === 'open' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-          style={{ backgroundImage: `url("${getUrl(OPEN_ID)}")` }}
+          style={{ backgroundImage: `url("${getUrl(currentImages.open)}")` }}
         ></div>
 
 
@@ -126,10 +157,10 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
 
           {/* 
               Text Positioned Relative to Image
-              top-[22%] positions it higher on the upper flap.
+              Adjust position based on orientation if needed
           */}
-          <div className="absolute top-[22%] left-0 right-0 text-center px-4 pointer-events-none">
-             <p className="font-sans text-xs sm:text-sm md:text-lg tracking-[0.25em] uppercase font-bold text-white/80 drop-shadow-md animate-float">
+          <div className={`absolute left-0 right-0 text-center px-4 pointer-events-none ${isPortrait ? 'top-[35%]' : 'top-[22%]'}`}>
+             <p className="font-sans text-xs sm:text-sm md:text-lg tracking-[0.25em] uppercase font-bold text-white/90 drop-shadow-md animate-float">
                {imagesLoaded ? "Tap to Open" : "Loading..."}
              </p>
           </div>
@@ -137,22 +168,14 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
 
       </div>
 
-      {/* Magical White Flash Overlay (Glitter Dust Effect) - Covers entire screen */}
+      {/* Magical White Flash Overlay (Glitter Dust Effect) */}
       <div className={`fixed inset-0 z-50 pointer-events-none flex items-center justify-center overflow-hidden transition-all duration-[1000ms] ease-out ${isWhiteFlash ? 'opacity-100' : 'opacity-0'}`}>
-        
-        {/* Base Cream/White Layer with Blur */}
         <div className="absolute inset-0 bg-[#FDFBF7] backdrop-blur-xl"></div>
-
-        {/* Misty/Glow Effect */}
         <div className={`absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,1)_0%,rgba(253,251,247,0.8)_60%,transparent_100%)] transition-transform duration-[1500ms] ease-out ${isWhiteFlash ? 'scale-150 opacity-100' : 'scale-50 opacity-0'}`}></div>
 
-        {/* Glitter Particles */}
         {isWhiteFlash && (
           <div className="absolute inset-0">
-             {/* Center Light Burst */}
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vmax] h-[120vmax] bg-white opacity-80 blur-3xl animate-pulse"></div>
-             
-             {/* Generate 50 glitter particles */}
              {glitterParticles.map((p) => (
                 <div 
                   key={p.id}

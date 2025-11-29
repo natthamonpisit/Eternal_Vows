@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export const Details: React.FC = () => {
@@ -8,7 +7,12 @@ export const Details: React.FC = () => {
       title: "Buddhist Alms Giving", 
       desc: "Morning Blessing",
       icon: (
-        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+        // Lotus Icon for Buddhism
+        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4c-2 3-4 6-4 9 0 2 2 3 4 3s4-1 4-3c0-3-2-6-4-9z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 13c-2 0-3 1-3 3 0 2 2 3 4 3" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 13c2 0 3 1 3 3 0 2-2 3-4 3" />
+        </svg>
       )
     },
     { 
@@ -16,7 +20,13 @@ export const Details: React.FC = () => {
       title: "Wedding Ceremony", 
       desc: "Engagement & Vows",
       icon: (
-        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        // Diamond Ring Icon
+        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7l3-4 3 4H9z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7l3 3 3-3" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 10a6 6 0 100 12 6 6 0 000-12z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v7" />
+        </svg>
       )
     },
     { 
@@ -146,27 +156,28 @@ export const Details: React.FC = () => {
         </div>
 
         {/* DRESS CODE SECTION */}
-        {/* Updated Background to Charcoal to contrast with Old Rose page and make swatches visible */}
-        <div className="mt-20 md:mt-24 py-12 bg-charcoal rounded-xl shadow-2xl text-center relative mx-4 md:mx-0">
+        {/* Changed background from charcoal to white/95 to resolve "dark black area" complaint on mobile */}
+        <div className="mt-20 md:mt-24 py-12 bg-white/95 backdrop-blur-sm rounded-xl shadow-xl text-center relative mx-4 md:mx-0 border border-white/40">
           <h3 className="font-serif text-4xl md:text-5xl text-gold-shine mb-4">Dress Code</h3>
-          <p className="font-sans text-sm md:text-base text-cream/80 uppercase tracking-[0.2em] mb-8 font-medium">
+          {/* Changed text color to charcoal since background is now light */}
+          <p className="font-sans text-sm md:text-base text-charcoal/70 uppercase tracking-[0.2em] mb-8 font-medium">
             Old Rose • Gold • Sage Green • Earth Tones
           </p>
           
-          <div className="flex justify-center items-center gap-4 md:gap-8 flex-wrap">
+          <div className="flex justify-center items-start gap-4 md:gap-8 flex-wrap px-2">
              {[
-               { color: '#C08E86', name: 'Old Rose' }, // Old Rose
-               { color: '#B78A7D', name: 'Gold' }, // Gold
-               { color: '#CFC1B3', name: 'Taupe' }, // Taupe
-               { color: '#9EA996', name: 'Sage' }, // Sage
-               { color: '#F3E5AB', name: 'Cream' }, // Cream - Adjusted to Vanilla Cream
+               { color: '#C08E86', name: 'Old Rose' }, 
+               { color: '#B78A7D', name: 'Gold' }, 
+               { color: '#CFC1B3', name: 'Taupe' }, 
+               { color: '#9EA996', name: 'Sage' }, 
+               { color: '#FDF6E4', name: 'Cream' }, // Updated Cream to #FDF6E4 (Whiter/Creamier)
              ].map((swatch, i) => (
-               <div key={i} className="flex flex-col items-center gap-3 group">
+               <div key={i} className="flex flex-col items-center gap-2 group w-20 sm:w-24">
                  <div 
-                   className="w-12 h-12 md:w-16 md:h-16 rounded-full shadow-xl border-2 border-white/30 group-hover:scale-110 group-hover:border-white transition-all duration-300"
+                   className="w-12 h-12 md:w-16 md:h-16 rounded-full shadow-md border border-gray-200 group-hover:scale-110 group-hover:shadow-xl transition-all duration-300"
                    style={{ backgroundColor: swatch.color }}
                  ></div>
-                 <span className="font-sans text-[10px] uppercase tracking-wider text-cream/60 opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-6 whitespace-nowrap">
+                 <span className="font-sans text-[10px] uppercase tracking-wider text-charcoal/60 group-hover:text-charcoal transition-colors whitespace-nowrap font-semibold">
                    {swatch.name}
                  </span>
                </div>
