@@ -132,7 +132,12 @@ const GalleryItem: React.FC<{
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        setIsVisible(entry.isIntersecting);
+        // Trigger only ONCE when intersecting
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          // Disconnect observer immediately to prevent re-triggering/flickering on scroll events
+          observer.disconnect();
+        }
       });
     }, {
       threshold: 0.15,
@@ -143,7 +148,7 @@ const GalleryItem: React.FC<{
     }
 
     return () => {
-      if (domRef.current) observer.disconnect();
+      observer.disconnect();
     };
   }, []);
 
