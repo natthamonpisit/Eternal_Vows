@@ -38,16 +38,30 @@
                 '100%': { opacity: '1' },
               },
               slideUp: {
-                '0%': { transform: 'translateY(20px)', opacity: '0' },
-                '100%': { transform: 'translateY(0)', opacity: '1' },
+                '0%': { transform: 'translate3d(0, 20px, 0)', opacity: '0' }, /* Hardware accelerated */
+                '100%': { transform: 'translate3d(0, 0, 0)', opacity: '1' },
               },
               float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-10px)' },
+                '0%, 100%': { transform: 'translate3d(0, 0, 0)' },
+                '50%': { transform: 'translate3d(0, -10px, 0)' },
               }
             }
           },
         },
+        plugins: [
+          function({ addUtilities }) {
+            const newUtilities = {
+              '.backface-hidden': {
+                'backface-visibility': 'hidden',
+                '-webkit-backface-visibility': 'hidden',
+              },
+              '.transform-style-3d': {
+                'transform-style': 'preserve-3d',
+              }
+            }
+            addUtilities(newUtilities)
+          }
+        ]
       }
     </script>
     <style>
@@ -90,7 +104,8 @@
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
-    "vite": "https://aistudiocdn.com/vite@^7.2.4"
+    "vite": "https://aistudiocdn.com/vite@^7.2.4",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0"
   }
 }
 </script>

@@ -8,6 +8,7 @@ import { RsvpForm } from './components/RsvpForm';
 import { Guestbook } from './components/Guestbook';
 import { Footer } from './components/Footer';
 import { LiveWall } from './components/LiveWall';
+import { ChatWidget } from './components/ChatWidget';
 
 export default function App() {
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false);
@@ -82,7 +83,11 @@ export default function App() {
 
         <Footer />
 
+        {/* AI Wedding Concierge */}
+        <ChatWidget />
+
         {/* Floating RSVP Button (Mobile Only) if not scrolled to RSVP yet */}
+        {/* Adjusted bottom position to not overlap with ChatWidget */}
         <FloatingCTA />
       </div>
     </div>
@@ -120,11 +125,11 @@ const FloatingCTA = () => {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 md:hidden animate-fade-in">
+    <div className="fixed bottom-6 left-6 z-40 md:hidden animate-fade-in">
       <a 
         href="#rsvp-section"
         onClick={handleClick}
-        className="bg-gold text-white font-sans uppercase tracking-widest text-xs font-bold py-4 px-6 rounded-full shadow-xl hover:bg-yellow-600 transition-colors cursor-pointer"
+        className="bg-charcoal text-white font-sans uppercase tracking-widest text-[10px] font-bold py-3 px-5 rounded-full shadow-xl hover:bg-black transition-colors cursor-pointer border border-white/20"
       >
         RSVP Now
       </a>

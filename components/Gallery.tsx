@@ -52,7 +52,7 @@ export const Gallery: React.FC = () => {
     <section className="py-16 md:py-24 px-4 relative min-h-screen bg-taupe/50">
       <div 
         ref={headerRef}
-        className={`text-center mb-12 md:mb-16 transition-all duration-[1200ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${
+        className={`text-center mb-12 md:mb-16 will-change-transform transform-gpu backface-hidden transition-all duration-[1200ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${
           isHeaderVisible 
             ? 'opacity-100 translate-y-0 blur-0' 
             : 'opacity-0 translate-y-32 blur-md'
@@ -155,7 +155,7 @@ const GalleryItem: React.FC<{
   return (
     <div 
       ref={domRef}
-      className={`${gridClass} relative group cursor-pointer overflow-hidden rounded-sm transition-all duration-[1200ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${
+      className={`${gridClass} relative group cursor-pointer overflow-hidden rounded-sm will-change-transform transform-gpu backface-hidden transition-all duration-[1200ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${
         isVisible 
           ? 'opacity-100 translate-y-0 blur-0' 
           : 'opacity-0 translate-y-32 blur-md'
