@@ -9,6 +9,7 @@ import { Guestbook } from './components/Guestbook';
 import { Footer } from './components/Footer';
 import { LiveWall } from './components/LiveWall';
 import { ChatWidget } from './components/ChatWidget';
+import { MusicPlayer } from './components/MusicPlayer';
 
 export default function App() {
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false);
@@ -47,6 +48,9 @@ export default function App() {
   // Normal Wedding Website Flow
   return (
     <div className="min-h-screen relative font-serif text-charcoal overflow-x-hidden">
+      {/* Background Music Player - Starts when envelope opens */}
+      <MusicPlayer shouldPlay={isEnvelopeOpen} />
+
       {/* Envelope Overlay */}
       <div 
         className={`fixed inset-0 z-50 transition-all duration-1000 ease-in-out ${
