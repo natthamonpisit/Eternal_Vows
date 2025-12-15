@@ -74,27 +74,53 @@ export const ChatWidget: React.FC = () => {
     sendMessage(question);
   };
 
-  // Helper function to render text with clickable links
+  // Helper function to render text with clickable links AND Bold Names
   const renderContent = (content: string) => {
-    // Regex to match URLs (http:// or https://)
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = content.split(urlRegex);
+    const lines = content.split('\n');
 
-    return parts.map((part, index) => {
-      if (part.match(urlRegex)) {
-        return (
-          <a 
-            key={index} 
-            href={part} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="text-blue-500 hover:text-blue-700 underline break-all"
-          >
-            {part}
-          </a>
-        );
+    return lines.map((line, lineIdx) => {
+      // 1. Check if line starts with Speaker Name (e.g., "Natthamonpisit:")
+      const speakerMatch = line.match(/^(Natthamonpisit:|Sorot:)\s*(.*)/);
+
+      let contentToRender = line;
+      let speakerName = null;
+
+      if (speakerMatch) {
+        speakerName = speakerMatch[1]; // "Natthamonpisit:"
+        contentToRender = speakerMatch[2]; // The rest of the message
       }
-      return <span key={index}>{part}</span>;
+
+      // 2. Process URLs in the content
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      const parts = contentToRender.split(urlRegex);
+      const processedContent = parts.map((part, index) => {
+        if (part.match(urlRegex)) {
+          return (
+            <a 
+              key={index} 
+              href={part} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-blue-500 hover:text-blue-700 underline break-all"
+            >
+              {part}
+            </a>
+          );
+        }
+        return <span key={index}>{part}</span>;
+      });
+
+      // 3. Render the line
+      return (
+        <div key={lineIdx} className={`${speakerName ? 'mt-2 first:mt-0' : 'min-h-[1.2em]'}`}>
+          {speakerName && (
+            <span className="font-bold text-gold-shine mr-1.5 drop-shadow-sm">
+              {speakerName}
+            </span>
+          )}
+          <span className="text-charcoal/90">{processedContent}</span>
+        </div>
+      );
     });
   };
 
@@ -166,7 +192,7 @@ export const ChatWidget: React.FC = () => {
                 className={`max-w-[85%] p-3 rounded-2xl text-sm md:text-base font-serif leading-relaxed shadow-sm flex gap-2 ${
                   msg.role === 'user' 
                     ? 'bg-gold text-white rounded-br-none flex-row-reverse' 
-                    : 'bg-white text-charcoal border border-gray-100 rounded-bl-none'
+                    : 'bg-white text-charcoal border border-gray-100 rounded-bl-none block'
                 }`}
               >
                 {/* Avatar next to AI message */}
@@ -175,10 +201,11 @@ export const ChatWidget: React.FC = () => {
                      <img src={COUPLE_AVATAR_URL} alt="AI" className="w-full h-full object-cover scale-[2.0] translate-y-2" />
                   </div>
                 )}
-                {/* 
-                   KEY CHANGE: Updated to use renderContent function for URL parsing
-                */}
-                <span className="whitespace-pre-wrap">{renderContent(msg.content)}</span>
+                
+                {/* Content Container - removed whitespace-pre-wrap to handle lines manually */}
+                <div className="w-full">
+                  {renderContent(msg.content)}
+                </div>
               </div>
             </div>
           ))}
