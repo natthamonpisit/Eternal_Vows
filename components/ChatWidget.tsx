@@ -74,6 +74,30 @@ export const ChatWidget: React.FC = () => {
     sendMessage(question);
   };
 
+  // Helper function to render text with clickable links
+  const renderContent = (content: string) => {
+    // Regex to match URLs (http:// or https://)
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = content.split(urlRegex);
+
+    return parts.map((part, index) => {
+      if (part.match(urlRegex)) {
+        return (
+          <a 
+            key={index} 
+            href={part} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-blue-500 hover:text-blue-700 underline break-all"
+          >
+            {part}
+          </a>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
+
   return (
     <>
       {/* Floating Action Button (Cartoon Avatar) */}
@@ -152,10 +176,9 @@ export const ChatWidget: React.FC = () => {
                   </div>
                 )}
                 {/* 
-                   KEY CHANGE: Added 'whitespace-pre-wrap' 
-                   This allows \n in the text to actually create new lines in the UI 
+                   KEY CHANGE: Updated to use renderContent function for URL parsing
                 */}
-                <span className="whitespace-pre-wrap">{msg.content}</span>
+                <span className="whitespace-pre-wrap">{renderContent(msg.content)}</span>
               </div>
             </div>
           ))}
