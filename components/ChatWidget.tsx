@@ -7,9 +7,12 @@ interface Message {
 
 export const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  // Update initial message to be from "We/Us"
+  // Update initial message to new dialogue format
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'ai', content: 'สวัสดีครับ/ค่ะ! ยินดีต้อนรับสู่งานแต่งของพวกเรา (Natthamonpisit & Sorot) นะครับ ✨ มีคำถามเรื่องการเดินทาง หรือกำหนดการ ถามพวกเราในนี้ได้เลยนะ อยากให้มากันเยอะๆ ครับ ❤️' }
+    { 
+      role: 'ai', 
+      content: 'Natthamonpisit: สวัสดีครับทุกคน! ยินดีต้อนรับสู่งานแต่งของเรานะครับ สอบถามข้อมูลต่างๆ ได้เลยครับ ✨\n\nSorot: ตื่นเต้นมากๆ เลยที่จะได้เจอทุกคน อย่าลืมกด RSVP ให้เราด้วยนะคะ ❤️' 
+    }
   ]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +64,7 @@ export const ChatWidget: React.FC = () => {
       setMessages(prev => [...prev, { role: 'ai', content: data.reply }]);
     } catch (error) {
       console.error(error);
-      setMessages(prev => [...prev, { role: 'ai', content: 'ขออภัยครับ ระบบขัดข้องชั่วคราว เดี๋ยวพวกเรามาตอบใหม่นะครับ' }]);
+      setMessages(prev => [...prev, { role: 'ai', content: 'Natthamonpisit: ขออภัยครับ ระบบขัดข้องชั่วคราว\nSorot: เดี๋ยวพวกเรามาตอบใหม่นะคะ' }]);
     } finally {
       setIsLoading(false);
     }
@@ -79,13 +82,9 @@ export const ChatWidget: React.FC = () => {
         className={`fixed bottom-6 right-6 md:bottom-12 md:right-12 z-50 p-0 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 group ${isOpen ? 'rotate-12 scale-0 opacity-0' : 'scale-100 opacity-100'}`}
         aria-label="Open Wedding Concierge"
       >
-        {/* Container for Avatar 
-            UPDATED SIZE: Increased from w-16/w-20 to w-20/w-28 (Larger)
-        */}
+        {/* Container for Avatar */}
         <div className="w-20 h-20 md:w-28 md:h-28 rounded-full bg-white border-4 border-gold shadow-[0_4px_25px_rgba(183,138,125,0.6)] overflow-hidden relative flex items-center justify-center">
-           {/* Cartoon Image 
-               UPDATED POSITION: Changed translate-y-5 to translate-y-9 to move image down further
-           */}
+           {/* Cartoon Image */}
            <img 
              src={COUPLE_AVATAR_URL}
              alt="Chat with us"
@@ -96,7 +95,7 @@ export const ChatWidget: React.FC = () => {
              }}
            />
            
-           {/* Online Status Dot - Adjusted position for larger button */}
+           {/* Online Status Dot */}
            <div className="absolute bottom-2 right-2 md:bottom-3 md:right-3 w-4 h-4 md:w-5 md:h-5 bg-green-500 border-[3px] border-white rounded-full animate-pulse z-10 shadow-sm"></div>
            
            {/* Shine Overlay */}
@@ -117,7 +116,7 @@ export const ChatWidget: React.FC = () => {
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
           <div className="flex items-center gap-3 relative z-10">
             <div className="w-12 h-12 rounded-full border-2 border-white/50 overflow-hidden bg-white/90 backdrop-blur-sm">
-               {/* Small Avatar in Header - Also moved down */}
+               {/* Small Avatar in Header */}
                <img src={COUPLE_AVATAR_URL} alt="Assistant" className="w-full h-full object-cover rounded-full scale-[2.0] translate-y-5" />
             </div>
             <div>
@@ -140,19 +139,23 @@ export const ChatWidget: React.FC = () => {
           {messages.map((msg, idx) => (
             <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div 
-                className={`max-w-[80%] p-3 rounded-2xl text-sm md:text-base font-serif leading-relaxed shadow-sm flex gap-2 ${
+                className={`max-w-[85%] p-3 rounded-2xl text-sm md:text-base font-serif leading-relaxed shadow-sm flex gap-2 ${
                   msg.role === 'user' 
                     ? 'bg-gold text-white rounded-br-none flex-row-reverse' 
                     : 'bg-white text-charcoal border border-gray-100 rounded-bl-none'
                 }`}
               >
-                {/* Optional: Show mini avatar next to AI message */}
+                {/* Avatar next to AI message */}
                 {msg.role === 'ai' && (
-                  <div className="w-6 h-6 min-w-[24px] rounded-full overflow-hidden bg-white border border-gray-100 mt-1">
+                  <div className="w-6 h-6 min-w-[24px] rounded-full overflow-hidden bg-white border border-gray-100 mt-1 shrink-0">
                      <img src={COUPLE_AVATAR_URL} alt="AI" className="w-full h-full object-cover scale-[2.0] translate-y-2" />
                   </div>
                 )}
-                <span>{msg.content}</span>
+                {/* 
+                   KEY CHANGE: Added 'whitespace-pre-wrap' 
+                   This allows \n in the text to actually create new lines in the UI 
+                */}
+                <span className="whitespace-pre-wrap">{msg.content}</span>
               </div>
             </div>
           ))}
@@ -198,7 +201,7 @@ export const ChatWidget: React.FC = () => {
             <button 
               type="submit" 
               disabled={!inputText.trim() || isLoading}
-              className="w-10 h-10 rounded-full bg-gold text-white flex items-center justify-center hover:bg-[#8E5B50] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-md"
+              className="w-10 h-10 rounded-full bg-gold text-white flex items-center justify-center hover:bg-[#8E5B50] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-md shrink-0"
             >
               <svg className="w-4 h-4 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
             </button>
