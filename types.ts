@@ -6,6 +6,12 @@ export interface GuestWishes {
   imageUrl?: string;
 }
 
+export interface GalleryItem {
+  thumb: string;
+  full: string;
+}
+
+// Deprecated: kept for backward compatibility if needed, but GalleryItem is preferred
 export interface GalleryImage {
   id: string;
   url: string;

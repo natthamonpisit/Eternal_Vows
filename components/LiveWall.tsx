@@ -5,19 +5,22 @@ import { GuestWishes } from '../types';
 export const LiveWall: React.FC = () => {
   const [wishes, setWishes] = useState<GuestWishes[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const loadWishes = async () => {
+    setIsRefreshing(true);
+    const data = await fetchWishes();
+    setWishes(data);
+    setLoading(false);
+    setIsRefreshing(false);
+  };
 
   useEffect(() => {
-    const loadWishes = async () => {
-      const data = await fetchWishes();
-      setWishes(data);
-      setLoading(false);
-    };
-
     // Initial load
     loadWishes();
 
-    // Auto-refresh every 10 seconds
-    const interval = setInterval(loadWishes, 10000);
+    // Auto-refresh every 15 seconds (increased from 10s to reduce quota usage)
+    const interval = setInterval(loadWishes, 15000);
     return () => clearInterval(interval);
   }, []);
 
@@ -27,7 +30,20 @@ export const LiveWall: React.FC = () => {
       <div className="absolute inset-0 opacity-40 pointer-events-none" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
 
       {/* Header */}
-      <header className="pt-8 pb-4 px-4 text-center relative z-10 bg-[#FDFBF7]/90 backdrop-blur-sm sticky top-0 shadow-sm border-b border-gold/20">
+      <header className="pt-8 pb-4 px-4 text-center relative z-10 bg-[#FDFBF7]/90 backdrop-blur-sm sticky top-0 shadow-sm border-b border-gold/20 flex flex-col items-center">
+        
+        {/* Refresh Button - Top Right */}
+        <button 
+          onClick={loadWishes}
+          disabled={isRefreshing}
+          className="absolute right-4 top-8 md:right-8 md:top-8 p-2 rounded-full bg-white shadow-md border border-gold/20 text-gold hover:bg-gold hover:text-white transition-all active:scale-95 disabled:opacity-50"
+          title="Refresh Messages"
+        >
+          <svg className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+
         <h1 className="font-script text-4xl sm:text-5xl md:text-6xl text-gold-shine mb-2 leading-tight">Natthamonpisit & Sorot</h1>
         <div className="flex items-center justify-center gap-4">
           <div className="h-px w-8 md:w-12 bg-charcoal/20"></div>

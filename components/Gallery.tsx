@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { fetchGallery } from '../services/api';
+import { GalleryItem } from '../types';
 
 export const Gallery: React.FC = () => {
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -12,8 +13,8 @@ export const Gallery: React.FC = () => {
 
   useEffect(() => {
     const loadImages = async () => {
-      const urls = await fetchGallery();
-      setImages(urls);
+      const items = await fetchGallery();
+      setImages(items);
       setLoading(false);
     };
     loadImages();
@@ -75,13 +76,13 @@ export const Gallery: React.FC = () => {
               Adjusted auto-rows for responsiveness.
           */}
           <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[160px] md:auto-rows-[240px] lg:auto-rows-[280px] gap-2 md:gap-3 grid-flow-dense">
-            {images.map((url, index) => (
-              <GalleryItem 
+            {images.map((item, index) => (
+              <GalleryItemView 
                 key={index}
-                url={url}
+                url={item.thumb}
                 index={index}
                 gridClass={getGridClass(index)}
-                onClick={() => setSelectedImage(url)}
+                onClick={() => setSelectedImage(item.full)}
               />
             ))}
           </div>
@@ -120,7 +121,7 @@ export const Gallery: React.FC = () => {
 };
 
 // Sub-component for individual gallery item to handle its own scroll animation
-const GalleryItem: React.FC<{ 
+const GalleryItemView: React.FC<{ 
   url: string; 
   index: number; 
   gridClass: string;

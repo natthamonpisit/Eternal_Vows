@@ -1,6 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export const MoneyGift: React.FC = () => {
+  const [copied, setCopied] = useState(false);
+  const ACCOUNT_NUMBER = "123-456-7890"; // พี่นัทอย่าลืมแก้เลขบัญชีจริงตรงนี้นะครับ
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(ACCOUNT_NUMBER.replace(/-/g, ''));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <section className="py-12 md:py-16 px-4">
       <div className="max-w-2xl mx-auto text-center space-y-6 md:space-y-8 bg-[#FAF9F6] border-4 border-gold/40 p-8 md:p-12 rounded-xl shadow-2xl relative transform transition-transform hover:-translate-y-1 duration-300">
@@ -19,7 +28,27 @@ export const MoneyGift: React.FC = () => {
             </div>
           </div>
           <p className="mt-4 font-sans text-xs md:text-sm text-gray-500 font-medium tracking-wide">Bank of America • Natthamonpisit & Sorot</p>
-          <p className="text-xs md:text-sm text-gray-400 mt-1">123-456-7890</p>
+          
+          {/* Copyable Account Number */}
+          <div className="relative mt-2 inline-block group">
+            <button 
+              onClick={handleCopy}
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-gold/30 rounded-full shadow-sm hover:shadow-md hover:border-gold transition-all group-hover:-translate-y-0.5"
+            >
+              <span className="font-mono text-lg md:text-xl text-charcoal font-bold tracking-wider">{ACCOUNT_NUMBER}</span>
+              <svg className={`w-4 h-4 text-gold transition-all ${copied ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+              
+              {/* Success Checkmark */}
+              <svg className={`absolute right-4 w-4 h-4 text-green-500 transition-all ${copied ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+            </button>
+            
+            {/* Tooltip */}
+            <span className={`absolute left-1/2 -translate-x-1/2 -bottom-8 text-[10px] bg-charcoal text-white px-2 py-1 rounded transition-opacity ${copied ? 'opacity-100' : 'opacity-0'}`}>
+              Copied!
+            </span>
+            <p className="text-[10px] text-gray-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Tap to copy</p>
+          </div>
+
         </div>
       </div>
     </section>

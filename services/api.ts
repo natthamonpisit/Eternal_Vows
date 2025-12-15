@@ -1,6 +1,6 @@
 
 import { API_URL } from '../constants';
-import { RsvpPayload, GuestbookPayload, ApiResponse, GuestWishes } from '../types';
+import { RsvpPayload, GuestbookPayload, ApiResponse, GuestWishes, GalleryItem } from '../types';
 
 export const submitRsvp = async (data: Omit<RsvpPayload, 'action'>): Promise<ApiResponse<null>> => {
   try {
@@ -32,11 +32,11 @@ export const submitGuestbook = async (data: Omit<GuestbookPayload, 'action'>): P
   }
 };
 
-export const fetchGallery = async (): Promise<string[]> => {
+export const fetchGallery = async (): Promise<GalleryItem[]> => {
   const targetUrl = `${API_URL}?action=getGallery&t=${Date.now()}`;
   try {
     const response = await fetch(targetUrl);
-    const result: ApiResponse<string[]> = await response.json();
+    const result: ApiResponse<GalleryItem[]> = await response.json();
     return result.data || [];
   } catch (error) {
     console.warn("API Error:", error);

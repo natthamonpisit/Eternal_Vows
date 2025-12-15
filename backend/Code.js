@@ -41,7 +41,7 @@ function doPost(e) {
 }
 
 function getGalleryImages() {
-  const urls = [];
+  const images = [];
   try {
     const cleanId = extractId(CONFIG.GALLERY_FOLDER_ID);
     const folder = DriveApp.getFolderById(cleanId);
@@ -51,12 +51,17 @@ function getGalleryImages() {
       const file = files.next();
       const mime = file.getMimeType();
       const name = file.getName();
+      const id = file.getId();
 
       if (mime.includes('image') || name.toLowerCase().endsWith('.heic')) {
-        urls.push("https://drive.google.com/thumbnail?id=" + file.getId() + "&sz=w2048");
+        // Return object with thumbnail (w600) and full size (w2048)
+        images.push({
+          thumb: "https://drive.google.com/thumbnail?id=" + id + "&sz=w600",
+          full: "https://drive.google.com/thumbnail?id=" + id + "&sz=w2048"
+        });
       }
     }
-    return createCorsResponse({ success: true, data: urls });
+    return createCorsResponse({ success: true, data: images });
   } catch (err) {
     return createCorsResponse({ success: false, error: err.toString() });
   }

@@ -39,6 +39,15 @@ export const Details: React.FC = () => {
     }
   ];
 
+  // Google Calendar Link Generator
+  const addToCalendarUrl = () => {
+    const title = encodeURIComponent("Wedding of Natthamonpisit & Sorot");
+    const dates = "20260321T020000Z/20260321T070000Z"; // UTC Time (09:00 - 14:00 BKK is +7)
+    const details = encodeURIComponent("Join us in celebrating our special day! Ceremony starts at 09:00 AM.");
+    const location = encodeURIComponent("Dalva le ville, Bangkok");
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&location=${location}&sf=true&output=xml`;
+  };
+
   return (
     <section className="relative py-16 md:py-24 overflow-hidden bg-old-rose">
       {/* 1. Enhanced Paper Texture Background */}
@@ -54,6 +63,17 @@ export const Details: React.FC = () => {
             <p className="font-sans text-cream/70 uppercase tracking-[0.25em] text-xs md:text-sm font-bold">Saturday, March 21st</p>
             <div className="h-px w-8 md:w-12 bg-cream/30"></div>
           </div>
+          
+          {/* Add to Calendar Button */}
+          <a 
+            href={addToCalendarUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2 border border-cream/30 rounded-full text-cream hover:bg-cream hover:text-old-rose transition-all duration-300 text-xs font-sans uppercase tracking-widest font-bold mt-4"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            Add to Calendar
+          </a>
         </div>
 
         {/* Main Content Grid 
