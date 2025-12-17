@@ -7,11 +7,11 @@ interface Message {
 
 export const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  // Update initial message to new dialogue format
+  // Update initial message to new dialogue format using nicknames
   const [messages, setMessages] = useState<Message[]>([
     { 
       role: 'ai', 
-      content: 'Natthamonpisit: สวัสดีครับทุกคน! ยินดีต้อนรับสู่งานแต่งของเรานะครับ สอบถามข้อมูลต่างๆ ได้เลยครับ ✨\n\nSorot: ตื่นเต้นมากๆ เลยที่จะได้เจอทุกคน อย่าลืมกด RSVP ให้เราด้วยนะคะ ❤️' 
+      content: 'Natthamonpisit: สวัสดีครับทุกคน! อุ๊กยินดีต้อนรับสู่งานแต่งของเรานะครับ สอบถามข้อมูลต่างๆ ได้เลยครับ ✨\n\nSorot: บิวตื่นเต้นมากๆ เลยที่จะได้เจอทุกคน อย่าลืมกด RSVP ให้เราด้วยนะคะ ❤️' 
     }
   ]);
   const [inputText, setInputText] = useState('');
