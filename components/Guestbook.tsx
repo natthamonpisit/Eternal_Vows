@@ -77,11 +77,11 @@ export const Guestbook: React.FC = () => {
         {/* Action Buttons (Refresh & Presentation Mode) */}
         {activeTab === 'wall' && (
           <div className="absolute top-0 right-0 md:top-auto md:bottom-2 md:right-10 lg:right-20 flex items-center gap-3">
-             {/* NEW: Explicit "Projector View" Button with Text */}
+             {/* NEW: Explicit "Projector View" Button - Uses Hash Navigation */}
              <button
-               onClick={() => window.open('?mode=live', '_blank')}
+               onClick={() => window.location.hash = '#live'}
                className="flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm border border-gold/40 rounded-full shadow-sm text-gold hover:bg-gold hover:text-white hover:shadow-md transition-all group"
-               title="Open Presentation Mode in New Tab"
+               title="Switch to Presentation Mode"
              >
                <span className="font-sans font-bold text-[10px] uppercase tracking-widest hidden sm:inline">Projector View</span>
                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

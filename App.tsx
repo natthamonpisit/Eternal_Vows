@@ -17,11 +17,19 @@ export default function App() {
   const [isLiveMode, setIsLiveMode] = useState(false);
 
   useEffect(() => {
-    // Check URL parameters for ?mode=live
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('mode') === 'live') {
-      setIsLiveMode(true);
-    }
+    // Function to check hash and set mode
+    const checkHash = () => {
+      setIsLiveMode(window.location.hash === '#live');
+    };
+
+    // Check on mount
+    checkHash();
+
+    // Listen for hash changes (Navigation without reload)
+    window.addEventListener('hashchange', checkHash);
+    
+    // Cleanup listener
+    return () => window.removeEventListener('hashchange', checkHash);
   }, []);
 
   const handleOpen = () => {
