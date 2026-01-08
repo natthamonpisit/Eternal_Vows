@@ -76,7 +76,7 @@ export const LiveWall: React.FC = () => {
       </div>
 
       {/* --- BOX 1: HEADER (Fixed Height, No Shrink) --- */}
-      <header className="flex-none relative z-20 w-full pt-4 pb-2 px-4 text-center bg-gradient-to-b from-[#FDFBF7] via-[#FDFBF7]/95 to-transparent">
+      <header className="flex-none relative z-20 w-full pt-2 landscape:pt-4 pb-2 px-4 text-center bg-gradient-to-b from-[#FDFBF7] via-[#FDFBF7]/95 to-transparent">
         
         {/* Navigation Controls */}
         <div className="absolute top-4 left-4 md:top-6 md:left-6 flex gap-3 z-30">
@@ -102,16 +102,16 @@ export const LiveWall: React.FC = () => {
           </button>
         </div>
 
-        {/* Names */}
-        <div className="py-2 mt-2">
-          <h1 className="font-script text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gold-shine mb-1 leading-relaxed md:leading-normal drop-shadow-sm px-4">
+        {/* Names - Reduced size and increased padding/line-height to prevent clipping */}
+        <div className="py-1 landscape:py-2 mt-1 landscape:mt-2">
+          <h1 className="font-script text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-gold-shine mb-1 leading-loose py-2 drop-shadow-sm px-4">
             Natthamonpisit & Sorot
           </h1>
         </div>
         
         <div className="flex items-center justify-center gap-4 opacity-70 mb-1">
           <div className="h-px w-8 md:w-16 bg-charcoal/20"></div>
-          <p className="font-sans text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-charcoal/60">
+          <p className="font-sans text-[8px] sm:text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-charcoal/60">
             Guestbook Live Wall
           </p>
           <div className="h-px w-8 md:w-16 bg-charcoal/20"></div>
@@ -119,7 +119,8 @@ export const LiveWall: React.FC = () => {
       </header>
 
       {/* --- BOX 2: MAIN CONTENT (Flexible, Fills space, No Overflow overlap) --- */}
-      <main className="flex-1 w-full relative z-10 flex flex-col justify-center items-center overflow-hidden px-4 py-2">
+      {/* Added larger bottom padding (pb-12 md:pb-24) to visually lift the center content up */}
+      <main className="flex-1 w-full relative z-10 flex flex-col justify-center items-center overflow-hidden px-4 pt-2 pb-12 md:pb-24">
         
         {/* Loading State */}
         {loading && wishes.length === 0 ? (
@@ -138,20 +139,29 @@ export const LiveWall: React.FC = () => {
           </div>
         ) : (
           // Slideshow Card
-          // Uses max-h-full to ensure it never exceeds the middle box
           <div className="w-full h-full flex items-center justify-center">
              <div 
                key={activeIndex} 
                className="
                  relative bg-white shadow-2xl rounded-2xl overflow-hidden animate-fade-in border border-white/50 ring-1 ring-gold/10
-                 flex flex-col md:flex-row
                  
-                 /* Sizing Constraints */
-                 w-full max-w-[340px] md:max-w-5xl
-                 h-auto max-h-full md:h-[60vh]
+                 /* FLEX LAYOUT: Column on Mobile Portrait, Row on Landscape */
+                 flex flex-col landscape:flex-row
                  
-                 /* Ensure card doesn't touch edges on small screens */
-                 my-auto
+                 /* WIDTH CONTROLS */
+                 /* Portrait: Full width but capped */
+                 w-full max-w-[340px] 
+                 /* Landscape: Auto width (shrink to fit content) + Max width cap to prevent over-stretching */
+                 landscape:w-auto landscape:max-w-[85vw]
+                 
+                 /* HEIGHT CONTROLS */
+                 /* Portrait: Auto height */
+                 h-auto max-h-full 
+                 /* Landscape: Fixed viewport height percentage to drive the aspect ratio */
+                 landscape:h-[75vh] md:landscape:h-[60vh]
+                 
+                 /* Centering */
+                 my-auto mx-auto
                "
              >
                 {/* Image Section */}
@@ -159,23 +169,31 @@ export const LiveWall: React.FC = () => {
                   <div className="
                     relative bg-gray-100 overflow-hidden flex-shrink-0
                     
-                    /* Mobile: Square Aspect Ratio, but capped height if screen is short */
-                    w-full aspect-square md:aspect-auto
+                    /* Portrait: Full width, Square Aspect */
+                    w-full aspect-square 
                     
-                    /* Desktop: Half width, Full height */
-                    md:w-1/2 md:h-full
+                    /* Landscape: Height matches container (100%), Width auto, Aspect Ratio 4:3 (or 1:1) */
+                    landscape:h-full landscape:w-auto landscape:aspect-[4/3]
                   ">
+                    {/* Layer 1: Blurred Background (To fill any gaps nicely) */}
+                    <img 
+                      src={currentWish.imageUrl} 
+                      alt="Background" 
+                      className="absolute inset-0 w-full h-full object-cover blur-xl opacity-60 scale-110"
+                      referrerPolicy="no-referrer"
+                    />
+
+                    {/* Layer 2: Main Image (Contained - Shows WHOLE picture) */}
                     <img 
                       src={currentWish.imageUrl} 
                       alt="Memory" 
-                      className="absolute inset-0 w-full h-full object-cover animate-[scale-in_10s_ease-out_forwards]"
+                      className="relative z-10 w-full h-full object-contain animate-[scale-in_10s_ease-out_forwards]"
                       referrerPolicy="no-referrer"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                   </div>
                 ) : (
                   // Fallback decoration
-                  <div className="hidden md:flex w-1/3 bg-[#FAF9F6] items-center justify-center border-r border-gold/10 relative overflow-hidden flex-shrink-0">
+                  <div className="hidden landscape:flex w-64 bg-[#FAF9F6] items-center justify-center border-r border-gold/10 relative overflow-hidden flex-shrink-0">
                      <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]"></div>
                      <svg className="w-32 h-32 text-gold/20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                   </div>
@@ -183,10 +201,17 @@ export const LiveWall: React.FC = () => {
 
                 {/* Message Section */}
                 <div className={`
-                   flex-1 relative flex flex-col justify-center overflow-hidden
-                   p-6 md:p-10
+                   /* Portrait: Flex-1 to fill height */
+                   flex-1 
+                   
+                   /* Landscape: Fixed Width! Do not grow. Keeps card compact. */
+                   landscape:flex-none landscape:w-[280px] md:landscape:w-[320px]
+                   
+                   relative flex flex-col justify-center overflow-hidden
+                   p-6 landscape:p-6
+                   
                    ${!currentWish?.imageUrl ? 'items-center text-center' : ''}
-                   min-h-0 /* Crucial for nested flex scrolling */
+                   min-h-0
                 `}>
                   
                   {/* Quotes */}
@@ -194,7 +219,7 @@ export const LiveWall: React.FC = () => {
                   <svg className="w-6 h-6 md:w-12 md:h-12 text-gold/20 absolute bottom-3 right-3 md:bottom-6 md:right-6 rotate-180" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 13.1216 16 12.017 16H9C9.04875 12.2882 11.2359 10.3204 12.8225 9.7042L12.0833 7.79979C9.25625 8.89708 7 12.1932 7 16V21H14.017ZM21 21L21 18C21 16.8954 20.1046 16 19 16H15.9829C16.0317 12.2882 18.2189 10.3204 19.8054 9.7042L19.0662 7.79979C16.2392 8.89708 13.9829 12.1932 13.9829 16V21H21Z" /></svg>
 
                   <div className="relative z-10 w-full max-h-full overflow-y-auto custom-scrollbar px-2 md:px-4 flex flex-col justify-center">
-                    <p className="font-serif text-xl sm:text-2xl md:text-4xl text-charcoal italic leading-relaxed md:leading-relaxed mb-4 md:mb-6 break-words text-center md:text-left">
+                    <p className="font-serif text-lg sm:text-xl md:text-3xl lg:text-4xl text-charcoal italic leading-relaxed md:leading-relaxed mb-4 md:mb-6 break-words text-center md:text-left">
                       "{currentWish?.message}"
                     </p>
                     
@@ -215,19 +240,19 @@ export const LiveWall: React.FC = () => {
       </main>
 
       {/* --- BOX 3: FOOTER (Fixed Height, No Shrink) --- */}
-      <footer className="flex-none relative z-20 w-full bg-white/80 backdrop-blur-md border-t border-gold/10 py-3 px-6 flex justify-between items-center">
+      <footer className="flex-none relative z-20 w-full bg-white/80 backdrop-blur-md border-t border-gold/10 py-2 landscape:py-3 px-6 flex justify-between items-center">
         <div className="flex items-center gap-4 md:gap-6">
           <div className="p-1 bg-white rounded-lg shadow-sm border border-gold/10">
             <img 
               src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://eternal-vows-pi.vercel.app/" 
               alt="Scan to Wish" 
-              className="w-10 h-10 md:w-14 md:h-14 mix-blend-multiply"
+              className="w-8 h-8 md:w-14 md:h-14 mix-blend-multiply"
             />
           </div>
           
           <div className="text-left">
-            <p className="font-sans font-bold text-charcoal uppercase tracking-widest text-[9px] md:text-xs mb-0.5">Join the celebration</p>
-            <p className="font-serif text-gold italic text-xs md:text-base">Scan to send your wishes</p>
+            <p className="font-sans font-bold text-charcoal uppercase tracking-widest text-[8px] md:text-xs mb-0.5">Join the celebration</p>
+            <p className="font-serif text-gold italic text-[10px] md:text-base">Scan to send your wishes</p>
             <p className="font-sans text-[8px] md:text-[10px] text-charcoal/50 tracking-wider hidden sm:block">eternal-vows-pi.vercel.app</p>
           </div>
         </div>
