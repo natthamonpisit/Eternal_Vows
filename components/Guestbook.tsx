@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { submitGuestbook, fetchWishes } from '../services/api';
 import { GuestWishes } from '../types';
@@ -75,9 +74,22 @@ export const Guestbook: React.FC = () => {
           </button>
         </div>
 
-        {/* Refresh Button - Positioned to the right of the tabs on desktop, or below on mobile */}
+        {/* Action Buttons (Refresh & Presentation Mode) */}
         {activeTab === 'wall' && (
-          <div className="absolute top-0 right-0 md:top-auto md:bottom-2 md:right-10 lg:right-20">
+          <div className="absolute top-0 right-0 md:top-auto md:bottom-2 md:right-10 lg:right-20 flex items-center gap-3">
+             {/* NEW: Explicit "Projector View" Button with Text */}
+             <button
+               onClick={() => window.open('?mode=live', '_blank')}
+               className="flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm border border-gold/40 rounded-full shadow-sm text-gold hover:bg-gold hover:text-white hover:shadow-md transition-all group"
+               title="Open Presentation Mode in New Tab"
+             >
+               <span className="font-sans font-bold text-[10px] uppercase tracking-widest hidden sm:inline">Projector View</span>
+               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+               </svg>
+             </button>
+
+             {/* Refresh Button */}
              <button
                onClick={loadWishes}
                disabled={isRefreshing}

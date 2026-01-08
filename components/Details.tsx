@@ -187,10 +187,10 @@ export const Details: React.FC = () => {
           <div className="flex justify-center items-start gap-4 md:gap-8 flex-wrap px-2">
              {[
                { color: '#C08E86', name: 'Old Rose' }, 
-               { color: '#B78A7D', name: 'Gold' }, 
-               { color: '#CFC1B3', name: 'Taupe' }, 
-               { color: '#9EA996', name: 'Sage' }, 
-               { color: '#FDF6E4', name: 'Cream' }, // Updated Cream to #FDF6E4 (Whiter/Creamier)
+               { color: '#B78A7D', name: 'Rose Gold' }, // Changed from 'Gold' to 'Rose Gold' to match Palette Card and Hex
+               { color: '#CFC1B3', name: 'Warm Taupe' }, 
+               { color: '#9EA996', name: 'Sage Green' }, 
+               { color: '#E6DABF', name: 'Cream Beige' }, // Updated from #FDF6E4 to match Palette Card
              ].map((swatch, i) => (
                <div key={i} className="flex flex-col items-center gap-2 group w-20 sm:w-24">
                  <div 

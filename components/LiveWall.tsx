@@ -6,6 +6,7 @@ export const LiveWall: React.FC = () => {
   const [wishes, setWishes] = useState<GuestWishes[]>([]);
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const loadWishes = async () => {
     setIsRefreshing(true);
@@ -19,10 +20,32 @@ export const LiveWall: React.FC = () => {
     // Initial load
     loadWishes();
 
-    // Auto-refresh every 15 seconds (increased from 10s to reduce quota usage)
+    // Auto-refresh every 15 seconds
     const interval = setInterval(loadWishes, 15000);
-    return () => clearInterval(interval);
+    
+    // Listen for fullscreen change events (e.g. user presses Esc)
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
   }, []);
+
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-charcoal font-serif relative overflow-hidden">
@@ -30,19 +53,41 @@ export const LiveWall: React.FC = () => {
       <div className="absolute inset-0 opacity-40 pointer-events-none" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
 
       {/* Header */}
-      <header className="pt-8 pb-4 px-4 text-center relative z-10 bg-[#FDFBF7]/90 backdrop-blur-sm sticky top-0 shadow-sm border-b border-gold/20 flex flex-col items-center">
+      <header className="pt-8 pb-4 px-4 text-center relative z-10 bg-[#FDFBF7]/90 backdrop-blur-sm sticky top-0 shadow-sm border-b border-gold/20 flex flex-col items-center transition-all duration-300">
         
-        {/* Refresh Button - Top Right */}
-        <button 
-          onClick={loadWishes}
-          disabled={isRefreshing}
-          className="absolute right-4 top-8 md:right-8 md:top-8 p-2 rounded-full bg-white shadow-md border border-gold/20 text-gold hover:bg-gold hover:text-white transition-all active:scale-95 disabled:opacity-50"
-          title="Refresh Messages"
-        >
-          <svg className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-        </button>
+        {/* Actions Container - Top Right */}
+        <div className="absolute right-4 top-8 md:right-8 md:top-8 flex items-center gap-3">
+          {/* Full Screen Toggle Button */}
+          <button 
+            onClick={toggleFullScreen}
+            className="p-2 rounded-full bg-white shadow-md border border-gold/20 text-gold hover:bg-gold hover:text-white transition-all active:scale-95 group"
+            title={isFullscreen ? "Exit Full Screen" : "Enter Presentation Mode"}
+          >
+            {isFullscreen ? (
+              // Exit Icon
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              // Enter Full Screen Icon (Expand)
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+              </svg>
+            )}
+          </button>
+
+          {/* Refresh Button */}
+          <button 
+            onClick={loadWishes}
+            disabled={isRefreshing}
+            className="p-2 rounded-full bg-white shadow-md border border-gold/20 text-gold hover:bg-gold hover:text-white transition-all active:scale-95 disabled:opacity-50"
+            title="Refresh Messages"
+          >
+            <svg className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </button>
+        </div>
 
         <h1 className="font-script text-4xl sm:text-5xl md:text-6xl text-gold-shine mb-2 leading-tight">Natthamonpisit & Sorot</h1>
         <div className="flex items-center justify-center gap-4">
