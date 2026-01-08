@@ -86,7 +86,10 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
     let loadedCount = 0;
     const checkLoaded = () => {
       loadedCount++;
-      if (loadedCount === imageUrls.length) setImagesLoaded(true);
+      if (loadedCount === imageUrls.length) {
+         // Add a small delay to ensure UI renders smoothly
+         setTimeout(() => setImagesLoaded(true), 500);
+      }
     };
 
     imageUrls.forEach(url => {
@@ -113,16 +116,35 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
   return (
     <div className="w-full h-full flex items-center justify-center overflow-hidden relative bg-[#D5C7BC]">
       
+      {/* --- INITIAL LOADING SCREEN --- */}
+      <div 
+        className={`absolute inset-0 z-[60] bg-[#FDFBF7] flex flex-col items-center justify-center transition-opacity duration-1000 ease-in-out ${
+          imagesLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        }`}
+      >
+        <div className="flex flex-col items-center space-y-6 animate-fade-in">
+          <div className="relative">
+             <div className="w-16 h-16 border-4 border-gold/20 rounded-full"></div>
+             <div className="absolute top-0 left-0 w-16 h-16 border-4 border-gold border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <div className="text-center space-y-2">
+            <p className="font-script text-3xl md:text-4xl text-gold-shine">Natthamonpisit & Sorot</p>
+            <p className="font-sans text-[10px] md:text-xs uppercase tracking-[0.2em] text-charcoal/40 animate-pulse">Loading Invitation...</p>
+          </div>
+        </div>
+      </div>
+
       {/* 
          Responsive Container 
          - Mobile/Portrait: w-full h-full (Fill Screen)
          - Desktop/Landscape: aspect-[16/9] (Constrained Cinematic Ratio)
       */}
-      <div className={`relative transition-all duration-300 shadow-2xl z-10 
+      <div className={`relative transition-all duration-1000 transform duration-700 shadow-2xl z-10 
         ${isPortrait 
            ? 'w-full h-full' 
            : 'w-full max-w-[177.78vh] aspect-[16/9]' 
         }
+        ${imagesLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}
       `}>
         
         {/* Layer 1: Closed */}
@@ -161,7 +183,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
           */}
           <div className={`absolute left-0 right-0 text-center px-4 pointer-events-none ${isPortrait ? 'top-[30%]' : 'top-[22%]'}`}>
              <p className="font-sans text-xs sm:text-sm md:text-lg tracking-[0.25em] uppercase font-bold text-white/90 drop-shadow-md animate-float">
-               {imagesLoaded ? "Tap to Open" : "Loading..."}
+               Tap to Open
              </p>
           </div>
         </div>
