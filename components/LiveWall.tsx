@@ -17,8 +17,6 @@ export const LiveWall: React.FC = () => {
     
     // Check if new data is different to avoid unnecessary re-renders/resets
     setWishes(prev => {
-      // Simple length check or deep comparison could go here
-      // For now, just update
       return data;
     });
     
@@ -67,22 +65,21 @@ export const LiveWall: React.FC = () => {
   const currentWish = wishes.length > 0 ? wishes[activeIndex] : null;
 
   return (
-    // Fixed inset-0 to prevent scrolling
+    // MAIN CONTAINER: 3 BOX LAYOUT (Header / Main / Footer)
     <div className="fixed inset-0 w-full h-full bg-[#FDFBF7] text-charcoal font-serif overflow-hidden flex flex-col">
+      
       {/* Background Texture & Decor */}
       <div className="absolute inset-0 opacity-40 pointer-events-none" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
-      
-      {/* Floating Particles/Bokeh (Optional Aesthetic) */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
          <div className="absolute top-10 left-10 w-64 h-64 bg-gold/5 rounded-full blur-3xl animate-pulse"></div>
          <div className="absolute bottom-20 right-20 w-80 h-80 bg-old-rose/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      {/* Header - Optimized to prevent clipping */}
-      <header className="flex-shrink-0 pt-4 pb-2 md:pt-8 md:pb-4 px-4 text-center relative z-20 bg-gradient-to-b from-[#FDFBF7] via-[#FDFBF7]/95 to-transparent">
+      {/* --- BOX 1: HEADER (Fixed Height, No Shrink) --- */}
+      <header className="flex-none relative z-20 w-full pt-4 pb-2 px-4 text-center bg-gradient-to-b from-[#FDFBF7] via-[#FDFBF7]/95 to-transparent">
         
         {/* Navigation Controls */}
-        <div className="absolute top-4 left-4 md:top-8 md:left-8 flex gap-3 z-30">
+        <div className="absolute top-4 left-4 md:top-6 md:left-6 flex gap-3 z-30">
            <button 
              onClick={() => window.location.hash = ''}
              className="p-2 rounded-full bg-white/80 shadow-sm border border-gold/20 text-gold hover:bg-gold hover:text-white transition-all group backdrop-blur-sm"
@@ -92,7 +89,7 @@ export const LiveWall: React.FC = () => {
            </button>
         </div>
 
-        <div className="absolute top-4 right-4 md:top-8 md:right-8 flex gap-3 z-30">
+        <div className="absolute top-4 right-4 md:top-6 md:right-6 flex gap-3 z-30">
           <button 
             onClick={toggleFullScreen}
             className="p-2 rounded-full bg-white/80 shadow-sm border border-gold/20 text-gold hover:bg-gold hover:text-white transition-all backdrop-blur-sm"
@@ -105,14 +102,14 @@ export const LiveWall: React.FC = () => {
           </button>
         </div>
 
-        {/* Names - Increased line-height and padding to prevent clipping */}
-        <div className="py-2">
-          <h1 className="font-script text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gold-shine mb-1 leading-relaxed md:leading-normal drop-shadow-sm px-4 pt-2">
+        {/* Names */}
+        <div className="py-2 mt-2">
+          <h1 className="font-script text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gold-shine mb-1 leading-relaxed md:leading-normal drop-shadow-sm px-4">
             Natthamonpisit & Sorot
           </h1>
         </div>
         
-        <div className="flex items-center justify-center gap-4 opacity-70">
+        <div className="flex items-center justify-center gap-4 opacity-70 mb-1">
           <div className="h-px w-8 md:w-16 bg-charcoal/20"></div>
           <p className="font-sans text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-charcoal/60">
             Guestbook Live Wall
@@ -121,9 +118,10 @@ export const LiveWall: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 min-h-0 flex flex-col justify-center items-center p-4 relative z-10 w-full max-w-[1600px] mx-auto">
+      {/* --- BOX 2: MAIN CONTENT (Flexible, Fills space, No Overflow overlap) --- */}
+      <main className="flex-1 w-full relative z-10 flex flex-col justify-center items-center overflow-hidden px-4 py-2">
         
+        {/* Loading State */}
         {loading && wishes.length === 0 ? (
           <div className="flex flex-col items-center gap-4">
             <div className="w-16 h-16 border-4 border-gold/30 border-t-gold rounded-full animate-spin"></div>
@@ -140,6 +138,7 @@ export const LiveWall: React.FC = () => {
           </div>
         ) : (
           // Slideshow Card
+          // Uses max-h-full to ensure it never exceeds the middle box
           <div className="w-full h-full flex items-center justify-center">
              <div 
                key={activeIndex} 
@@ -147,11 +146,12 @@ export const LiveWall: React.FC = () => {
                  relative bg-white shadow-2xl rounded-2xl overflow-hidden animate-fade-in border border-white/50 ring-1 ring-gold/10
                  flex flex-col md:flex-row
                  
-                 /* Mobile/Tablet: Width constrained to prevent huge squares */
-                 w-[85vw] max-w-[340px] md:w-full md:max-w-5xl
+                 /* Sizing Constraints */
+                 w-full max-w-[340px] md:max-w-5xl
+                 h-auto max-h-full md:h-[60vh]
                  
-                 /* Heights */
-                 h-auto md:h-[60vh] max-h-[75vh]
+                 /* Ensure card doesn't touch edges on small screens */
+                 my-auto
                "
              >
                 {/* Image Section */}
@@ -159,11 +159,11 @@ export const LiveWall: React.FC = () => {
                   <div className="
                     relative bg-gray-100 overflow-hidden flex-shrink-0
                     
-                    /* Mobile: Square Aspect Ratio */
-                    w-full aspect-square 
+                    /* Mobile: Square Aspect Ratio, but capped height if screen is short */
+                    w-full aspect-square md:aspect-auto
                     
-                    /* Desktop: Half width, Full height, Auto aspect */
-                    md:w-1/2 md:aspect-auto md:h-full
+                    /* Desktop: Half width, Full height */
+                    md:w-1/2 md:h-full
                   ">
                     <img 
                       src={currentWish.imageUrl} 
@@ -174,7 +174,7 @@ export const LiveWall: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                   </div>
                 ) : (
-                  // Fallback decoration if no image
+                  // Fallback decoration
                   <div className="hidden md:flex w-1/3 bg-[#FAF9F6] items-center justify-center border-r border-gold/10 relative overflow-hidden flex-shrink-0">
                      <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]"></div>
                      <svg className="w-32 h-32 text-gold/20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
@@ -186,13 +186,14 @@ export const LiveWall: React.FC = () => {
                    flex-1 relative flex flex-col justify-center overflow-hidden
                    p-6 md:p-10
                    ${!currentWish?.imageUrl ? 'items-center text-center' : ''}
+                   min-h-0 /* Crucial for nested flex scrolling */
                 `}>
                   
                   {/* Quotes */}
-                  <svg className="w-8 h-8 md:w-12 md:h-12 text-gold/20 absolute top-4 left-4 md:top-6 md:left-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 13.1216 16 12.017 16H9C9.04875 12.2882 11.2359 10.3204 12.8225 9.7042L12.0833 7.79979C9.25625 8.89708 7 12.1932 7 16V21H14.017ZM21 21L21 18C21 16.8954 20.1046 16 19 16H15.9829C16.0317 12.2882 18.2189 10.3204 19.8054 9.7042L19.0662 7.79979C16.2392 8.89708 13.9829 12.1932 13.9829 16V21H21Z" /></svg>
-                  <svg className="w-8 h-8 md:w-12 md:h-12 text-gold/20 absolute bottom-4 right-4 md:bottom-6 md:right-6 rotate-180" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 13.1216 16 12.017 16H9C9.04875 12.2882 11.2359 10.3204 12.8225 9.7042L12.0833 7.79979C9.25625 8.89708 7 12.1932 7 16V21H14.017ZM21 21L21 18C21 16.8954 20.1046 16 19 16H15.9829C16.0317 12.2882 18.2189 10.3204 19.8054 9.7042L19.0662 7.79979C16.2392 8.89708 13.9829 12.1932 13.9829 16V21H21Z" /></svg>
+                  <svg className="w-6 h-6 md:w-12 md:h-12 text-gold/20 absolute top-3 left-3 md:top-6 md:left-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 13.1216 16 12.017 16H9C9.04875 12.2882 11.2359 10.3204 12.8225 9.7042L12.0833 7.79979C9.25625 8.89708 7 12.1932 7 16V21H14.017ZM21 21L21 18C21 16.8954 20.1046 16 19 16H15.9829C16.0317 12.2882 18.2189 10.3204 19.8054 9.7042L19.0662 7.79979C16.2392 8.89708 13.9829 12.1932 13.9829 16V21H21Z" /></svg>
+                  <svg className="w-6 h-6 md:w-12 md:h-12 text-gold/20 absolute bottom-3 right-3 md:bottom-6 md:right-6 rotate-180" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 13.1216 16 12.017 16H9C9.04875 12.2882 11.2359 10.3204 12.8225 9.7042L12.0833 7.79979C9.25625 8.89708 7 12.1932 7 16V21H14.017ZM21 21L21 18C21 16.8954 20.1046 16 19 16H15.9829C16.0317 12.2882 18.2189 10.3204 19.8054 9.7042L19.0662 7.79979C16.2392 8.89708 13.9829 12.1932 13.9829 16V21H21Z" /></svg>
 
-                  <div className="relative z-10 w-full max-h-full overflow-y-auto custom-scrollbar px-2 md:px-4 flex flex-col justify-center min-h-0">
+                  <div className="relative z-10 w-full max-h-full overflow-y-auto custom-scrollbar px-2 md:px-4 flex flex-col justify-center">
                     <p className="font-serif text-xl sm:text-2xl md:text-4xl text-charcoal italic leading-relaxed md:leading-relaxed mb-4 md:mb-6 break-words text-center md:text-left">
                       "{currentWish?.message}"
                     </p>
@@ -213,8 +214,8 @@ export const LiveWall: React.FC = () => {
         )}
       </main>
 
-      {/* Footer / QR Instructions - Compact */}
-      <footer className="flex-shrink-0 bg-white/80 backdrop-blur-md border-t border-gold/10 py-2 md:py-3 px-6 flex justify-between items-center relative z-20">
+      {/* --- BOX 3: FOOTER (Fixed Height, No Shrink) --- */}
+      <footer className="flex-none relative z-20 w-full bg-white/80 backdrop-blur-md border-t border-gold/10 py-3 px-6 flex justify-between items-center">
         <div className="flex items-center gap-4 md:gap-6">
           <div className="p-1 bg-white rounded-lg shadow-sm border border-gold/10">
             <img 
