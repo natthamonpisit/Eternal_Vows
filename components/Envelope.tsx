@@ -6,18 +6,18 @@ interface EnvelopeProps {
 
 export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
   // ---------------------------------------------------------------------------
-  // DESKTOP IMAGES (Horizontal 16:9)
+  // DESKTOP IMAGES (Horizontal 16:9) - UPDATED TO WEBP
   // ---------------------------------------------------------------------------
-  const DESKTOP_CLOSED_ID = "1TT6MKgz1RV70T1PmRj_I5QH49pbqQpxf"; 
-  const DESKTOP_HALF_ID = "1QPx4ifFYd__PL9O_LJn-hBKkjNaDL451"; 
-  const DESKTOP_OPEN_ID = "1W0hljkGqWNVvBa1EpL4NcMXnHa1COYf4"; 
+  const DESKTOP_CLOSED_ID = "1MRp2zV29olp5ijtDlUmNKEKZZVEoqEQH"; 
+  const DESKTOP_HALF_ID = "1HUVNwdYU3PbYKm96QIAYmTDs3EoOJInY"; 
+  const DESKTOP_OPEN_ID = "13-t5Spc5ntzNEOkWgeFPdLAogXZ8M1Xn"; 
 
   // ---------------------------------------------------------------------------
-  // MOBILE IMAGES (Vertical/Portrait)
+  // MOBILE IMAGES (Vertical/Portrait) - UPDATED TO WEBP
   // ---------------------------------------------------------------------------
-  const MOBILE_CLOSED_ID = "1KfTaVMYxnL0NXvYaG8h9huXtSPuLgFkc";
-  const MOBILE_HALF_ID = "1JGif_jjP3G602pJ-km_DfPSRZ7YfHyYu";
-  const MOBILE_OPEN_ID = "1v9smiaD_f3gKAMWKK1KGbg0Sp-axbqWf";
+  const MOBILE_CLOSED_ID = "15zST0AwxacdX7421EPK4GX7mQKu8QYTi";
+  const MOBILE_HALF_ID = "1dufx9C_bJW3mo5EEuigy4sN6WhejYEhP";
+  const MOBILE_OPEN_ID = "1iO24LTT7wIQ-OI26elRMoslH9g4aNR00";
 
 
   // ---------------------------------------------------------------------------
