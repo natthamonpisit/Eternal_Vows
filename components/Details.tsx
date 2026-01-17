@@ -181,17 +181,17 @@ export const Details: React.FC = () => {
           <h3 className="font-serif text-4xl md:text-5xl text-gold-shine mb-4">Dress Code</h3>
           {/* Changed text color to charcoal since background is now light */}
           <p className="font-sans text-sm md:text-base text-charcoal/70 uppercase tracking-[0.2em] mb-8 font-medium">
-            Rose Gold • Sage Green • Earth Tones • Light Gold • Blush Pink
+            Pink Taupe • Dusty Pink • Warm Taupe • Sage Green • Cream Beige • Light Gold
           </p>
           
           <div className="flex justify-center items-start gap-4 md:gap-8 flex-wrap px-2">
              {[
-               { color: '#C5908E', name: 'Rose Gold' }, 
+               { color: '#C08E86', name: 'Pink Taupe' },
+               { color: '#C5908E', name: 'Dusty Pink' }, 
                { color: '#CFC1B3', name: 'Warm Taupe' }, 
                { color: '#9EA996', name: 'Sage Green' }, 
                { color: '#E6DABF', name: 'Cream Beige' }, 
                { color: '#DBC895', name: 'Light Gold' },
-               { color: '#E8D3C6', name: 'Blush Pink' },
              ].map((swatch, i) => (
                <div key={i} className="flex flex-col items-center gap-2 group w-20 sm:w-24">
                  <div 
