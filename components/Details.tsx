@@ -178,11 +178,7 @@ export const Details: React.FC = () => {
         {/* DRESS CODE SECTION */}
         {/* Changed background from charcoal to white/95 to resolve "dark black area" complaint on mobile */}
         <div className="mt-20 md:mt-24 py-12 bg-white/95 backdrop-blur-sm rounded-xl shadow-xl text-center relative mx-4 md:mx-0 border border-white/40">
-          <h3 className="font-serif text-4xl md:text-5xl text-gold-shine mb-4">Dress Code</h3>
-          {/* Changed text color to charcoal since background is now light */}
-          <p className="font-sans text-sm md:text-base text-charcoal/70 uppercase tracking-[0.2em] mb-8 font-medium">
-            Pink Taupe • Dusty Pink • Warm Taupe • Sage Green • Cream Beige • Light Gold
-          </p>
+          <h3 className="font-serif text-4xl md:text-5xl text-gold-shine mb-8">Dress Code</h3>
           
           <div className="flex justify-center items-start gap-4 md:gap-8 flex-wrap px-2">
              {[
