@@ -23,16 +23,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    // CHANGE: Use Admin API 'resources' instead of 'search'
-    // This is more reliable for immediate listings and exact folder matching.
-    
-    const result = await cloudinary.api.resources({
-      type: 'upload',
-      prefix: 'Wedding_OukBew/Ourmoment', // Folder path (Case Sensitive!)
-      max_results: 100, // Fetch up to 100 images
-      direction: 'desc', // Show newest uploaded first (optional, or 'asc' for filename)
-      sort_by: 'public_id' // Sort by name
-    });
+    // Revert: Use Search API
+    // Note: Search API requires a few minutes for new images to be indexed.
+    const result = await cloudinary.search
+      .expression('folder:Wedding_OukBew/Ourmoment')
+      .sort_by('public_id', 'desc')
+      .max_results(100)
+      .execute();
 
     const images = result.resources.map(file => ({
       // Transform: Quality auto, Format auto, Width 600 for thumb
@@ -44,7 +41,7 @@ export default async function handler(req, res) {
     res.status(200).json({ success: true, data: images });
   } catch (error) {
     console.error('Cloudinary Gallery Error:', error);
-    // Return empty array instead of crashing, so frontend shows empty state nicely
+    // Return empty array instead of crashing
     res.status(500).json({ success: false, error: error.message, data: [] });
   }
 }
