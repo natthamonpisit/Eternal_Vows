@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 import { fetchGallery } from '../services/api';
 import { GalleryItem } from '../types';
@@ -14,19 +15,8 @@ export const Gallery: React.FC = () => {
   useEffect(() => {
     const loadImages = async () => {
       const rawItems = await fetchGallery();
-      
-      let candidateItems = rawItems;
-      
-      // If we have very few images (less than 12), duplicate them just to fill the grid initially
-      // But if we have many, we SHOW THEM ALL.
-      const MIN_ITEMS = 12;
-      if (candidateItems.length > 0 && candidateItems.length < MIN_ITEMS) {
-         while (candidateItems.length < MIN_ITEMS) {
-            candidateItems = [...candidateItems, ...candidateItems];
-         }
-      }
-      
-      setImages(candidateItems);
+      // Show exactly what we have (No duplication logic anymore)
+      setImages(rawItems);
       setLoading(false);
     };
     loadImages();
@@ -50,22 +40,55 @@ export const Gallery: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Helper to determine Bento Grid Class based on repeating pattern
-  // Pattern repeats every 10 images to ensure variety but infinite scroll support
+  // --------------------------------------------------------------------------
+  // 🧩 CUSTOM JIGSAW LAYOUT FOR 17 IMAGES
+  // --------------------------------------------------------------------------
+  // Design Concept: Symmetrical Balance
+  // Rows 1-2: [Big][Big] Left/Right, [Small][Small] Center
+  // Last Image (17): Centerpiece Big
+  // --------------------------------------------------------------------------
   const getBentoClass = (index: number) => {
     const baseClass = "relative w-full h-full overflow-hidden group cursor-zoom-in rounded-sm border-[4px] md:border-[6px] border-white shadow-md bg-white";
     
-    let spanClass = "md:col-span-1 md:row-span-1"; // Default 1x1
+    // Default Mobile: Col span 1
+    // Desktop: Specific mapping
+    let spanClass = "col-span-1 row-span-1 md:col-span-1 md:row-span-1"; 
 
-    // Repeating Pattern Logic (Mod 10)
-    const patternIndex = index % 10;
+    // Specific Map for 17 Images (0-16)
+    switch (index) {
+      // --- BLOCK 1 ---
+      case 0: // Top Left Big
+        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
+        break;
+      case 3: // Top Right Big
+        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
+        break;
+      
+      // --- BLOCK 2 ---
+      case 6: // Mid Left Big
+        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
+        break;
+      case 9: // Mid Right Big
+        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
+        break;
 
-    if (patternIndex === 0) {
-      spanClass = "md:col-span-2 md:row-span-2"; // Big Square (Every 10th image)
-    } else if (patternIndex === 3) {
-      spanClass = "md:col-span-1 md:row-span-2"; // Tall Vertical
-    } else if (patternIndex === 6) {
-      spanClass = "md:col-span-2 md:row-span-1"; // Wide Landscape
+      // --- BLOCK 3 ---
+      case 12: // Bot Left Big
+        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
+        break;
+      case 15: // Bot Right Big
+        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
+        break;
+
+      // --- THE GRAND FINALE (17th Image) ---
+      case 16: // Center Bottom Big
+        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
+        break;
+
+      // All others are default 1x1 (Indices: 1, 2, 4, 5, 7, 8, 10, 11, 13, 14)
+      default:
+        spanClass = "col-span-1 row-span-1 md:col-span-1 md:row-span-1";
+        break;
     }
     
     return `${baseClass} ${spanClass}`;
@@ -111,10 +134,10 @@ export const Gallery: React.FC = () => {
                 
                 {/* 
                    --------------------------------------------------
-                   DYNAMIC BENTO GRID LAYOUT
+                   PUZZLE GRID LAYOUT
                    Desktop: 6 Columns
                    Mobile: 3 Columns
-                   Rows: Auto (Infinite)
+                   Flow: Dense (Fits pieces together)
                    --------------------------------------------------
                 */}
                 <div className="w-full grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3 grid-flow-dense auto-rows-[100px] md:auto-rows-[180px]">
