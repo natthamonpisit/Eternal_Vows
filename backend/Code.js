@@ -1,8 +1,9 @@
 
 // ---------------- CONFIGURATION ----------------
 const CONFIG = {
-  // รหัส Sheet ที่ถูกต้อง (ตัว y)
   SHEET_ID: '10nq4glCrBgH0wdqeAFFqYfAk-5FZ7Swr4-6c-K5y0iQ', 
+  // Gallery and Guestbook Folders are no longer used for storage in Drive
+  // But kept in config to avoid breaking old variables if referenced
   GALLERY_FOLDER_ID: '1Qa2ztFGPavgnMVaG_Bz7-9uoZqOTV5Gu',
   GUESTBOOK_FOLDER_ID: '1HhsMZCZNkmWjP6ySi7HLyogBuvd7LFEu' 
 };
@@ -23,7 +24,9 @@ function extractId(raw) {
 function doGet(e) {
   const action = e ? e.parameter.action : 'test';
   
-  if (action === 'getGallery') return getGalleryImages();
+  // Gallery is now handled by Vercel/Cloudinary, but we keep this for backward compat
+  // or if you want to use Drive as backup.
+  if (action === 'getGallery') return createCorsResponse({ success: true, data: [] }); 
   if (action === 'getWishes') return getWishes();
   
   return createCorsResponse({ success: true, message: "Wedding API Ready" });
@@ -40,39 +43,11 @@ function doPost(e) {
   }
 }
 
-function getGalleryImages() {
-  const images = [];
-  try {
-    const cleanId = extractId(CONFIG.GALLERY_FOLDER_ID);
-    const folder = DriveApp.getFolderById(cleanId);
-    const files = folder.getFiles();
-    
-    while (files.hasNext()) {
-      const file = files.next();
-      const mime = file.getMimeType();
-      const name = file.getName();
-      const id = file.getId();
-
-      if (mime.includes('image') || name.toLowerCase().endsWith('.heic')) {
-        // Return object with thumbnail (w600) and full size (w2048)
-        images.push({
-          thumb: "https://drive.google.com/thumbnail?id=" + id + "&sz=w600",
-          full: "https://drive.google.com/thumbnail?id=" + id + "&sz=w2048"
-        });
-      }
-    }
-    return createCorsResponse({ success: true, data: images });
-  } catch (err) {
-    return createCorsResponse({ success: false, error: err.toString() });
-  }
-}
-
 function handleGuestbook(data) {
   try {
     const sheetId = extractId(CONFIG.SHEET_ID);
-    const folderId = extractId(CONFIG.GUESTBOOK_FOLDER_ID);
     
-    // เช็ค Sheet
+    // Check Sheet
     const ss = SpreadsheetApp.openById(sheetId);
     let sheet = ss.getSheetByName('GuestBook');
     if (!sheet) { 
@@ -80,20 +55,32 @@ function handleGuestbook(data) {
       sheet.appendRow(['Timestamp', 'Name', 'Message', 'ImageURL']); 
     }
 
-    // จัดการรูปภาพ
-    let imageUrl = '';
+    // Handle Image
+    // Now the frontend sends a Cloudinary URL string directly.
+    // If it's a URL (starts with http), we save it directly.
+    // If it's Base64 (legacy), we save to Drive (Old logic fallback).
+    
+    let finalImageUrl = '';
+
     if (data.image) {
-      const parts = data.image.split(',');
-      const base64Data = parts.length > 1 ? parts[1] : parts[0];
-      const contentType = parts.length > 1 ? parts[0].split(':')[1].split(';')[0] : 'image/png';
-      
-      const blob = Utilities.newBlob(Utilities.base64Decode(base64Data), contentType, data.name || 'guest');
-      const file = DriveApp.getFolderById(folderId).createFile(blob);
-      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-      imageUrl = "https://drive.google.com/thumbnail?id=" + file.getId() + "&sz=w1024";
+       if (data.image.toString().startsWith('http')) {
+          // It's a Cloudinary URL
+          finalImageUrl = data.image;
+       } else {
+          // Fallback: Base64 Upload to Drive (Legacy)
+          const folderId = extractId(CONFIG.GUESTBOOK_FOLDER_ID);
+          const parts = data.image.split(',');
+          const base64Data = parts.length > 1 ? parts[1] : parts[0];
+          const contentType = parts.length > 1 ? parts[0].split(':')[1].split(';')[0] : 'image/png';
+          
+          const blob = Utilities.newBlob(Utilities.base64Decode(base64Data), contentType, data.name || 'guest');
+          const file = DriveApp.getFolderById(folderId).createFile(blob);
+          file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+          finalImageUrl = "https://drive.google.com/thumbnail?id=" + file.getId() + "&sz=w1024";
+       }
     }
     
-    sheet.appendRow([new Date(), data.name, data.message, imageUrl]);
+    sheet.appendRow([new Date(), data.name, data.message, finalImageUrl]);
     return createCorsResponse({ success: true });
     
   } catch (err) {
@@ -121,15 +108,13 @@ function getWishes() {
     const sheet = ss.getSheetByName('GuestBook');
     if (!sheet) return createCorsResponse({ success: true, data: [] });
     
-    // ดึงข้อมูลทั้งหมดออกมา
+    // Fetch data
     const rows = sheet.getDataRange().getValues();
     
-    // กรองข้อมูล:
-    // 1. ตัดแถวที่เป็นหัวตารางทิ้ง (เช็คว่าคอลัมน์แรกเขียนว่า Timestamp ไหม)
-    // 2. ตัดแถวว่างทิ้ง (เช็คว่าคอลัมน์ Name ต้องไม่ว่าง)
+    // Filter
     const cleanRows = rows.filter(r => r[0] !== 'Timestamp' && r[1] && r[1].toString() !== '');
 
-    // เอา 20 อันล่าสุด (Reverse)
+    // Get latest 20
     const wishes = cleanRows.reverse().slice(0, 20).map(r => ({
       timestamp: r[0], 
       name: r[1], 

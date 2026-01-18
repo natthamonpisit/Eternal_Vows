@@ -2,15 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { fetchGallery } from '../services/api';
 import { GalleryItem } from '../types';
 
-interface SizedGalleryItem extends GalleryItem {
-  orientation: 'landscape' | 'portrait';
-}
-
-type LayoutType = 'uniform' | 'magazine';
-
 export const Gallery: React.FC = () => {
-  const [images, setImages] = useState<SizedGalleryItem[]>([]);
-  const [layoutType, setLayoutType] = useState<LayoutType>('uniform');
+  const [images, setImages] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   
@@ -22,73 +15,18 @@ export const Gallery: React.FC = () => {
     const loadImages = async () => {
       const rawItems = await fetchGallery();
       
-      // 1. Fetch exactly 8 candidates
-      let candidateItems = rawItems.slice(0, 8);
+      let candidateItems = rawItems;
       
-      // Fallback: Ensure we have exactly 8 images (Duplicate if needed to fill grid)
-      while (candidateItems.length > 0 && candidateItems.length < 8) {
-        candidateItems = [...candidateItems, ...candidateItems].slice(0, 8);
+      // If we have very few images (less than 12), duplicate them just to fill the grid initially
+      // But if we have many, we SHOW THEM ALL.
+      const MIN_ITEMS = 12;
+      if (candidateItems.length > 0 && candidateItems.length < MIN_ITEMS) {
+         while (candidateItems.length < MIN_ITEMS) {
+            candidateItems = [...candidateItems, ...candidateItems];
+         }
       }
-
-      // 2. Analyze Orientation
-      const sizedItems = await Promise.all(
-        candidateItems.map(item => {
-          return new Promise<SizedGalleryItem>((resolve) => {
-            const img = new Image();
-            img.src = item.thumb;
-            img.onload = () => {
-              resolve({
-                ...item,
-                orientation: img.naturalWidth > img.naturalHeight ? 'landscape' : 'portrait'
-              });
-            };
-            img.onerror = () => {
-              resolve({ ...item, orientation: 'landscape' });
-            };
-          });
-        })
-      );
-
-      if (sizedItems.length === 0) {
-        setLoading(false);
-        return;
-      }
-
-      // 3. LOGIC: CHOOSE LAYOUT
-      const portraits = sizedItems.filter(i => i.orientation === 'portrait');
-      const landscapes = sizedItems.filter(i => i.orientation === 'landscape');
-      const portraitCount = portraits.length;
       
-      let finalLayout: LayoutType = 'uniform';
-      let sortedImages: SizedGalleryItem[] = [];
-
-      // Case: Mixed Orientations (2-6 Portraits) -> Use Magazine Layout
-      if (portraitCount >= 2 && portraitCount <= 6) {
-        finalLayout = 'magazine';
-        
-        // Priority: Put 2 Portraits in the Center Column (Target indices: 3, 4)
-        const centerImages = portraits.slice(0, 2);
-        
-        // Remaining pool
-        const remainingPool = [...portraits.slice(2), ...landscapes];
-        
-        // Left Column (Target indices: 0, 1, 2)
-        const leftImages = remainingPool.slice(0, 3);
-        
-        // Right Column (Target indices: 5, 6, 7)
-        const rightImages = remainingPool.slice(3, 6);
-        
-        // Final Assembly: [Left... , Center... , Right...]
-        sortedImages = [...leftImages, ...centerImages, ...rightImages];
-        
-      } else {
-        // Case: Uniform (All Landscape or All Portrait or just 1 outlier) -> Use Uniform 4x2
-        finalLayout = 'uniform';
-        sortedImages = sizedItems;
-      }
-
-      setImages(sortedImages.slice(0, 8));
-      setLayoutType(finalLayout);
+      setImages(candidateItems);
       setLoading(false);
     };
     loadImages();
@@ -112,6 +50,27 @@ export const Gallery: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Helper to determine Bento Grid Class based on repeating pattern
+  // Pattern repeats every 10 images to ensure variety but infinite scroll support
+  const getBentoClass = (index: number) => {
+    const baseClass = "relative w-full h-full overflow-hidden group cursor-zoom-in rounded-sm border-[4px] md:border-[6px] border-white shadow-md bg-white";
+    
+    let spanClass = "md:col-span-1 md:row-span-1"; // Default 1x1
+
+    // Repeating Pattern Logic (Mod 10)
+    const patternIndex = index % 10;
+
+    if (patternIndex === 0) {
+      spanClass = "md:col-span-2 md:row-span-2"; // Big Square (Every 10th image)
+    } else if (patternIndex === 3) {
+      spanClass = "md:col-span-1 md:row-span-2"; // Tall Vertical
+    } else if (patternIndex === 6) {
+      spanClass = "md:col-span-2 md:row-span-1"; // Wide Landscape
+    }
+    
+    return `${baseClass} ${spanClass}`;
+  };
+
   return (
     <section className="py-16 md:py-24 px-4 relative min-h-[80vh] flex flex-col justify-center bg-taupe/20">
       {/* Background Decor */}
@@ -127,6 +86,9 @@ export const Gallery: React.FC = () => {
       >
         <p className="font-sans text-gold text-xs md:text-sm tracking-[0.3em] uppercase mb-4">Pre-Wedding Gallery</p>
         <h2 className="font-serif text-5xl md:text-7xl text-charcoal mb-6 text-gold-shine">Our Moments</h2>
+        <p className="font-serif text-charcoal/60 italic max-w-2xl mx-auto px-4">
+          "Every picture tells a story of love, laughter, and our journey together."
+        </p>
       </div>
 
       <div className="max-w-7xl mx-auto w-full px-0 relative z-10">
@@ -142,96 +104,44 @@ export const Gallery: React.FC = () => {
           </div>
         ) : (
           /* 
-             THE FRAME (16:9 Aspect Ratio Container)
+             THE FRAME Container
           */
-          <div className="w-full relative pt-[56.25%] shadow-2xl bg-white">
-             <div className="absolute inset-0 w-full h-full bg-white">
+          <div className="w-full relative shadow-2xl bg-white p-4 md:p-6 rounded-sm">
+             <div className="relative w-full h-full bg-white p-2">
                 
                 {/* 
                    --------------------------------------------------
-                   LAYOUT A: UNIFORM GRID (4 Columns x 2 Rows)
+                   DYNAMIC BENTO GRID LAYOUT
+                   Desktop: 6 Columns
+                   Mobile: 3 Columns
+                   Rows: Auto (Infinite)
                    --------------------------------------------------
-                   Used for: 0, 1, 7, 8 Portraits
-                   Simple CSS Grid.
                 */}
-                {layoutType === 'uniform' && (
-                  <div className="w-full h-full grid grid-cols-2 md:grid-cols-4 grid-rows-4 md:grid-rows-2 gap-1 p-1">
-                    {images.map((img, idx) => (
-                      <div 
-                        key={idx} 
-                        className="relative w-full h-full overflow-hidden group cursor-zoom-in"
-                        onClick={() => setSelectedImage(img.full)}
-                      >
-                        <img 
-                          src={img.thumb} 
-                          alt={`Moment ${idx + 1}`} 
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+                <div className="w-full grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3 grid-flow-dense auto-rows-[100px] md:auto-rows-[180px]">
+                  {images.map((img, idx) => (
+                    <div 
+                      key={idx} 
+                      className={getBentoClass(idx)}
+                      onClick={() => setSelectedImage(img.full)}
+                    >
+                      <img 
+                        src={img.thumb} 
+                        alt={`Moment ${idx + 1}`} 
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        loading="lazy"
+                      />
+                      {/* Overlay Effect */}
+                      <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/20 transition-colors duration-500"></div>
+                      
+                      {/* Icon on hover */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                         <div className="bg-white/30 backdrop-blur-sm p-2 md:p-3 rounded-full shadow-sm">
+                            <svg className="w-4 h-4 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
+                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* 
-                   --------------------------------------------------
-                   LAYOUT B: MAGAZINE GRID (3 Columns: 3 - 2 - 3)
-                   --------------------------------------------------
-                   Used for: 2, 3, 4, 5, 6 Portraits
-                   
-                   TECHNIQUE: CSS GRID with 6 ROWS.
-                   - Left Col Items: Span 2 Rows each (3 items * 2 = 6 rows)
-                   - Center Col Items: Span 3 Rows each (2 items * 3 = 6 rows)
-                   - Right Col Items: Span 2 Rows each (3 items * 2 = 6 rows)
-                   
-                   Result: PERFECT HEIGHT MATCH. No whitespace.
-                */}
-                {layoutType === 'magazine' && (
-                  <>
-                    {/* DESKTOP: 6-Row Grid */}
-                    <div className="hidden md:grid w-full h-full grid-cols-[1fr_1.3fr_1fr] grid-rows-6 gap-1 p-1">
-                       {/* Left Column (Indices 0, 1, 2) */}
-                       <div className="relative w-full h-full overflow-hidden group cursor-zoom-in row-span-2 col-start-1" onClick={() => setSelectedImage(images[0].full)}>
-                          <img src={images[0].thumb} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                       </div>
-                       <div className="relative w-full h-full overflow-hidden group cursor-zoom-in row-span-2 col-start-1" onClick={() => setSelectedImage(images[1].full)}>
-                          <img src={images[1].thumb} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                       </div>
-                       <div className="relative w-full h-full overflow-hidden group cursor-zoom-in row-span-2 col-start-1" onClick={() => setSelectedImage(images[2].full)}>
-                          <img src={images[2].thumb} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                       </div>
-
-                       {/* Center Column (Indices 3, 4 - Hero) */}
-                       <div className="relative w-full h-full overflow-hidden group cursor-zoom-in row-span-3 col-start-2" onClick={() => setSelectedImage(images[3].full)}>
-                          <img src={images[3].thumb} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                       </div>
-                       <div className="relative w-full h-full overflow-hidden group cursor-zoom-in row-span-3 col-start-2" onClick={() => setSelectedImage(images[4].full)}>
-                          <img src={images[4].thumb} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                       </div>
-
-                       {/* Right Column (Indices 5, 6, 7) */}
-                       <div className="relative w-full h-full overflow-hidden group cursor-zoom-in row-span-2 col-start-3" onClick={() => setSelectedImage(images[5].full)}>
-                          <img src={images[5].thumb} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                       </div>
-                       <div className="relative w-full h-full overflow-hidden group cursor-zoom-in row-span-2 col-start-3" onClick={() => setSelectedImage(images[6].full)}>
-                          <img src={images[6].thumb} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                       </div>
-                       <div className="relative w-full h-full overflow-hidden group cursor-zoom-in row-span-2 col-start-3" onClick={() => setSelectedImage(images[7].full)}>
-                          <img src={images[7].thumb} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                       </div>
                     </div>
-
-                    {/* MOBILE: Standard 2-Col Grid (Fallback) */}
-                    <div className="md:hidden w-full h-full grid grid-cols-2 grid-rows-4 gap-1 p-1">
-                      {images.map((img, idx) => (
-                        <div key={idx} className="relative w-full h-full overflow-hidden" onClick={() => setSelectedImage(img.full)}>
-                          <img src={img.thumb} className="w-full h-full object-cover" loading="lazy" />
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
+                  ))}
+                </div>
 
              </div>
           </div>
@@ -254,7 +164,7 @@ export const Gallery: React.FC = () => {
       {/* Lightbox Overlay */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 animate-fade-in cursor-zoom-out backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 animate-fade-in cursor-zoom-out backdrop-blur-sm"
           onClick={() => setSelectedImage(null)}
         >
           <button 

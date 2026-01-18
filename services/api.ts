@@ -19,13 +19,44 @@ export const submitRsvp = async (data: Omit<RsvpPayload, 'action'>): Promise<Api
 
 export const submitGuestbook = async (data: Omit<GuestbookPayload, 'action'>): Promise<ApiResponse<null>> => {
   try {
-    const payload: GuestbookPayload = { ...data, action: 'guestbook' };
+    let imageUrl = '';
+
+    // Step 1: Upload Image to Cloudinary (if exists) via our Vercel Backend
+    if (data.image) {
+       try {
+          const uploadRes = await fetch('/api/upload', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({ image: data.image })
+          });
+          const uploadResult = await uploadRes.json();
+          if (uploadResult.success) {
+             imageUrl = uploadResult.url;
+          } else {
+             throw new Error("Image upload failed: " + uploadResult.error);
+          }
+       } catch (err) {
+          console.error("Cloudinary Upload Error", err);
+          return { success: false, error: "Failed to upload image. Please try again." };
+       }
+    }
+
+    // Step 2: Submit Text Data + Image URL to Google Sheets
+    // Note: We send the 'imageUrl' string instead of the base64 'image' data
+    const payload = { 
+       action: 'guestbook', 
+       name: data.name, 
+       message: data.message, 
+       image: imageUrl // Sending URL string now, not base64
+    };
+
     const response = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify(payload),
     });
     const result = await response.json();
     return result;
+
   } catch (error) {
     console.error("Guestbook Error:", error);
     return { success: false, error: String(error) };
@@ -33,13 +64,16 @@ export const submitGuestbook = async (data: Omit<GuestbookPayload, 'action'>): P
 };
 
 export const fetchGallery = async (): Promise<GalleryItem[]> => {
-  const targetUrl = `${API_URL}?action=getGallery&t=${Date.now()}`;
+  // Use our new Vercel API endpoint for Cloudinary
   try {
-    const response = await fetch(targetUrl);
-    const result: ApiResponse<GalleryItem[]> = await response.json();
-    return result.data || [];
+    const response = await fetch('/api/gallery');
+    const result = await response.json();
+    if (result.success) {
+      return result.data || [];
+    }
+    return [];
   } catch (error) {
-    console.warn("API Error:", error);
+    console.warn("Gallery API Error:", error);
     return [];
   }
 };

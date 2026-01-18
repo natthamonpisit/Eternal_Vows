@@ -6,23 +6,29 @@ interface EnvelopeProps {
 
 export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
   // ---------------------------------------------------------------------------
-  // DESKTOP IMAGES (Horizontal 16:9) - UPDATED TO WEBP
+  // CLOUDINARY CONFIG
   // ---------------------------------------------------------------------------
-  const DESKTOP_CLOSED_ID = "1MRp2zV29olp5ijtDlUmNKEKZZVEoqEQH"; 
-  const DESKTOP_HALF_ID = "1HUVNwdYU3PbYKm96QIAYmTDs3EoOJInY"; 
-  const DESKTOP_OPEN_ID = "13-t5Spc5ntzNEOkWgeFPdLAogXZ8M1Xn"; 
+  const CLOUD_NAME = "damfrrvrb";
+  const BASE_URL = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto,w_1920/`;
 
   // ---------------------------------------------------------------------------
-  // MOBILE IMAGES (Vertical/Portrait) - UPDATED TO WEBP
+  // DESKTOP IMAGES (Horizontal)
   // ---------------------------------------------------------------------------
-  const MOBILE_CLOSED_ID = "15zST0AwxacdX7421EPK4GX7mQKu8QYTi";
-  const MOBILE_HALF_ID = "1dufx9C_bJW3mo5EEuigy4sN6WhejYEhP";
-  const MOBILE_OPEN_ID = "1iO24LTT7wIQ-OI26elRMoslH9g4aNR00";
+  const DESKTOP_CLOSED_ID = "Wedding_OukBew/Envelope/01_closed_envelope"; 
+  const DESKTOP_HALF_ID = "Wedding_OukBew/Envelope/02_Middle_open"; 
+  const DESKTOP_OPEN_ID = "Wedding_OukBew/Envelope/03_full_open"; 
+
+  // ---------------------------------------------------------------------------
+  // MOBILE IMAGES (Vertical/Portrait)
+  // ---------------------------------------------------------------------------
+  const MOBILE_CLOSED_ID = "Wedding_OukBew/Envelope/04_Closed_Iphone";
+  const MOBILE_HALF_ID = "Wedding_OukBew/Envelope/05_Half_open_iphone";
+  const MOBILE_OPEN_ID = "Wedding_OukBew/Envelope/06_Fullopen_iphone";
 
 
   // ---------------------------------------------------------------------------
   const getUrl = (id: string) => {
-    return `https://drive.google.com/thumbnail?id=${id}&sz=w1920`;
+    return `${BASE_URL}${id}`;
   };
 
   const [stage, setStage] = useState<'closed' | 'half' | 'open'>('closed');
