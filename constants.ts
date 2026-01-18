@@ -1,9 +1,9 @@
 
 // ---------------- คำแนะนำสำหรับพี่นัท ----------------
-// ผมแก้ URL ให้ถูกต้องตามที่พี่ส่งมาแล้วครับ (เช็คตัวอักษร PI5GBOcv ครบถ้วน)
-// ลิ้งค์นี้จะเชื่อมกับ Google Drive ของพี่ได้แน่นอนครับ
+// ผมแก้ URL เป็นตัวใหม่ล่าสุดที่พี่ส่งมาให้แล้วครับ (...tfjg/exec)
+// ตอนนี้ระบบจะเชื่อมต่อกับ Google Sheet ผ่าน Script ตัวใหม่นี้ครับ
 
-export const API_URL = "https://script.google.com/macros/s/AKfycbzRvT5E7ndbYShZIV_31yacOnr08L33-XfAqtTbYrPa6LLVDkVnLGH8cPI5GBOcv_XZTw/exec";
+export const API_URL = "https://script.google.com/macros/s/AKfycbyvomQVxSrgQdYTgSTVZmMPIiqThw5d26ZJIvdaUgQg2tdYgoN_Oy9VoVipgLvCtfjg/exec";
 
 // รูปตัวอย่าง (ระบบจะโชว์รูปพวกนี้ระหว่างรอรูปจริงโหลด หรือถ้า API มีปัญหา)
 export const MOCK_GALLERY_IMAGES = [
