@@ -14,17 +14,14 @@ export const Details: React.FC = () => {
       const images = await fetchGallery('Wedding_OukBew/Location');
       
       if (images.length > 0) {
-        // If we have real images, use them (take up to 6)
-        setVenueImages(images.slice(0, 6));
+        // If we have real images, use them (take up to 3)
+        setVenueImages(images.slice(0, 3));
       } else {
         // 2. Fallback / Placeholder if folder is empty (Mocking Dalva le ville vibe)
         const placeholders = [
           "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=800&auto=format&fit=crop", // Hall
           "https://images.unsplash.com/photo-1464366400600-7168b8af0bc3?q=80&w=800&auto=format&fit=crop", // Garden
           "https://images.unsplash.com/photo-1519225421980-715cb0202128?q=80&w=800&auto=format&fit=crop", // Table
-          "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=800&auto=format&fit=crop", // Decor
-          "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop", // Light
-          "https://images.unsplash.com/photo-1511285560982-1351cdeb9821?q=80&w=800&auto=format&fit=crop"  // Flowers
         ].map(url => ({ thumb: url, full: url }));
         setVenueImages(placeholders);
       }
@@ -205,12 +202,13 @@ export const Details: React.FC = () => {
                 </div>
               </div>
 
-              {/* Right: Venue Gallery (2x3 Grid) */}
+              {/* Right: Venue Gallery (3 Images) */}
               <div className="space-y-6">
-                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                 {/* Grid: Stack on Mobile (1 col), Row on Desktop (3 cols) */}
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                     {loadingVenue ? (
                        // Skeleton Loaders
-                       Array.from({length: 6}).map((_, i) => (
+                       Array.from({length: 3}).map((_, i) => (
                          <div key={i} className="aspect-[4/3] bg-white/10 rounded-sm animate-pulse"></div>
                        ))
                     ) : (
