@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 
 export const Hero: React.FC = () => {
@@ -7,6 +8,12 @@ export const Hero: React.FC = () => {
     minutes: 0,
     seconds: 0
   });
+
+  // Cloudinary Configuration
+  const CLOUD_NAME = "damfrrvrb";
+  // The specific image ID from your screenshot
+  const BG_IMAGE_ID = "Wedding_OukBew/BG/7e0b499b-7fa4-4a7d-99e0-8068afce2e07_1_prgbpm";
+  const bgUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto,c_cover/${BG_IMAGE_ID}`;
 
   useEffect(() => {
     // Target date: March 21, 2026 at 09:00 AM
@@ -44,20 +51,30 @@ export const Hero: React.FC = () => {
 
   return (
     <section className="relative h-screen min-h-[700px] flex flex-col items-center text-center px-4 overflow-hidden">
-      {/* 1. Subtle Paper Texture Background */}
-      <div className="absolute inset-0 opacity-40 pointer-events-none" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
+      
+      {/* 1. Main Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 transition-transform duration-[20s] ease-linear hover:scale-105"
+        style={{ backgroundImage: `url("${bgUrl}")` }}
+      ></div>
+
+      {/* 2. Soft Overlay (Cream Tint) - Helps text pop against the photo */}
+      <div className="absolute inset-0 bg-cream/50 z-0 mix-blend-overlay"></div>
+      
+      {/* 3. Gradient Fade (Top & Bottom) - Ensures text readability at top, and smooth transition at bottom */}
+      <div className="absolute inset-0 bg-gradient-to-b from-cream/80 via-white/20 to-cream z-0"></div>
+
+      {/* 4. Texture Overlay (Original Paper Texture) - Keeps the vintage feel */}
+      <div className="absolute inset-0 opacity-40 pointer-events-none z-0 mix-blend-multiply" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
 
       {/* Main Content Area - Top Aligned with Padding */}
-      {/* Reduced padding-top to move content up and prevent overlap with bottom arrow */}
-      {/* Reduced space-y to bring Date/Location closer to Names */}
       <div className="pt-20 sm:pt-24 md:pt-32 animate-slide-up space-y-2 sm:space-y-3 md:space-y-4 max-w-5xl flex flex-col items-center relative z-10 w-full">
         <div className="space-y-4 w-full">
           {/* Responsive Font Size for Header */}
-          <p className="text-gold-shine font-sans tracking-[0.2em] uppercase text-sm sm:text-xl md:text-3xl font-bold">The Wedding Of</p>
+          <p className="text-gold-shine font-sans tracking-[0.2em] uppercase text-sm sm:text-xl md:text-3xl font-bold drop-shadow-sm">The Wedding Of</p>
           
-          {/* Names in Charcoal - Fluid Typography optimized for all screens */}
-          {/* text-[11vw] for mobile to maximize size without breaking, capped at lg sizes */}
-          <h1 className="font-script text-[11vw] sm:text-[8vw] lg:text-9xl text-charcoal drop-shadow-sm leading-tight whitespace-nowrap px-1">
+          {/* Names in Charcoal */}
+          <h1 className="font-script text-[11vw] sm:text-[8vw] lg:text-9xl text-charcoal drop-shadow-md leading-tight whitespace-nowrap px-1">
             Natthamonpisit <span className="text-gold mx-0.5 sm:mx-2">&</span> Sorot
           </h1>
         </div>
@@ -65,17 +82,17 @@ export const Hero: React.FC = () => {
         {/* Tightened gap to move time up */}
         <div className="flex flex-col items-center gap-2 sm:gap-4 w-full">
           {/* Responsive Font Size for Date/Location */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-8 text-lg sm:text-2xl md:text-3xl lg:text-4xl font-serif text-charcoal/80">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-8 text-lg sm:text-2xl md:text-3xl lg:text-4xl font-serif text-charcoal/90 font-medium">
             <span>March 21, 2026</span>
             <span className="hidden md:block w-2 h-2 rounded-full bg-gold"></span>
             <span>Dalva le ville, Bangkok</span>
           </div>
           
           {/* Reduced vertical margin for divider */}
-          <div className="w-12 sm:w-16 h-px bg-gold/30 my-1"></div>
+          <div className="w-12 sm:w-16 h-px bg-gold/50 my-1"></div>
 
-          {/* Countdown Timer - Removed top margin to pull it closer */}
-          <div className="flex items-center justify-center mt-0 scale-90 sm:scale-100">
+          {/* Countdown Timer */}
+          <div className="flex items-center justify-center mt-0 scale-90 sm:scale-100 bg-white/40 backdrop-blur-sm px-6 py-4 rounded-full border border-white/50 shadow-sm">
             <TimeUnit value={timeLeft.days} label="Days" />
             <span className="font-serif text-xl sm:text-2xl text-gold/50 -mt-3 sm:-mt-4">:</span>
             <TimeUnit value={timeLeft.hours} label="Hours" />
@@ -87,9 +104,9 @@ export const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Arrow Container: Fills the remaining space to center the arrow vertically */}
+      {/* Arrow Container */}
       <div className="flex-1 flex items-center justify-center relative z-10 w-full pb-24">
-        <div className="animate-bounce text-gold/80">
+        <div className="animate-bounce text-charcoal/80 drop-shadow-sm">
           <svg className="w-8 h-8 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
           </svg>
