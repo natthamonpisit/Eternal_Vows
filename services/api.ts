@@ -63,10 +63,15 @@ export const submitGuestbook = async (data: Omit<GuestbookPayload, 'action'>): P
   }
 };
 
-export const fetchGallery = async (): Promise<GalleryItem[]> => {
+export const fetchGallery = async (folderName?: string): Promise<GalleryItem[]> => {
   // Use our new Vercel API endpoint for Cloudinary
+  // Accepts optional folderName query param
   try {
-    const response = await fetch('/api/gallery');
+    const url = folderName 
+      ? `/api/gallery?folder=${encodeURIComponent(folderName)}`
+      : '/api/gallery';
+      
+    const response = await fetch(url);
     const result = await response.json();
     if (result.success) {
       return result.data || [];

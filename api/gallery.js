@@ -1,3 +1,4 @@
+
 import { v2 as cloudinary } from 'cloudinary';
 
 // Configuration
@@ -23,10 +24,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Revert: Use Search API
+    // Get folder from query param, default to 'Wedding_OukBew/Ourmoment'
+    const targetFolder = req.query.folder || 'Wedding_OukBew/Ourmoment';
+
     // Note: Search API requires a few minutes for new images to be indexed.
     const result = await cloudinary.search
-      .expression('folder:Wedding_OukBew/Ourmoment')
+      .expression(`folder:${targetFolder}`)
       .sort_by('public_id', 'desc')
       .max_results(100)
       .execute();
