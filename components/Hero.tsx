@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { fetchGallery } from '../services/api';
 
 export const Hero: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -9,11 +10,29 @@ export const Hero: React.FC = () => {
     seconds: 0
   });
 
-  // Cloudinary Configuration
+  // Default Fallback Image (รูปปัจจุบันที่พี่ส่งมา)
+  // ใช้เป็นค่าเริ่มต้นเพื่อให้เว็บโหลดไว (LCP) ก่อนที่ API จะไปเช็ครูปใหม่มาให้
+  const DEFAULT_BG_ID = "Wedding_OukBew/BG/7e0b499b-7fa4-4a7d-99e0-8068afce2e07_1_prgbpm";
   const CLOUD_NAME = "damfrrvrb";
-  // The specific image ID from your screenshot
-  const BG_IMAGE_ID = "Wedding_OukBew/BG/7e0b499b-7fa4-4a7d-99e0-8068afce2e07_1_prgbpm";
-  const bgUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto,c_cover/${BG_IMAGE_ID}`;
+  const [bgUrl, setBgUrl] = useState(`https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto,c_cover/${DEFAULT_BG_ID}`);
+
+  // Fetch Background Dynamically from 'Wedding_OukBew/BG' folder
+  useEffect(() => {
+    const loadDynamicBg = async () => {
+      try {
+        // ดึงรูปจาก Folder BG โดยตรง
+        const images = await fetchGallery('Wedding_OukBew/BG');
+        if (images.length > 0) {
+          // ถ้ามีรูปใน Folder ให้ใช้รูปแรกที่เจอ (ล่าสุด)
+          // ระบบจะ Override รูป Default ให้เองถ้าพี่อัพรูปใหม่เข้าไป
+          setBgUrl(images[0].full);
+        }
+      } catch (error) {
+        console.warn("Could not fetch dynamic BG, using default.");
+      }
+    };
+    loadDynamicBg();
+  }, []);
 
   useEffect(() => {
     // Target date: March 21, 2026 at 09:00 AM
