@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { fetchGallery } from '../services/api';
 import { GalleryItem } from '../types';
+import { MOCK_GALLERY_IMAGES } from '../constants';
 
 export const Gallery: React.FC = () => {
   const [images, setImages] = useState<GalleryItem[]>([]);
@@ -14,8 +15,20 @@ export const Gallery: React.FC = () => {
 
   useEffect(() => {
     const loadImages = async () => {
-      const rawItems = await fetchGallery();
-      // Show exactly what we have (No duplication logic anymore)
+      let rawItems = await fetchGallery();
+      
+      // -----------------------------------------------------------
+      // FALLBACK FOR PREVIEW / DEV MODE
+      // -----------------------------------------------------------
+      if (rawItems.length === 0) {
+        console.log("Preview Mode: Loading Mock Images");
+        // สร้าง Dummy Data 17 รูป
+        rawItems = Array.from({ length: 17 }).map((_, i) => ({
+           thumb: MOCK_GALLERY_IMAGES[i % MOCK_GALLERY_IMAGES.length],
+           full: MOCK_GALLERY_IMAGES[i % MOCK_GALLERY_IMAGES.length]
+        }));
+      }
+
       setImages(rawItems);
       setLoading(false);
     };
@@ -39,60 +52,6 @@ export const Gallery: React.FC = () => {
 
     return () => observer.disconnect();
   }, []);
-
-  // --------------------------------------------------------------------------
-  // 🧩 CUSTOM JIGSAW LAYOUT FOR 17 IMAGES
-  // --------------------------------------------------------------------------
-  // Design Concept: Symmetrical Balance
-  // Rows 1-2: [Big][Big] Left/Right, [Small][Small] Center
-  // Last Image (17): Centerpiece Big
-  // --------------------------------------------------------------------------
-  const getBentoClass = (index: number) => {
-    const baseClass = "relative w-full h-full overflow-hidden group cursor-zoom-in rounded-sm border-[4px] md:border-[6px] border-white shadow-md bg-white";
-    
-    // Default Mobile: Col span 1
-    // Desktop: Specific mapping
-    let spanClass = "col-span-1 row-span-1 md:col-span-1 md:row-span-1"; 
-
-    // Specific Map for 17 Images (0-16)
-    switch (index) {
-      // --- BLOCK 1 ---
-      case 0: // Top Left Big
-        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
-        break;
-      case 3: // Top Right Big
-        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
-        break;
-      
-      // --- BLOCK 2 ---
-      case 6: // Mid Left Big
-        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
-        break;
-      case 9: // Mid Right Big
-        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
-        break;
-
-      // --- BLOCK 3 ---
-      case 12: // Bot Left Big
-        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
-        break;
-      case 15: // Bot Right Big
-        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
-        break;
-
-      // --- THE GRAND FINALE (17th Image) ---
-      case 16: // Center Bottom Big
-        spanClass = "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
-        break;
-
-      // All others are default 1x1 (Indices: 1, 2, 4, 5, 7, 8, 10, 11, 13, 14)
-      default:
-        spanClass = "col-span-1 row-span-1 md:col-span-1 md:row-span-1";
-        break;
-    }
-    
-    return `${baseClass} ${spanClass}`;
-  };
 
   return (
     <section className="py-16 md:py-24 px-4 relative min-h-[80vh] flex flex-col justify-center bg-taupe/20">
@@ -134,32 +93,33 @@ export const Gallery: React.FC = () => {
                 
                 {/* 
                    --------------------------------------------------
-                   PUZZLE GRID LAYOUT
-                   Desktop: 6 Columns
-                   Mobile: 3 Columns
-                   Flow: Dense (Fits pieces together)
+                   MASONRY LAYOUT (Pinterest Style)
                    --------------------------------------------------
+                   - Uses CSS Columns (columns-2, columns-3, columns-4)
+                   - Images flow naturally from top to bottom, then next column
+                   - Respects aspect ratio perfectly (No cropping)
                 */}
-                <div className="w-full grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3 grid-flow-dense auto-rows-[100px] md:auto-rows-[180px]">
+                <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
                   {images.map((img, idx) => (
                     <div 
                       key={idx} 
-                      className={getBentoClass(idx)}
+                      className="break-inside-avoid relative group cursor-zoom-in rounded-sm overflow-hidden border-[4px] border-white shadow-sm bg-white"
                       onClick={() => setSelectedImage(img.full)}
                     >
                       <img 
                         src={img.thumb} 
                         alt={`Moment ${idx + 1}`} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
                         loading="lazy"
                       />
+                      
                       {/* Overlay Effect */}
-                      <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/20 transition-colors duration-500"></div>
+                      <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-500"></div>
                       
                       {/* Icon on hover */}
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                         <div className="bg-white/30 backdrop-blur-sm p-2 md:p-3 rounded-full shadow-sm">
-                            <svg className="w-4 h-4 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
+                         <div className="bg-white/30 backdrop-blur-sm p-2 rounded-full shadow-sm">
+                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
                          </div>
                       </div>
                     </div>
