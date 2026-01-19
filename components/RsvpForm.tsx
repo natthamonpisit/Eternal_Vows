@@ -118,7 +118,8 @@ export const RsvpForm: React.FC = () => {
             </div>
 
             <div className="pt-4">
-              <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gold/80 mb-2">Dietary Requirements / Note</label>
+              {/* UPDATED LABEL: Changed from "Dietary Requirements / Note" to "Note" */}
+              <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gold/80 mb-2">Note</label>
               <textarea 
                 rows={2}
                 className="w-full border border-gray-200 bg-gray-50/30 p-4 rounded-sm font-serif text-lg focus:border-gold focus:outline-none transition-colors placeholder-gray-300 resize-none"
