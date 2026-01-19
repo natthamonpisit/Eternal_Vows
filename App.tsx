@@ -20,7 +20,23 @@ import { MusicPlayer } from './components/MusicPlayer';
   Mood: เรียบหรู, ผู้ดี, กระดาษการ์ด, ทองรมควัน, โปร่งสบาย
   
   ----------------------------------------------------------------------------------------
-  1. TYPOGRAPHY SCALING STRATEGY (กฏขนาดตัวอักษร Mobile vs Desktop)
+  1. TYPOGRAPHY FAMILIES (3 ทหารเสือ)
+  ----------------------------------------------------------------------------------------
+  [A] The Signature (font-script): 'Great Vibes'
+      - Role: ชื่อบ่าวสาว, จุดเน้นอารมณ์โรแมนติก
+      - Rule: ห้ามใช้ All Caps เด็ดขาด (ต้อง Title Case เท่านั้น)
+
+  [B] The Elegant Voice (font-serif): 'Cormorant Garamond'
+      - Role: คำคม (Quotes), เนื้อหาจดหมาย, Body text ที่ต้องการความหรู
+      - Rule: เส้นฟอนต์มีความหนาบางชัดเจน (High Contrast) เหมาะกับ Italic
+
+  [C] The Structure (font-sans): 'Montserrat'
+      - Role: หัวข้อหลัก (Headings), ข้อมูลสถานที่, วันที่, ปุ่มกด, ฟอร์ม
+      - Rule: ***ต้องใช้คู่กับ UPPERCASE และ Tracking (Letter Spacing) เสมอ***
+              เพื่อลุคที่ดู Modern & Premium
+
+  ----------------------------------------------------------------------------------------
+  2. TYPOGRAPHY SCALING STRATEGY (กฏขนาดตัวอักษร Mobile vs Desktop)
   ----------------------------------------------------------------------------------------
   *Update: ลดขนาด Mobile ลง 20-25% เพื่อแก้ปัญหาคำตกหล่นและพื้นที่หายใจ*
 
@@ -39,7 +55,7 @@ import { MusicPlayer } from './components/MusicPlayer';
   - Desktop: text-base (16px)
 
   ----------------------------------------------------------------------------------------
-  2. SECTION STRATEGY (กฏการจัดวาง Layout)
+  3. SECTION STRATEGY (กฏการจัดวาง Layout)
   ----------------------------------------------------------------------------------------
   
   TYPE A: "THE VISUAL FLOW" (สำหรับ Gallery / รูปภาพ)
