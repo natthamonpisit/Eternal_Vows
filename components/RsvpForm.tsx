@@ -27,103 +27,119 @@ export const RsvpForm: React.FC = () => {
   if (status === 'success') {
     return (
       <FadeInUp>
-        <div className="max-w-xl mx-auto text-center py-20 px-6 bg-white shadow-xl rounded-lg border-t-4 border-[#C08E86] animate-fade-in mx-4">
+        <div className="max-w-2xl mx-auto text-center py-24 px-8 bg-white shadow-2xl rounded-sm border border-gold/40 animate-fade-in mx-4">
+          <div className="w-16 h-16 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-6">
+             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+          </div>
           <h3 className="font-sans text-4xl md:text-5xl text-gold-shine mb-4 font-bold uppercase tracking-wider">Thank You!</h3>
           <p className="font-sans text-lg text-charcoal">Your response has been recorded.</p>
-          <p className="font-sans text-sm text-gray-500 mt-2 uppercase tracking-widest">We can't wait to see you</p>
+          <p className="font-sans text-sm text-gray-400 mt-2 uppercase tracking-widest">We can't wait to see you</p>
         </div>
       </FadeInUp>
     );
   }
 
   return (
-    <section className="max-w-xl mx-auto bg-white p-6 md:p-12 shadow-2xl rounded-sm mx-4 md:mx-auto">
+    // DESIGN UPDATE: 'Stationery Card' Style
+    // Wider (max-w-3xl), White BG, Thin Gold Border, Soft Shadow
+    <section className="max-w-3xl mx-auto px-4">
       <FadeInUp>
-        <div className="text-center mb-8 md:mb-10">
-          <h2 className="font-sans text-4xl md:text-5xl text-gold-shine font-bold tracking-wider uppercase">R.S.V.P</h2>
-          {/* Changed color to text-gray-500 (dark gray) */}
-          <p className="font-sans text-gray-500 text-sm md:text-base uppercase tracking-[0.2em] mt-2 font-medium">Please respond by February 21st</p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Name</label>
-            <input 
-              type="text" 
-              required
-              className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-base md:text-lg font-sans font-medium focus:border-[#C08E86] focus:outline-none transition-colors rounded-none placeholder-gray-300"
-              placeholder="Mr. & Mrs. John Doe"
-              value={formData.name}
-              onChange={e => setFormData({...formData, name: e.target.value})}
-            />
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-6 md:gap-8">
-            <div className="flex-1">
-              <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Attending?</label>
-              <div className="flex flex-col sm:flex-row gap-4 mt-3">
-                <label className="flex items-center cursor-pointer">
-                  <input 
-                    type="radio" 
-                    name="attending"
-                    checked={formData.attending === 'yes'}
-                    onChange={() => setFormData({...formData, attending: 'yes'})}
-                    className="accent-[#C08E86] w-5 h-5"
-                  />
-                  <span className="ml-2 font-sans text-base font-medium">Joyfully Accept</span>
-                </label>
-                <label className="flex items-center cursor-pointer">
-                  <input 
-                    type="radio" 
-                    name="attending" 
-                    checked={formData.attending === 'no'}
-                    onChange={() => setFormData({...formData, attending: 'no'})}
-                    className="accent-gray-500 w-5 h-5"
-                  />
-                  <span className="ml-2 font-sans text-base font-medium">Regretfully Decline</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          {formData.attending === 'yes' && (
-            <div>
-              <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Total Guests</label>
-              <select 
-                className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-base md:text-lg font-sans font-medium focus:border-[#C08E86] focus:outline-none rounded-none"
-                value={formData.attendees}
-                onChange={e => setFormData({...formData, attendees: parseInt(e.target.value)})}
-              >
-                {[1, 2, 3, 4, 5].map(num => (
-                  <option key={num} value={num}>{num} {num === 1 ? 'Guest' : 'Guests'}</option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          <div>
-            <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Note</label>
-            <textarea 
-              rows={3}
-              className="w-full border-2 border-gray-100 bg-gray-50/50 p-3 rounded-md font-sans font-medium focus:border-[#C08E86] focus:outline-none transition-colors"
-              value={formData.note}
-              onChange={e => setFormData({...formData, note: e.target.value})}
-            ></textarea>
-          </div>
-
-          {/* Button: Pink Taupe -> Cream Beige */}
-          <button 
-            type="submit" 
-            disabled={status === 'submitting'}
-            className="w-full bg-[#C08E86] text-white font-sans font-bold uppercase tracking-widest py-4 px-6 hover:bg-[#E6DABF] hover:text-charcoal transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4 text-sm md:text-base"
-          >
-            {status === 'submitting' ? 'Sending...' : 'Confirm RSVP'}
-          </button>
+        <div className="bg-white p-8 md:p-16 shadow-2xl rounded-sm border border-gold/40 relative overflow-hidden">
           
-          {status === 'error' && (
-            <p className="text-red-500 text-center text-sm mt-2">Something went wrong. Please try again.</p>
-          )}
-        </form>
+          {/* Header moved inside */}
+          <div className="text-center mb-12">
+            <h2 className="font-sans text-4xl md:text-5xl text-gold-shine font-bold tracking-wider uppercase mb-3">R.S.V.P</h2>
+            <p className="font-sans text-gray-500 text-sm md:text-base uppercase tracking-[0.2em] font-medium">Please respond by February 21st</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-10 max-w-xl mx-auto">
+            <div className="relative group">
+              <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gold/80 mb-2">Guest Name</label>
+              <input 
+                type="text" 
+                required
+                className="w-full border-b border-gray-300 bg-transparent py-3 px-1 text-xl md:text-2xl font-serif text-charcoal focus:border-gold focus:outline-none transition-all rounded-none placeholder-gray-200"
+                placeholder="Mr. & Mrs. John Doe"
+                value={formData.name}
+                onChange={e => setFormData({...formData, name: e.target.value})}
+              />
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-8 pt-4">
+              <div className="flex-1">
+                <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gold/80 mb-3">Attending?</label>
+                <div className="flex flex-col gap-4">
+                  <label className="flex items-center cursor-pointer group">
+                    <div className={`w-6 h-6 rounded-full border border-gold flex items-center justify-center transition-all ${formData.attending === 'yes' ? 'bg-gold' : 'bg-white'}`}>
+                       {formData.attending === 'yes' && <div className="w-2.5 h-2.5 bg-white rounded-full"></div>}
+                    </div>
+                    <input 
+                      type="radio" 
+                      name="attending"
+                      checked={formData.attending === 'yes'}
+                      onChange={() => setFormData({...formData, attending: 'yes'})}
+                      className="hidden"
+                    />
+                    <span className={`ml-3 font-serif text-lg md:text-xl transition-colors ${formData.attending === 'yes' ? 'text-charcoal' : 'text-gray-400'}`}>Joyfully Accept</span>
+                  </label>
+                  
+                  <label className="flex items-center cursor-pointer group">
+                    <div className={`w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center transition-all ${formData.attending === 'no' ? 'bg-charcoal border-charcoal' : 'bg-white'}`}>
+                       {formData.attending === 'no' && <div className="w-2.5 h-2.5 bg-white rounded-full"></div>}
+                    </div>
+                    <input 
+                      type="radio" 
+                      name="attending" 
+                      checked={formData.attending === 'no'}
+                      onChange={() => setFormData({...formData, attending: 'no'})}
+                      className="hidden"
+                    />
+                    <span className={`ml-3 font-serif text-lg md:text-xl transition-colors ${formData.attending === 'no' ? 'text-charcoal' : 'text-gray-400'}`}>Regretfully Decline</span>
+                  </label>
+                </div>
+              </div>
+
+              {formData.attending === 'yes' && (
+                <div className="flex-1 animate-fade-in">
+                  <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gold/80 mb-3">Number of Guests</label>
+                  <select 
+                    className="w-full border-b border-gray-300 bg-transparent py-3 px-1 text-xl md:text-2xl font-serif text-charcoal focus:border-gold focus:outline-none rounded-none cursor-pointer"
+                    value={formData.attendees}
+                    onChange={e => setFormData({...formData, attendees: parseInt(e.target.value)})}
+                  >
+                    {[1, 2, 3, 4, 5].map(num => (
+                      <option key={num} value={num}>{num} {num === 1 ? 'Guest' : 'Guests'}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+
+            <div className="pt-4">
+              <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gold/80 mb-2">Dietary Requirements / Note</label>
+              <textarea 
+                rows={2}
+                className="w-full border border-gray-200 bg-gray-50/30 p-4 rounded-sm font-serif text-lg focus:border-gold focus:outline-none transition-colors placeholder-gray-300 resize-none"
+                placeholder="Allergies, special requests..."
+                value={formData.note}
+                onChange={e => setFormData({...formData, note: e.target.value})}
+              ></textarea>
+            </div>
+
+            {/* Button: 'Cream Beige' Style to match Luxury theme */}
+            <button 
+              type="submit" 
+              disabled={status === 'submitting'}
+              className="w-full bg-[#E6DABF] text-charcoal font-sans font-bold uppercase tracking-widest py-4 px-6 hover:bg-gold hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-6 shadow-md rounded-sm border border-transparent hover:border-gold/20"
+            >
+              {status === 'submitting' ? 'Sending Response...' : 'Confirm R.S.V.P'}
+            </button>
+            
+            {status === 'error' && (
+              <p className="text-red-500 text-center text-sm mt-2">Something went wrong. Please try again.</p>
+            )}
+          </form>
+        </div>
       </FadeInUp>
     </section>
   );

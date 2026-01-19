@@ -30,7 +30,9 @@ export const Gallery: React.FC = () => {
 
   // 🍱 BENTO GRID LOGIC
   const getBentoClass = (index: number) => {
-    const base = "relative overflow-hidden group cursor-zoom-in rounded-sm border-2 border-white shadow-sm bg-gray-100";
+    // UPDATED: Removed bg-gray-100, added bg-white/50 for placeholder feel before load
+    // Added border-white/40 to make images pop slightly from transparent bg
+    const base = "relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10";
     let desktopClass = "";
     if ([0, 3, 8, 11, 14].includes(index)) {
         desktopClass = "md:col-span-2 md:row-span-2"; 
@@ -46,15 +48,14 @@ export const Gallery: React.FC = () => {
   };
 
   return (
-    // Updated: Removed bg-[#FDFBF7] and texture overlay.
-    // Now completely transparent to show the global App.tsx texture.
-    <section className="pt-0 pb-24 px-4 relative flex flex-col justify-center">
+    // Section uses transparent background to show App global texture
+    <section className="pt-0 pb-16 px-4 relative flex flex-col justify-center">
       
       <FadeInUp>
         <div className="text-center mb-16 md:mb-20 relative z-10">
           {/* Main Heading First */}
           <h2 className="font-sans text-4xl md:text-5xl text-gold-shine mb-3 uppercase tracking-wider font-bold">Our Moments</h2>
-          {/* Subheading Moved Below & Dark Gray */}
+          {/* Subheading Moved Below */}
           <p className="font-sans text-gray-500 text-sm md:text-base tracking-[0.3em] uppercase font-medium">Pre-Wedding Gallery</p>
         </div>
       </FadeInUp>
@@ -62,35 +63,30 @@ export const Gallery: React.FC = () => {
       <div className="max-w-[1400px] mx-auto w-full px-0 relative z-10">
         
         {loading ? (
-          <div className="w-full aspect-video bg-white/50 rounded-sm flex flex-col justify-center items-center shadow-lg border border-gold/10">
+          <div className="w-full aspect-video bg-white/10 backdrop-blur-sm rounded-sm flex flex-col justify-center items-center shadow-lg border border-gold/10">
             <div className="w-12 h-12 border-4 border-gold/30 border-t-gold rounded-full animate-spin mb-4"></div>
             <p className="font-sans text-charcoal/60 uppercase tracking-widest text-xs">Loading gallery...</p>
           </div>
         ) : (
-          /* THE FRAME Container */
+          /* DESIGN UPDATE: Removed White Frame Container. Images float on background. */
           <FadeInUp delay="200ms">
-            <div className="w-full relative shadow-2xl bg-white p-2 md:p-4 rounded-sm">
-               <div className="relative w-full h-full bg-white">
-                  {/* THE BENTO GRID */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 md:gap-3 auto-rows-[120px] md:auto-rows-[160px] lg:auto-rows-[180px] grid-flow-dense">
-                    {images.map((img, idx) => (
-                      <div 
-                        key={idx} 
-                        className={getBentoClass(idx)}
-                        onClick={() => setSelectedImage(img.full)}
-                      >
-                        <img 
-                          src={img.thumb} 
-                          alt={`Moment ${idx + 1}`} 
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-500"></div>
-                      </div>
-                    ))}
-                  </div>
-               </div>
-            </div>
+             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 md:gap-4 auto-rows-[120px] md:auto-rows-[160px] lg:auto-rows-[180px] grid-flow-dense">
+               {images.map((img, idx) => (
+                 <div 
+                   key={idx} 
+                   className={getBentoClass(idx)}
+                   onClick={() => setSelectedImage(img.full)}
+                 >
+                   <img 
+                     src={img.thumb} 
+                     alt={`Moment ${idx + 1}`} 
+                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                     loading="lazy"
+                   />
+                   <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-500"></div>
+                 </div>
+               ))}
+             </div>
           </FadeInUp>
         )}
 
@@ -100,12 +96,9 @@ export const Gallery: React.FC = () => {
                 href="https://www.instagram.com/explore/tags/OukBewtheWedding/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="group relative inline-flex items-center justify-center p-[2px] overflow-hidden rounded-full transition-transform hover:scale-105 duration-300"
+                className="group relative inline-flex items-center justify-center p-[2px] overflow-hidden rounded-full transition-transform hover:scale-105 duration-300 shadow-lg"
               >
-                {/* The Rainbow Gradient Background (Instagram Colors) */}
                 <span className="absolute inset-0 bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045]"></span>
-                
-                {/* The Inner Content (White Pill) */}
                 <span className="relative flex items-center gap-2 px-6 py-2.5 transition-all ease-in duration-200 bg-white rounded-full group-hover:bg-opacity-0">
                     <span className="font-sans text-xs font-bold uppercase tracking-widest bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] bg-clip-text text-transparent group-hover:text-white">
                        View on Instagram #OukBewtheWedding
@@ -114,6 +107,11 @@ export const Gallery: React.FC = () => {
                 </span>
               </a>
           </div>
+        </FadeInUp>
+
+        {/* Closing Divider for Visual Flow */}
+        <FadeInUp delay="500ms">
+           <div className="w-24 h-px bg-gold/30 mx-auto mt-20"></div>
         </FadeInUp>
       </div>
 
