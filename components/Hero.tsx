@@ -52,8 +52,8 @@ export const Hero: React.FC = () => {
   }, []);
 
   const TimeUnit = ({ value, label }: { value: number, label: string }) => (
-    <div className="flex flex-col items-center mx-2 md:mx-4">
-      <span className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#5D4037] font-medium tabular-nums leading-none drop-shadow-sm">
+    <div className="flex flex-col items-center mx-1.5 sm:mx-2 md:mx-4">
+      <span className="font-serif text-xl sm:text-3xl md:text-4xl text-[#5D4037] font-medium tabular-nums leading-none drop-shadow-sm">
         {String(value).padStart(2, '0')}
       </span>
       <span className="font-sans text-[8px] sm:text-[10px] text-[#8E5B50] uppercase tracking-[0.2em] mt-1 sm:mt-2 font-semibold">
@@ -63,87 +63,115 @@ export const Hero: React.FC = () => {
   );
 
   return (
-    <section className="relative h-screen min-h-[700px] flex flex-col items-center text-center px-4 overflow-hidden">
+    <section className="relative h-screen min-h-[600px] flex flex-col items-center text-center px-4 overflow-hidden bg-[#FDFBF7]">
       
-      {/* 1. Main Background Image (Layer 0) */}
+      {/* 
+          1. Main Background Image 
+          - Mobile: Fit Width (100% auto), Top Aligned, No Repeat -> Shows full horizontal image at top.
+          - Desktop: Cover, Center -> Standard full screen background.
+      */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 transition-transform duration-[20s] ease-linear hover:scale-105"
-        style={{ backgroundImage: `url("${bgUrl}")` }}
-      ></div>
+        className="absolute inset-0 z-0 transition-transform duration-[20s] ease-linear hover:scale-105"
+        style={{ 
+          backgroundImage: `url("${bgUrl}")`,
+          backgroundSize: 'var(--bg-size, cover)',
+          backgroundPosition: 'var(--bg-pos, center)',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <style>{`
+          @media (max-width: 768px) {
+            div[style*="background-image"] {
+              --bg-size: 100% auto;
+              --bg-pos: top center;
+            }
+          }
+          @media (min-width: 769px) {
+             div[style*="background-image"] {
+              --bg-size: cover;
+              --bg-pos: center center;
+            }
+          }
+        `}</style>
+      </div>
 
-      {/* 2. Soft Overlay (Layer 10) */}
-      <div className="absolute inset-0 bg-[#FDFBF7]/60 z-10 mix-blend-overlay"></div>
+      {/* 2. Soft Overlay (Desktop Only - To let mobile image pop) */}
+      <div className="hidden md:block absolute inset-0 bg-[#FDFBF7]/60 z-10 mix-blend-overlay"></div>
       
-      {/* 3. Gradient Fade (Layer 10) */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7]/90 via-white/30 to-[#FDFBF7] z-10"></div>
+      {/* 3. Gradient Fade (Desktop Only) */}
+      <div className="hidden md:block absolute inset-0 bg-gradient-to-b from-[#FDFBF7]/90 via-white/30 to-[#FDFBF7] z-10"></div>
+      
+      {/* Mobile Fade: Gradient at the bottom of the image area to blend into text area */}
+      <div className="md:hidden absolute top-[40vw] left-0 right-0 h-24 bg-gradient-to-b from-transparent to-[#FDFBF7] z-10"></div>
 
       {/* 4. Texture Overlay (Layer 10) */}
       <div className="absolute inset-0 opacity-40 pointer-events-none z-10 mix-blend-multiply" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
 
-      {/* Main Content Area - Z-Index 50 (TOPMOST) */}
       {/* 
-          FIX: Increased top padding (pt-32 -> pt-44) to create more space at the top
-          Added max-w-[95vw] to ensure it never exceeds screen width on mobile.
+         Main Content Area
+         - Mobile: Pushed down (mt) to sit BELOW the image (approx 55vw down).
+         - Desktop: Centered as before.
       */}
-      <div className="pt-32 sm:pt-40 md:pt-48 animate-slide-up space-y-4 w-full max-w-[95vw] md:max-w-7xl flex flex-col items-center relative z-50 mx-auto">
-        <div className="space-y-2 md:space-y-6 w-full px-2">
+      <div className="animate-slide-up space-y-2 sm:space-y-4 w-full max-w-full md:max-w-7xl flex flex-col items-center relative z-50 mx-auto 
+          mt-[60vw] md:mt-0 md:justify-center md:h-full md:py-10">
+        
+        <div className="space-y-1 md:space-y-6 w-full px-1">
           {/* Headline */}
-          <p className="text-[#8E5B50] font-sans tracking-[0.25em] uppercase text-xs sm:text-sm md:text-xl font-bold drop-shadow-sm">
+          <p className="text-[#8E5B50] font-sans tracking-[0.25em] uppercase text-[10px] sm:text-sm md:text-xl font-bold drop-shadow-sm mb-2 md:mb-0">
             The Wedding Of
           </p>
           
           {/* Names */}
           {/* 
-             REDUCED FONT SIZES:
-             - Mobile: text-4xl (was 5xl)
-             - Tablet: text-5xl (was 6xl)
-             - Desktop: text-7xl (was 8xl)
+             MOBILE FIX: 
+             - Flex Column (Stacked)
+             - Text Size using 'vw' units: Ensures "Natthamonpisit" fits perfectly without wrapping or being too small.
+             - Tight leading to keep the block compact.
           */}
-          <h1 className="font-script leading-normal py-2 px-2 md:px-4 drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] flex flex-col md:flex-row items-center justify-center gap-1 md:gap-3">
+          <h1 className="font-script leading-[1.1] md:leading-tight py-1 px-1 md:px-4 drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] flex flex-col md:flex-row items-center justify-center md:gap-4">
             
             {/* Name 1 */}
-            <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-1 md:pb-0">
+            <span className="text-[11vw] md:text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-1 whitespace-nowrap">
               Natthamonpisit
             </span>
 
-            {/* Ampersand */}
-            <span className="font-serif text-2xl sm:text-3xl md:text-4xl bg-clip-text text-transparent bg-gradient-to-b from-[#B78A7D] to-[#8E5B50] my-0.5 md:my-0">
+            {/* Ampersand - Small & Elegant in between */}
+            <span className="font-serif text-xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-b from-[#B78A7D] to-[#8E5B50] my-[-5px] md:my-0">
               &
             </span>
 
             {/* Name 2 */}
-            <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-1 md:pb-0">
+            <span className="text-[11vw] md:text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-1 whitespace-nowrap">
               Sorot
             </span>
           </h1>
         </div>
 
         {/* Info Section */}
-        <div className="flex flex-col items-center gap-4 sm:gap-6 w-full pt-4">
+        <div className="flex flex-col items-center gap-4 sm:gap-8 w-full pt-4 md:pt-6">
           {/* Date & Location */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-8 text-base sm:text-lg md:text-2xl font-serif text-[#5D4037] font-medium drop-shadow-sm">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-1 sm:gap-3 md:gap-8 text-sm sm:text-lg md:text-2xl font-serif text-[#5D4037] font-medium drop-shadow-sm">
             <span>March 21, 2026</span>
             <span className="hidden md:block w-2 h-2 rounded-full bg-[#8E5B50]"></span>
-            <span className="text-sm sm:text-lg md:text-2xl">Dalva le ville, Bangkok</span>
+            <span className="text-xs sm:text-lg md:text-2xl">Dalva le ville, Bangkok</span>
           </div>
           
           {/* Divider */}
-          <div className="w-12 sm:w-16 h-px bg-[#8E5B50]/50 my-2"></div>
+          <div className="w-8 sm:w-16 h-px bg-[#8E5B50]/50 my-1 sm:my-2"></div>
 
           {/* Countdown Timer */}
-          <div className="flex items-center justify-center mt-2 scale-90 sm:scale-100 bg-white/70 backdrop-blur-md px-6 py-4 sm:px-8 sm:py-5 rounded-full border border-white/60 shadow-lg ring-1 ring-[#8E5B50]/10 max-w-[90vw]">
+          <div className="flex items-center justify-center mt-1 scale-[0.8] sm:scale-100 bg-white/70 backdrop-blur-md px-4 py-3 sm:px-8 sm:py-5 rounded-full border border-white/60 shadow-lg ring-1 ring-[#8E5B50]/10 max-w-[98vw]">
             <TimeUnit value={timeLeft.days} label="Days" />
-            <span className="font-serif text-xl sm:text-2xl text-[#8E5B50]/50 -mt-3 sm:-mt-4">:</span>
+            <span className="font-serif text-lg sm:text-2xl text-[#8E5B50]/50 -mt-2 sm:-mt-4">:</span>
             <TimeUnit value={timeLeft.hours} label="Hours" />
-            <span className="font-serif text-xl sm:text-2xl text-[#8E5B50]/50 -mt-3 sm:-mt-4">:</span>
+            <span className="font-serif text-lg sm:text-2xl text-[#8E5B50]/50 -mt-2 sm:-mt-4">:</span>
             <TimeUnit value={timeLeft.minutes} label="Minutes" />
-            <span className="font-serif text-xl sm:text-2xl text-[#8E5B50]/50 -mt-3 sm:-mt-4">:</span>
+            <span className="font-serif text-lg sm:text-2xl text-[#8E5B50]/50 -mt-2 sm:-mt-4">:</span>
             <TimeUnit value={timeLeft.seconds} label="Seconds" />
           </div>
         </div>
       </div>
 
-      {/* Arrow Container REMOVED as requested */}
     </section>
   );
 };
