@@ -29,7 +29,7 @@ export const Gallery: React.FC = () => {
     loadImages();
   }, []);
 
-  // 🍱 BENTO GRID LOGIC (Same as before)
+  // 🍱 BENTO GRID LOGIC
   const getBentoClass = (index: number) => {
     const base = "relative overflow-hidden group cursor-zoom-in rounded-sm border-2 border-white shadow-sm bg-gray-100";
     let desktopClass = "";
@@ -47,11 +47,14 @@ export const Gallery: React.FC = () => {
   };
 
   return (
-    // Changed bg-taupe/20 to transparent/subtle to blend with global background
-    <section className="py-24 px-4 relative min-h-[80vh] flex flex-col justify-center">
+    // Updated: Removed min-h to let it flow naturally with Hero
+    <section className="pt-0 pb-24 px-4 relative flex flex-col justify-center">
       
-      {/* Optional: Very subtle gradient to differentiate section without hard lines */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-taupe/5 to-transparent pointer-events-none"></div>
+      {/* 
+         REMOVED: bg-gradient-to-b (Taupe/5) 
+         Reason: It caused a visible color seam between Hero and Gallery.
+         Now it uses the global Cream background, ensuring a perfect match.
+      */}
 
       <FadeInUp>
         <div className="text-center mb-16 md:mb-20">
@@ -68,11 +71,11 @@ export const Gallery: React.FC = () => {
             <p className="font-serif text-charcoal/60 italic">Loading gallery...</p>
           </div>
         ) : (
-          /* THE FRAME Container - We animate the container entry, but NOT the images inside */
+          /* THE FRAME Container */
           <FadeInUp delay="200ms">
             <div className="w-full relative shadow-2xl bg-white p-2 md:p-4 rounded-sm">
                <div className="relative w-full h-full bg-white">
-                  {/* THE BENTO GRID - Images are STATIC (no motion/scroll effects) as requested */}
+                  {/* THE BENTO GRID */}
                   <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 md:gap-3 auto-rows-[120px] md:auto-rows-[160px] lg:auto-rows-[180px] grid-flow-dense">
                     {images.map((img, idx) => (
                       <div 

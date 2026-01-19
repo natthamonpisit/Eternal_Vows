@@ -4,14 +4,13 @@ import { fetchGallery } from '../services/api';
 
 /* 
   ========================================================================================
-  🤵👰 COMPONENT: Hero (ส่วนหัวข้อหน้าแรก - Re-Layout V.6)
+  🤵👰 COMPONENT: Hero (ส่วนหัวข้อหน้าแรก - Re-Layout V.7 Seamless Fix)
   ========================================================================================
   
-  [Fixes based on Feedback]
-  1. Fading: Restore the original "Cream/White" fade (removed the black gradients).
-  2. Text Colors: Revert to Brown/Rose (#5D4037, #C08E86) to be visible on the cream fade.
-  3. Names: Increase size (7vw -> 9vw).
-  4. Layout: Keep "The Wedding Of" at top as confirmed correct.
+  [Fixes]
+  1. Gap Image vs Star: เพิ่ม -mt-4 ให้ส่วนล่าง (Footer) ดึงขึ้นไปทับส่วนบน และปรับ z-index
+  2. Gap Star vs Gallery: (Solved in Gallery component by removing top padding)
+  3. Fading: เน้น Gradient สีครีมให้ชัด เพื่อให้รอยต่อเนียนกริบ
 */
 
 export const Hero: React.FC = () => {
@@ -79,15 +78,15 @@ export const Hero: React.FC = () => {
       
       {/* 
         =======================================================================
-        📱 MOBILE LAYOUT (Cream Fading Restored)
+        📱 MOBILE LAYOUT (Seamless & No Gaps)
         =======================================================================
       */}
       <div className="md:hidden flex flex-col w-full h-[100dvh]">
          
          {/* 
-            PART A: IMAGE AREA (Top 75%) 
+            PART A: IMAGE AREA (Top 72% - ลดความสูงลงนิดนึงเพื่อให้ Footer ดันขึ้นมาได้) 
          */}
-         <div className="relative h-[75%] w-full overflow-hidden">
+         <div className="relative h-[72%] w-full overflow-hidden z-0">
             
             {/* 1. Background Image Layer */}
             <div 
@@ -95,17 +94,17 @@ export const Hero: React.FC = () => {
               style={{ backgroundImage: `url("${bgUrl}")` }}
             ></div>
 
-            {/* 2. Gradient Overlays (THE FADING IS BACK!) */}
-            {/* Top Fade: Cream -> Transparent */}
-            <div className="absolute top-0 left-0 right-0 h-[30vh] bg-gradient-to-b from-[#FDFBF7] via-[#FDFBF7]/60 to-transparent pointer-events-none z-10"></div>
+            {/* 2. Gradient Overlays (Cream Fading) */}
+            {/* Top Fade */}
+            <div className="absolute top-0 left-0 right-0 h-[30vh] bg-gradient-to-b from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent pointer-events-none z-10"></div>
             
-            {/* Bottom Fade: Transparent -> Cream (Seamless connection to footer) */}
-            <div className="absolute bottom-0 left-0 right-0 h-[30vh] bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/60 to-transparent pointer-events-none z-10"></div>
+            {/* Bottom Fade: ไล่สีลงมาเป็น Solid Cream ด้านล่างสุด เพื่อรอรับกับ Footer */}
+            <div className="absolute bottom-0 left-0 right-0 h-[30vh] bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent pointer-events-none z-10"></div>
 
             {/* 3. Content Layout Layer */}
-            <div className="absolute inset-0 z-20 flex flex-col items-center justify-between px-2 py-10">
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-between px-2 py-8">
                 
-                {/* [TOP] Intro - Sitting on Cream Fade */}
+                {/* [TOP] Intro */}
                 <div className="mt-8">
                   <p className="text-[#5D4037] font-sans tracking-[0.3em] uppercase text-[10px] font-bold drop-shadow-sm">
                     The Wedding Of
@@ -113,8 +112,8 @@ export const Hero: React.FC = () => {
                 </div>
 
                 {/* [MIDDLE] Names & Date - Pop Effect */}
-                <div className="flex flex-col items-center justify-center w-full space-y-4">
-                   {/* Names: Increased size to 9vw */}
+                <div className="flex flex-col items-center justify-center w-full space-y-3 -mt-4">
+                   {/* Names: 9vw */}
                    <h1 
                      className="font-script text-[#C08E86] leading-none whitespace-nowrap drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)] text-center px-1"
                      style={{ fontSize: '9vw' }} 
@@ -131,8 +130,8 @@ export const Hero: React.FC = () => {
                    </div>
                 </div>
 
-                {/* [BOTTOM] Countdown - Sitting on Bottom Cream Fade */}
-                <div className="mb-2">
+                {/* [BOTTOM] Countdown */}
+                <div className="mb-4">
                   <div className="flex items-center justify-center pt-2">
                     <TimeUnit value={timeLeft.days} label="Days" />
                     <span className="font-serif text-lg text-[#8E5B50]/50 -mt-3">:</span>
@@ -146,15 +145,17 @@ export const Hero: React.FC = () => {
          </div>
 
          {/* 
-            PART B: FOOTER AREA (Bottom 25%) 
+            PART B: FOOTER AREA (Bottom ~28% + Negative Margin) 
+            - ใช้ -mt-6 เพื่อดึงขึ้นไปทับส่วนรูปภาพ ปิดช่องว่าง
+            - ใช้ z-10 เพื่อให้อยู่เหนือรูปภาพ
          */}
-         <div className="relative h-[25%] bg-[#FDFBF7] flex items-center justify-center overflow-hidden -mt-1">
+         <div className="relative flex-1 bg-[#FDFBF7] flex items-center justify-center overflow-hidden -mt-6 z-10 rounded-t-[2rem] shadow-[0_-10px_40px_rgba(253,251,247,1)]">
             {/* Texture */}
             <div className="absolute inset-0 opacity-40 mix-blend-multiply pointer-events-none" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
             
             {/* Star Shape */}
             <div className="relative z-10 flex flex-col items-center animate-pulse-slow">
-               <svg className="w-16 h-16 text-[#C08E86]" viewBox="0 0 24 24" fill="currentColor">
+               <svg className="w-14 h-14 text-[#C08E86]" viewBox="0 0 24 24" fill="currentColor">
                    <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/>
                </svg>
                <div className="absolute top-0 left-0 -translate-x-full -translate-y-1/2">
