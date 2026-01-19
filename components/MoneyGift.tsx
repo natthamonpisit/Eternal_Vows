@@ -18,12 +18,13 @@ export const MoneyGift: React.FC = () => {
     // Consistent with RSVP: max-w-3xl, White BG, Gold Border
     <section className="max-w-3xl mx-auto px-4">
       <FadeInUp>
-        <div className="bg-white border border-gold/40 p-8 md:p-16 rounded-sm shadow-2xl relative transition-all duration-300">
+        {/* Mobile Tuning: Changed p-8 to p-6 */}
+        <div className="bg-white border border-gold/40 p-6 md:p-16 rounded-sm shadow-2xl relative transition-all duration-300">
           
           <div className="text-center mb-8">
              <h2 className="font-sans text-4xl md:text-5xl text-gold-shine leading-normal py-2 uppercase tracking-wider font-bold">Gift with Love</h2>
              {view === 'info' && (
-                <p className="font-sans text-sm md:text-base text-gray-500 leading-relaxed px-2 md:px-12 mt-2 font-medium tracking-wide">
+                <p className="font-sans text-xs md:text-base text-gray-500 leading-relaxed px-0 md:px-12 mt-2 font-medium tracking-wide">
                   Your presence is the most precious gift to us. For those who wish to offer a token of celebration, we have provided this digital option.
                 </p>
              )}
@@ -34,7 +35,7 @@ export const MoneyGift: React.FC = () => {
             // VIEW 1: INFO & QR CODE
             // ===================================
             <div className="py-2 text-center animate-fade-in max-w-md mx-auto">
-              <div className="relative w-56 h-56 mx-auto bg-white p-4 rounded-sm shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-100 flex items-center justify-center mb-8 rotate-0 hover:rotate-2 transition-transform duration-500">
+              <div className="relative w-48 h-48 md:w-56 md:h-56 mx-auto bg-white p-3 md:p-4 rounded-sm shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-100 flex items-center justify-center mb-8 rotate-0 hover:rotate-2 transition-transform duration-500">
                 {/* QR Code Placeholder */}
                 <div className="w-full h-full bg-[#FAF9F6] flex flex-col items-center justify-center text-gold/40 border border-dashed border-gold/30 rounded-sm">
                    <svg className="w-12 h-12 mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 4v1m6 11h2m-6 0h-2v4h2v-4zM5 21v-4m4 4v-4m4 4v-4m-4-4h4m-4 4h4m-4-4v4m4-4v4m-5 0V3m-4 0v18m18 0V3" /></svg>
@@ -53,7 +54,7 @@ export const MoneyGift: React.FC = () => {
                   onClick={handleCopy}
                   className="flex items-center justify-center gap-3 w-full px-6 py-4 bg-[#FAF9F6] border border-gold/20 rounded-sm hover:border-gold hover:shadow-md transition-all group-hover:-translate-y-0.5"
                 >
-                  <span className="font-sans text-xl md:text-2xl text-charcoal font-bold tracking-widest">{ACCOUNT_NUMBER}</span>
+                  <span className="font-sans text-lg md:text-2xl text-charcoal font-bold tracking-widest">{ACCOUNT_NUMBER}</span>
                   <div className="w-8 h-8 rounded-full bg-white border border-gold/20 flex items-center justify-center text-gold">
                     {copied ? (
                       <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>

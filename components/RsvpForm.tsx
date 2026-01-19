@@ -44,21 +44,22 @@ export const RsvpForm: React.FC = () => {
     // Wider (max-w-3xl), White BG, Thin Gold Border, Soft Shadow
     <section className="max-w-3xl mx-auto px-4">
       <FadeInUp>
-        <div className="bg-white p-8 md:p-16 shadow-2xl rounded-sm border border-gold/40 relative overflow-hidden">
+        {/* Mobile Tuning: Changed p-8 to p-6 for better spacing on small screens */}
+        <div className="bg-white p-6 md:p-16 shadow-2xl rounded-sm border border-gold/40 relative overflow-hidden">
           
           {/* Header moved inside */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-10 md:mb-12">
             <h2 className="font-sans text-4xl md:text-5xl text-gold-shine font-bold tracking-wider uppercase mb-3">R.S.V.P</h2>
-            <p className="font-sans text-gray-500 text-sm md:text-base uppercase tracking-[0.2em] font-medium">Please respond by February 21st</p>
+            <p className="font-sans text-gray-500 text-xs md:text-base uppercase tracking-[0.2em] font-medium">Please respond by February 21st</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-10 max-w-xl mx-auto">
+          <form onSubmit={handleSubmit} className="space-y-8 md:space-y-10 max-w-xl mx-auto">
             <div className="relative group">
               <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gold/80 mb-2">Guest Name</label>
               <input 
                 type="text" 
                 required
-                className="w-full border-b border-gray-300 bg-transparent py-3 px-1 text-xl md:text-2xl font-serif text-charcoal focus:border-gold focus:outline-none transition-all rounded-none placeholder-gray-200"
+                className="w-full border-b border-gray-300 bg-transparent py-3 px-1 text-lg md:text-2xl font-serif text-charcoal focus:border-gold focus:outline-none transition-all rounded-none placeholder-gray-200"
                 placeholder="Mr. & Mrs. John Doe"
                 value={formData.name}
                 onChange={e => setFormData({...formData, name: e.target.value})}
@@ -103,7 +104,7 @@ export const RsvpForm: React.FC = () => {
                 <div className="flex-1 animate-fade-in">
                   <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gold/80 mb-3">Number of Guests</label>
                   <select 
-                    className="w-full border-b border-gray-300 bg-transparent py-3 px-1 text-xl md:text-2xl font-serif text-charcoal focus:border-gold focus:outline-none rounded-none cursor-pointer"
+                    className="w-full border-b border-gray-300 bg-transparent py-3 px-1 text-lg md:text-2xl font-serif text-charcoal focus:border-gold focus:outline-none rounded-none cursor-pointer"
                     value={formData.attendees}
                     onChange={e => setFormData({...formData, attendees: parseInt(e.target.value)})}
                   >

@@ -10,12 +10,13 @@ export const Guestbook: React.FC = () => {
     // Max Width consistent with others (max-w-3xl)
     <section className="max-w-3xl mx-auto px-4">
       <FadeInUp>
-        <div className="bg-white border border-gold/40 shadow-2xl rounded-sm p-8 md:p-16 relative overflow-hidden transition-all duration-500">
+        {/* Mobile Tuning: Changed p-8 to p-6 */}
+        <div className="bg-white border border-gold/40 shadow-2xl rounded-sm p-6 md:p-16 relative overflow-hidden transition-all duration-500">
           
           {/* Header moved INSIDE the card */}
           <div className="text-center mb-10 md:mb-12 relative z-10">
              <h2 className="font-sans text-4xl md:text-5xl text-gold-shine mb-3 uppercase tracking-wider font-bold">Guestbook</h2>
-             <p className="font-sans text-gray-500 text-sm md:text-base uppercase tracking-widest font-medium">
+             <p className="font-sans text-gray-500 text-xs md:text-base uppercase tracking-widest font-medium">
                Share your memories & blessings
              </p>
           </div>

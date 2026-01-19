@@ -286,10 +286,25 @@ export const Details: React.FC = () => {
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                 <FadeInUp delay="200ms">
                   <div className="flex justify-center">
-                    <div className="relative drop-shadow-2xl w-full max-w-[320px]">
-                       <div className="w-full aspect-[360/500] bg-charcoal rounded-t-[160px] md:rounded-t-[180px] rounded-b-xl p-3 md:p-4 flex flex-col relative shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
-                          <div className="flex-1 bg-white rounded-t-[140px] md:rounded-t-[160px] rounded-b-lg p-2 overflow-hidden relative">
-                              <div className="w-full h-full rounded-t-[130px] md:rounded-t-[150px] rounded-b-md overflow-hidden bg-gray-100 relative isolate">
+                    
+                    {/* 
+                       MOBILE FINE-TUNING:
+                       1. Size Reduction: max-w from 320px -> 240px (Approx 25% smaller on mobile)
+                       2. Border Geometry: Calculated precise radii for perfect semi-circle arch
+                          - Mobile Width: 240px -> Outer Radius: 120px
+                          - Padding: p-3 (12px) -> Inner Radius: 108px
+                          - Inner Padding: p-2 (8px) -> Map Radius: 100px
+                    */}
+                    <div className="relative drop-shadow-2xl w-full max-w-[240px] md:max-w-[320px]">
+                       
+                       {/* Outer Frame (Charcoal) */}
+                       <div className="w-full aspect-[360/500] bg-charcoal rounded-t-[120px] md:rounded-t-[160px] rounded-b-xl p-3 md:p-4 flex flex-col relative shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+                          
+                          {/* Inner Matte (White) */}
+                          <div className="flex-1 bg-white rounded-t-[108px] md:rounded-t-[144px] rounded-b-lg p-2 overflow-hidden relative">
+                              
+                              {/* Map Container */}
+                              <div className="w-full h-full rounded-t-[100px] md:rounded-t-[136px] rounded-b-md overflow-hidden bg-gray-100 relative isolate">
                                 <iframe 
                                   className="w-full h-full filter grayscale-[20%] hover:grayscale-0 transition-all duration-700"
                                   src="https://maps.google.com/maps?q=Dalva+le+ville+Bangkok&t=&z=15&ie=UTF8&iwloc=&output=embed"

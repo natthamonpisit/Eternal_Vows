@@ -221,9 +221,10 @@ const FloatingCTA = () => {
       <a 
         href="#rsvp-section"
         onClick={handleClick}
-        // Change from bg-charcoal to bg-[#C5908E] (Dusty Pink) to match theme
-        className="bg-[#C5908E] text-white font-sans uppercase tracking-widest text-[10px] font-bold py-3 px-5 rounded-full shadow-xl hover:bg-[#B78A7D] transition-colors cursor-pointer border border-white/20"
+        // Mobile Tuning: Updated to Glassmorphism style with Dusty Pink Tint
+        className="bg-[#C5908E]/90 backdrop-blur-md text-white font-sans uppercase tracking-widest text-[10px] font-bold py-3 px-5 rounded-full shadow-xl hover:bg-[#B78A7D] transition-all cursor-pointer border border-white/30 flex items-center gap-2"
       >
+        <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
         RSVP Now
       </a>
     </div>

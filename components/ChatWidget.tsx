@@ -129,11 +129,12 @@ export const ChatWidget: React.FC = () => {
       {/* Floating Action Button (Cartoon Avatar) */}
       <button
         onClick={toggleChat}
+        // Mobile Tuning: Reduced size from w-20 to w-16 to save space
         className={`fixed bottom-6 right-6 md:bottom-12 md:right-12 z-50 p-0 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 group ${isOpen ? 'rotate-12 scale-0 opacity-0' : 'scale-100 opacity-100'}`}
         aria-label="Open Wedding Concierge"
       >
         {/* Container for Avatar */}
-        <div className="w-20 h-20 md:w-28 md:h-28 rounded-full bg-white border-4 border-gold shadow-[0_4px_25px_rgba(183,138,125,0.6)] overflow-hidden relative flex items-center justify-center">
+        <div className="w-16 h-16 md:w-28 md:h-28 rounded-full bg-white border-4 border-gold shadow-[0_4px_25px_rgba(183,138,125,0.6)] overflow-hidden relative flex items-center justify-center">
            {/* Cartoon Image */}
            <img 
              src={COUPLE_AVATAR_URL}

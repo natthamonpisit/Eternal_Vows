@@ -106,10 +106,11 @@ export const Hero: React.FC = () => {
                   Natthamonpisit & Sorot
                 </h1>
                 
-                <div className="mt-3 flex flex-col items-center gap-1 text-[#FDFBF7] drop-shadow-md animate-fade-in">
-                   {/* Date Size matched to Location Size (text-[9px]) */}
-                   <span className="font-sans text-[9px] uppercase tracking-[0.2em] font-bold">March 21, 2026</span>
-                   <p className="font-sans text-[9px] uppercase tracking-[0.2em] opacity-90 text-[#EBCBC5]">Dalva le ville, Bangkok</p>
+                <div className="mt-4 flex flex-col items-center gap-2 text-[#FDFBF7] drop-shadow-md animate-fade-in">
+                   {/* Mobile Tuning: Increased font size to 11px and adjusted spacing */}
+                   <span className="font-sans text-[11px] uppercase tracking-[0.2em] font-bold">March 21, 2026</span>
+                   <div className="w-8 h-px bg-white/50"></div>
+                   <p className="font-sans text-[11px] uppercase tracking-[0.2em] opacity-90 text-[#EBCBC5]">Dalva le ville, Bangkok</p>
                 </div>
              </div>
          </div>
