@@ -90,12 +90,18 @@ export const Hero: React.FC = () => {
          </div>
 
          {/* [BLOCK 2] Image Card */}
-         <div className="flex-grow w-full relative z-0">
+         <div className="flex-grow w-full relative z-0 bg-charcoal">
+             {/* 
+                 DESIGN UPDATE:
+                 - Added 'brightness-[0.7]' -> Fades image by 30% (Darkens it)
+                 - Added 'grayscale' -> Ensures B&W look
+             */}
              <div 
-               className="absolute inset-0 bg-cover bg-center bg-no-repeat shadow-inner"
+               className="absolute inset-0 bg-cover bg-center bg-no-repeat shadow-inner brightness-[0.7] grayscale"
                style={{ backgroundImage: `url("${bgUrl}")` }}
              >
-               <div className="absolute inset-0 bg-black/25"></div>
+               {/* Soft overlay to smoothen contrast */}
+               <div className="absolute inset-0 bg-black/20"></div>
              </div>
 
              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 w-full">
@@ -166,10 +172,13 @@ export const Hero: React.FC = () => {
          {/* [BLOCK 2] Image Card */}
          {/* Uses padding to create a 'frame' effect on desktop, more elegant than full bleed */}
          <div className="flex-grow w-full px-8 lg:px-12 pb-4">
-             <div className="w-full h-full relative rounded-sm overflow-hidden shadow-2xl group">
-                 {/* Bg Image */}
+             <div className="w-full h-full relative rounded-sm overflow-hidden shadow-2xl group bg-charcoal">
+                 {/* 
+                     DESIGN UPDATE:
+                     - Added 'brightness-[0.7]' and 'grayscale'
+                 */}
                  <div 
-                   className="absolute inset-0 bg-cover bg-center bg-no-repeat transform group-hover:scale-105 transition-transform duration-[20s]"
+                   className="absolute inset-0 bg-cover bg-center bg-no-repeat transform group-hover:scale-105 transition-transform duration-[20s] brightness-[0.7] grayscale"
                    style={{ backgroundImage: `url("${bgUrl}")` }}
                  >
                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/15 transition-colors duration-700"></div>

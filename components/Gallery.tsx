@@ -28,23 +28,28 @@ export const Gallery: React.FC = () => {
     loadImages();
   }, []);
 
-  // 🍱 BENTO GRID LOGIC
-  const getBentoClass = (index: number) => {
-    // UPDATED: Removed bg-gray-100, added bg-white/50 for placeholder feel before load
-    // Added border-white/40 to make images pop slightly from transparent bg
-    const base = "relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10";
-    let desktopClass = "";
+  // 🍱 LAYOUT LOGIC
+  // Mobile: Uses CSS Columns (Pinterest Style) - Class handled in JSX
+  // Desktop: Uses CSS Grid (Bento Style) - Class handled here
+  const getResponsiveClass = (index: number) => {
+    // Base Classes
+    // Mobile: 'mb-3 break-inside-avoid' creates the Masonry spacing and prevents column breaking
+    // Desktop: 'md:mb-0' removes the bottom margin because Grid handles the gap
+    const base = "relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10 mb-3 break-inside-avoid md:mb-0";
+    
+    // Desktop Grid Logic (Bento Spans)
+    // These classes are prefixed with 'md:' so they ONLY apply on Desktop
+    let desktopClass = "md:col-span-1 md:row-span-1";
+    
     if ([0, 3, 8, 11, 14].includes(index)) {
         desktopClass = "md:col-span-2 md:row-span-2"; 
-    } else {
-        desktopClass = "md:col-span-1 md:row-span-1"; 
-    }
+    } 
     if (index === 1) desktopClass = "md:col-span-2 md:row-span-1"; 
     if (index === 2) desktopClass = "md:col-span-1 md:row-span-1";
     if (index === 5) desktopClass = "md:col-span-1 md:row-span-2"; 
     if (index === 16) desktopClass = "md:col-span-2 md:row-span-1"; 
 
-    return `${base} col-span-1 row-span-1 ${desktopClass}`;
+    return `${base} ${desktopClass}`;
   };
 
   return (
@@ -68,19 +73,31 @@ export const Gallery: React.FC = () => {
             <p className="font-sans text-charcoal/60 uppercase tracking-widest text-xs">Loading gallery...</p>
           </div>
         ) : (
-          /* DESIGN UPDATE: Removed White Frame Container. Images float on background. */
           <FadeInUp delay="200ms">
-             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 md:gap-4 auto-rows-[120px] md:auto-rows-[160px] lg:auto-rows-[180px] grid-flow-dense">
+             {/* 
+                LAYOUT STRATEGY SWAP:
+                
+                1. Mobile (Default): 'columns-2 gap-3'
+                   - Creates a Masonry/Pinterest layout.
+                   - Images stack vertically in columns.
+                   - Respects natural aspect ratio (Height auto).
+                
+                2. Desktop (md:): 'md:columns-auto md:grid ...'
+                   - Resets columns.
+                   - Activates CSS Grid.
+                   - Enforces fixed row heights (auto-rows) for the Bento look.
+             */}
+             <div className="columns-2 gap-3 md:columns-auto md:grid md:grid-cols-4 lg:grid-cols-8 md:gap-4 md:auto-rows-[160px] lg:auto-rows-[180px] grid-flow-dense">
                {images.map((img, idx) => (
                  <div 
                    key={idx} 
-                   className={getBentoClass(idx)}
+                   className={getResponsiveClass(idx)}
                    onClick={() => setSelectedImage(img.full)}
                  >
                    <img 
                      src={img.thumb} 
                      alt={`Moment ${idx + 1}`} 
-                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                     className="w-full transition-transform duration-700 group-hover:scale-110 h-auto md:h-full md:object-cover"
                      loading="lazy"
                    />
                    <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-500"></div>
