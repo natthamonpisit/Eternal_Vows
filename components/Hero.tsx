@@ -81,9 +81,9 @@ export const Hero: React.FC = () => {
       */}
       <div className="md:hidden w-full h-full flex flex-col">
          
-         {/* [BLOCK 1] Intro */}
+         {/* [BLOCK 1] Intro - Size updated to 18px */}
          <div className="flex-none h-[15%] flex items-center justify-center z-10">
-            <p className="text-[#5D4037] font-sans tracking-[0.3em] uppercase text-xs font-bold mt-2">
+            <p className="text-[#5D4037] font-sans tracking-[0.3em] uppercase text-[18px] font-bold mt-2">
               The Wedding Of
             </p>
          </div>
@@ -106,8 +106,8 @@ export const Hero: React.FC = () => {
                 </h1>
                 
                 <div className="mt-3 flex flex-col items-center gap-1 text-[#FDFBF7] drop-shadow-md animate-fade-in">
-                   {/* Changed to font-sans */}
-                   <span className="font-sans text-lg tracking-widest font-bold">March 21, 2026</span>
+                   {/* Date Size matched to Location Size (text-[9px]) */}
+                   <span className="font-sans text-[9px] uppercase tracking-[0.2em] font-bold">March 21, 2026</span>
                    <p className="font-sans text-[9px] uppercase tracking-[0.2em] opacity-90 text-[#EBCBC5]">Dalva le ville, Bangkok</p>
                 </div>
              </div>
@@ -153,9 +153,9 @@ export const Hero: React.FC = () => {
       */}
       <div className="hidden md:flex flex-col w-full h-full relative z-10">
         
-         {/* [BLOCK 1] Intro */}
+         {/* [BLOCK 1] Intro - Size updated to text-2xl */}
          <div className="flex-none h-[15%] flex items-center justify-center">
-            <p className="text-[#5D4037] font-sans tracking-[0.4em] uppercase text-sm lg:text-base font-bold translate-y-2">
+            <p className="text-[#5D4037] font-sans tracking-[0.4em] uppercase text-2xl font-bold translate-y-2">
               The Wedding Of
             </p>
          </div>
@@ -179,8 +179,8 @@ export const Hero: React.FC = () => {
                     </h1>
                     
                     <div className="flex items-center gap-6 text-[#FDFBF7] mt-2 animate-fade-in backdrop-blur-sm bg-white/5 px-8 py-2 rounded-full border border-white/10">
-                       {/* Changed to font-sans */}
-                       <span className="font-sans text-xl lg:text-2xl tracking-widest font-bold">March 21, 2026</span>
+                       {/* Date Size matched to Location Size */}
+                       <span className="font-sans text-xs lg:text-sm uppercase tracking-[0.25em] font-bold">March 21, 2026</span>
                        <span className="w-2 h-2 rounded-full bg-[#EBCBC5]"></span>
                        <span className="font-sans text-xs lg:text-sm uppercase tracking-[0.25em] text-[#EBCBC5] font-bold">Dalva le ville, Bangkok</span>
                     </div>

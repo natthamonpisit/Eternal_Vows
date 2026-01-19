@@ -63,11 +63,11 @@ export const MoneyGift: React.FC = () => {
                 </span>
               </div>
 
-              {/* Attach Slip Button */}
+              {/* Attach Slip Button - Pink Taupe -> Cream Beige */}
               <div>
                 <button
                   onClick={() => setView('upload')}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-charcoal text-white font-sans text-xs font-bold uppercase tracking-widest rounded-md hover:bg-gold transition-colors shadow-lg"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#C08E86] text-white font-sans text-xs font-bold uppercase tracking-widest rounded-md hover:bg-[#E6DABF] hover:text-charcoal transition-colors shadow-lg"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
                   Attach Slip
@@ -191,7 +191,7 @@ const SlipUploadForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
              type="text" 
              required
              /* Changed to font-sans */
-             className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-lg font-sans font-medium focus:border-gold focus:outline-none transition-colors rounded-none placeholder-gray-300"
+             className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-lg font-sans font-medium focus:border-[#C08E86] focus:outline-none transition-colors rounded-none placeholder-gray-300"
              placeholder="e.g. Somchai Jai-dee"
              value={name}
              onChange={e => setName(e.target.value)}
@@ -203,9 +203,9 @@ const SlipUploadForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
            {!previewUrl ? (
              <div 
                onClick={() => fileInputRef.current?.click()}
-               className="border-2 border-dashed border-gray-300 bg-white p-8 rounded-lg text-center cursor-pointer hover:border-gold hover:bg-gold/5 transition-all group"
+               className="border-2 border-dashed border-gray-300 bg-white p-8 rounded-lg text-center cursor-pointer hover:border-[#C08E86] hover:bg-[#C08E86]/5 transition-all group"
              >
-                <div className="w-10 h-10 mx-auto mb-3 text-gray-400 group-hover:text-gold transition-colors">
+                <div className="w-10 h-10 mx-auto mb-3 text-gray-400 group-hover:text-[#C08E86] transition-colors">
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                 </div>
                 {/* Changed to font-sans */}
@@ -232,10 +232,11 @@ const SlipUploadForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
            />
         </div>
 
+        {/* Button: Pink Taupe -> Cream Beige */}
         <button 
           type="submit"
           disabled={status === 'processing' || status === 'submitting'}
-          className="w-full bg-gold text-white py-4 font-sans font-bold uppercase tracking-widest hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md rounded-sm"
+          className="w-full bg-[#C08E86] text-white py-4 font-sans font-bold uppercase tracking-widest hover:bg-[#E6DABF] hover:text-charcoal transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md rounded-sm"
         >
            {status === 'processing' || status === 'submitting' ? 'Uploading...' : 'Send Slip'}
         </button>

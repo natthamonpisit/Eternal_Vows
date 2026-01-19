@@ -27,8 +27,7 @@ export const RsvpForm: React.FC = () => {
   if (status === 'success') {
     return (
       <FadeInUp>
-        <div className="max-w-xl mx-auto text-center py-20 px-6 bg-white shadow-xl rounded-lg border-t-4 border-gold animate-fade-in mx-4">
-          {/* Matches Gift with Love style */}
+        <div className="max-w-xl mx-auto text-center py-20 px-6 bg-white shadow-xl rounded-lg border-t-4 border-[#C08E86] animate-fade-in mx-4">
           <h3 className="font-sans text-4xl md:text-5xl text-gold-shine mb-4 font-bold uppercase tracking-wider">Thank You!</h3>
           <p className="font-sans text-lg text-charcoal">Your response has been recorded.</p>
           <p className="font-sans text-sm text-gray-500 mt-2 uppercase tracking-widest">We can't wait to see you</p>
@@ -41,10 +40,9 @@ export const RsvpForm: React.FC = () => {
     <section className="max-w-xl mx-auto bg-white p-6 md:p-12 shadow-2xl rounded-sm mx-4 md:mx-auto">
       <FadeInUp>
         <div className="text-center mb-8 md:mb-10">
-          {/* Matches Gift with Love style: text-4xl md:text-5xl, text-gold-shine, uppercase, tracking-wider, font-bold */}
           <h2 className="font-sans text-4xl md:text-5xl text-gold-shine font-bold tracking-wider uppercase">R.S.V.P</h2>
-          {/* Design System Update: text-sm md:text-base, font-medium (Thin) */}
-          <p className="font-sans text-gold text-sm md:text-base uppercase tracking-[0.2em] mt-2 font-medium">Please respond by February 21st</p>
+          {/* Changed color to text-gray-500 (dark gray) */}
+          <p className="font-sans text-gray-500 text-sm md:text-base uppercase tracking-[0.2em] mt-2 font-medium">Please respond by February 21st</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -53,7 +51,7 @@ export const RsvpForm: React.FC = () => {
             <input 
               type="text" 
               required
-              className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-base md:text-lg font-sans font-medium focus:border-gold focus:outline-none transition-colors rounded-none placeholder-gray-300"
+              className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-base md:text-lg font-sans font-medium focus:border-[#C08E86] focus:outline-none transition-colors rounded-none placeholder-gray-300"
               placeholder="Mr. & Mrs. John Doe"
               value={formData.name}
               onChange={e => setFormData({...formData, name: e.target.value})}
@@ -70,7 +68,7 @@ export const RsvpForm: React.FC = () => {
                     name="attending"
                     checked={formData.attending === 'yes'}
                     onChange={() => setFormData({...formData, attending: 'yes'})}
-                    className="accent-gold w-5 h-5"
+                    className="accent-[#C08E86] w-5 h-5"
                   />
                   <span className="ml-2 font-sans text-base font-medium">Joyfully Accept</span>
                 </label>
@@ -92,7 +90,7 @@ export const RsvpForm: React.FC = () => {
             <div>
               <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Total Guests</label>
               <select 
-                className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-base md:text-lg font-sans font-medium focus:border-gold focus:outline-none rounded-none"
+                className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-base md:text-lg font-sans font-medium focus:border-[#C08E86] focus:outline-none rounded-none"
                 value={formData.attendees}
                 onChange={e => setFormData({...formData, attendees: parseInt(e.target.value)})}
               >
@@ -107,16 +105,17 @@ export const RsvpForm: React.FC = () => {
             <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Note</label>
             <textarea 
               rows={3}
-              className="w-full border-2 border-gray-100 bg-gray-50/50 p-3 rounded-md font-sans font-medium focus:border-gold focus:outline-none transition-colors"
+              className="w-full border-2 border-gray-100 bg-gray-50/50 p-3 rounded-md font-sans font-medium focus:border-[#C08E86] focus:outline-none transition-colors"
               value={formData.note}
               onChange={e => setFormData({...formData, note: e.target.value})}
             ></textarea>
           </div>
 
+          {/* Button: Pink Taupe -> Cream Beige */}
           <button 
             type="submit" 
             disabled={status === 'submitting'}
-            className="w-full bg-gold text-white font-sans font-bold uppercase tracking-widest py-4 px-6 hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4 text-sm md:text-base"
+            className="w-full bg-[#C08E86] text-white font-sans font-bold uppercase tracking-widest py-4 px-6 hover:bg-[#E6DABF] hover:text-charcoal transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4 text-sm md:text-base"
           >
             {status === 'submitting' ? 'Sending...' : 'Confirm RSVP'}
           </button>
