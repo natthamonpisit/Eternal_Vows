@@ -14,15 +14,14 @@ export const Details: React.FC = () => {
       const images = await fetchGallery('Wedding_OukBew/Location');
       
       if (images.length > 0) {
-        // If we have real images, use them (take up to 4)
         setVenueImages(images.slice(0, 4));
       } else {
-        // 2. Fallback / Placeholder if folder is empty (Mocking Dalva le ville vibe)
+        // 2. Fallback
         const placeholders = [
-          "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=800&auto=format&fit=crop", // Hall
-          "https://images.unsplash.com/photo-1464366400600-7168b8af0bc3?q=80&w=800&auto=format&fit=crop", // Garden
-          "https://images.unsplash.com/photo-1519225421980-715cb0202128?q=80&w=800&auto=format&fit=crop", // Table
-          "https://images.unsplash.com/photo-1511285560982-1351cdeb9821?q=80&w=800&auto=format&fit=crop"  // Flowers
+          "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=800&auto=format&fit=crop", 
+          "https://images.unsplash.com/photo-1464366400600-7168b8af0bc3?q=80&w=800&auto=format&fit=crop", 
+          "https://images.unsplash.com/photo-1519225421980-715cb0202128?q=80&w=800&auto=format&fit=crop", 
+          "https://images.unsplash.com/photo-1511285560982-1351cdeb9821?q=80&w=800&auto=format&fit=crop"
         ].map(url => ({ thumb: url, full: url }));
         setVenueImages(placeholders);
       }
@@ -31,17 +30,15 @@ export const Details: React.FC = () => {
     loadVenueImages();
   }, []);
 
-  // Updated Schedule Data
+  // Updated Schedule Data with English & Luxury Icons
   const events = [
     { 
       time: "07:09", 
       title: "Buddhist Ceremony", 
       desc: "Monk Blessing & Merit Making",
       icon: (
-        // Lotus / Praying Hands
-        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M12 5v10m-3-3l3-3 3 3" />
+        <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm0-12a1 1 0 100 2 1 1 0 000-2zm0 4a3 3 0 100 6 3 3 0 000-6z" />
         </svg>
       )
     },
@@ -50,12 +47,9 @@ export const Details: React.FC = () => {
       title: "Engagement Ceremony", 
       desc: "Ring Exchange",
       icon: (
-        // Diamond Ring
-        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M9 7l3-4 3 4H9z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M9 7l3 3 3-3" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M12 10a6 6 0 100 12 6 6 0 000-12z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M15 13l2 2m-8-2l-2 2" />
+        <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 7v5" />
         </svg>
       )
     },
@@ -64,10 +58,8 @@ export const Details: React.FC = () => {
       title: "Tea Ceremony", 
       desc: "Pay Respects to Elders",
       icon: (
-        // Tea / Cup
-        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M6 1V4M10 1V4M14 1V4" />
+        <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M18.36 6.64a9 9 0 11-12.73 0M12 2v10" />
         </svg>
       )
     },
@@ -76,10 +68,8 @@ export const Details: React.FC = () => {
       title: "Water Pouring", 
       desc: "Rod Nam Sangha Ceremony",
       icon: (
-        // Water / Conch Shell Vibe
-        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M12 8v4m0 4h.01" />
+        <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
         </svg>
       )
     },
@@ -88,9 +78,8 @@ export const Details: React.FC = () => {
       title: "Wedding Reception", 
       desc: "Lunch Banquet & Celebration",
       icon: (
-        // Cheers / Glasses
-        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M8 21h8m-4-8v8m-4-8a3 3 0 01-3-3V5a2 2 0 012-2h4a2 2 0 012 2v5a3 3 0 01-3 3zm8 0a3 3 0 01-3-3V5a2 2 0 012-2h4a2 2 0 012 2v5a3 3 0 01-3 3z" />
+        <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
         </svg>
       )
     }
@@ -112,62 +101,70 @@ export const Details: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10 space-y-24">
         
         {/* =========================================
-            SECTION 1: THE SCHEDULE (Redesigned)
+            SECTION 1: THE SCHEDULE (Luxury Row Layout)
            ========================================= */}
         <div>
           <div className="text-center mb-16 space-y-4">
-            <h2 className="font-serif text-5xl md:text-7xl text-cream drop-shadow-sm text-gold-shine">The Schedule</h2>
+            <h2 className="font-serif text-5xl md:text-7xl text-[#FDFBF7] drop-shadow-sm">The Schedule</h2>
             <div className="flex items-center justify-center gap-4">
-              <div className="h-px w-8 md:w-12 bg-cream/30"></div>
-              <p className="font-sans text-cream/70 uppercase tracking-[0.25em] text-xs md:text-sm font-bold">Saturday, March 21st</p>
-              <div className="h-px w-8 md:w-12 bg-cream/30"></div>
+              <div className="h-px w-8 md:w-12 bg-[#F3E5AB]/40"></div>
+              <p className="font-sans text-[#F3E5AB] uppercase tracking-[0.25em] text-xs md:text-sm font-bold">Saturday, March 21st</p>
+              <div className="h-px w-8 md:w-12 bg-[#F3E5AB]/40"></div>
             </div>
             
             <a 
               href={addToCalendarUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2 border border-cream/30 rounded-full text-cream hover:bg-cream hover:text-old-rose transition-all duration-300 text-xs font-sans uppercase tracking-widest font-bold mt-4"
+              className="inline-flex items-center gap-2 px-6 py-2 border border-[#F3E5AB]/30 rounded-full text-[#F3E5AB] hover:bg-[#F3E5AB] hover:text-old-rose transition-all duration-300 text-xs font-sans uppercase tracking-widest font-bold mt-6"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
               Add to Calendar
             </a>
           </div>
 
-          <div className="max-w-3xl mx-auto relative pl-0 md:pl-10">
+          <div className="max-w-4xl mx-auto relative">
+             
              {/* 
-                 Vertical Timeline Line 
-                 - Moved to left side (approx 120px on desktop)
+                 THE TIMELINE LINE 
+                 - Positioned at approx 35% from left on Desktop to allow space for Icon+Time
              */}
-             <div className="absolute left-[34px] md:left-[140px] top-4 bottom-4 w-px bg-gradient-to-b from-transparent via-cream/40 to-transparent"></div>
+             <div className="absolute left-[24px] md:left-[320px] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#F3E5AB]/30 to-transparent"></div>
 
-             <div className="space-y-10 md:space-y-12">
+             <div className="space-y-12">
                {events.map((event, idx) => (
-                 <div key={idx} className="relative flex items-start group">
+                 <div key={idx} className="relative flex items-center group">
                    
-                    {/* Time (Left Side) */}
-                    <div className="hidden md:block w-[110px] text-right pt-3 pr-8">
-                       <span className="font-serif text-3xl text-gold-shine font-medium tracking-wide drop-shadow-sm">{event.time}</span>
-                    </div>
-
-                    {/* Icon (On the Line) */}
-                    <div className="relative z-10 flex-shrink-0">
-                       <div className="w-[68px] h-[68px] md:w-[60px] md:h-[60px] rounded-full border border-gold/30 bg-[#A67B73] flex items-center justify-center text-cream shadow-[0_4px_20px_rgba(0,0,0,0.15)] group-hover:scale-110 group-hover:bg-gold transition-all duration-500 relative">
-                          {/* Inner Glow Ring */}
-                          <div className="absolute inset-1 rounded-full border border-white/20"></div>
+                    {/* LEFT GROUP: Icon + Time (Desktop) */}
+                    {/* "Icon left of line, left of time" implies: Icon -> Time -> Line */}
+                    <div className="hidden md:flex w-[280px] items-center justify-end pr-10 gap-6">
+                       
+                       {/* Icon */}
+                       <div className="w-10 h-10 text-[#F3E5AB]/80 group-hover:text-white transition-colors duration-500">
                           {event.icon}
-                          
-                          {/* Mobile Time Badge (Floating on Icon) */}
-                          <div className="md:hidden absolute -top-3 -right-2 bg-cream text-old-rose px-2 py-0.5 rounded-full shadow-md">
-                             <span className="font-serif text-sm font-bold">{event.time}</span>
-                          </div>
                        </div>
+
+                       {/* Time (Vanilla Cream, No Shimmer, Elegant) */}
+                       <span className="font-serif text-3xl text-[#F3E5AB] font-medium tracking-wider drop-shadow-sm min-w-[80px] text-right">
+                          {event.time}
+                       </span>
+
                     </div>
 
-                    {/* Content (Right Side) */}
-                    <div className="flex-1 pl-6 pt-1">
-                       <h3 className="font-serif text-3xl md:text-4xl text-cream mb-1 drop-shadow-sm">{event.title}</h3>
-                       <p className="font-sans text-cream/70 uppercase tracking-widest text-xs font-medium border-t border-white/10 inline-block pt-2">
+                    {/* MOBILE GROUP (Layout adjusted for small screen) */}
+                    <div className="md:hidden absolute left-[56px] -top-6 flex items-center gap-2">
+                        <span className="font-serif text-xl text-[#F3E5AB] font-bold">{event.time}</span>
+                    </div>
+
+                    {/* CENTER POINT ON LINE */}
+                    <div className="absolute left-[19px] md:left-[315px] w-[11px] h-[11px] rounded-full bg-[#F3E5AB] border-2 border-old-rose z-10 shadow-sm group-hover:scale-125 transition-transform duration-300"></div>
+
+                    {/* RIGHT GROUP: Content */}
+                    <div className="flex-1 pl-12 md:pl-12 pt-1">
+                       <h3 className="font-serif text-3xl md:text-4xl text-[#FDFBF7] mb-1 drop-shadow-sm group-hover:translate-x-1 transition-transform duration-300">
+                          {event.title}
+                       </h3>
+                       <p className="font-sans text-[#F3E5AB]/70 uppercase tracking-widest text-xs font-medium border-t border-white/10 inline-block pt-2">
                          {event.desc}
                        </p>
                     </div>
