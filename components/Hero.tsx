@@ -4,12 +4,14 @@ import { fetchGallery } from '../services/api';
 
 /* 
   ========================================================================================
-  🤵👰 COMPONENT: Hero (ส่วนหัวข้อหน้าแรก - Re-Layout V.8 Seamless Texture Fix)
+  🤵👰 COMPONENT: Hero (ส่วนหัวข้อหน้าแรก - Re-Layout V.9 4-Block Structure)
   ========================================================================================
   
-  [Fixes]
-  1. Texture Mismatch: Added `bg-fixed` to the footer texture to align with global/gallery texture.
-  2. Seamless: Ensure the footer background is identical to the upcoming Gallery section.
+  [Structure Idea: 4 Vertical Blocks]
+  1. Intro Box: "The Wedding Of"
+  2. Main Box: Names, Date, Location
+  3. Timer Box: Countdown
+  4. Footer Box: Star Shape (Solid Cream connecting to Gallery)
 */
 
 export const Hero: React.FC = () => {
@@ -77,72 +79,75 @@ export const Hero: React.FC = () => {
       
       {/* 
         =======================================================================
-        📱 MOBILE LAYOUT
+        📱 MOBILE LAYOUT (4-Block Vertical Stack)
         =======================================================================
       */}
-      <div className="md:hidden flex flex-col w-full h-[100dvh]">
+      <div className="md:hidden relative w-full h-[100dvh] flex flex-col">
          
          {/* 
-            PART A: IMAGE AREA
+            LAYER B: BACKGROUND IMAGE (Underlying Layer)
+            - Covers the top 75% of the screen (Blocks 1, 2, 3)
          */}
-         <div className="relative h-[72%] w-full overflow-hidden z-0">
-            
-            {/* 1. Background Image Layer */}
+         <div className="absolute top-0 left-0 w-full h-[75%] overflow-hidden z-0">
             <div 
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
               style={{ backgroundImage: `url("${bgUrl}")` }}
             ></div>
-
-            {/* 2. Gradient Overlays */}
-            <div className="absolute top-0 left-0 right-0 h-[30vh] bg-gradient-to-b from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent pointer-events-none z-10"></div>
-            <div className="absolute bottom-0 left-0 right-0 h-[30vh] bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent pointer-events-none z-10"></div>
-
-            {/* 3. Content */}
-            <div className="absolute inset-0 z-20 flex flex-col items-center justify-between px-2 py-8">
-                <div className="mt-8">
-                  <p className="text-[#5D4037] font-sans tracking-[0.3em] uppercase text-[10px] font-bold drop-shadow-sm">
-                    The Wedding Of
-                  </p>
-                </div>
-
-                <div className="flex flex-col items-center justify-center w-full space-y-3 -mt-4">
-                   <h1 
-                     className="font-script text-[#C08E86] leading-none whitespace-nowrap drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)] text-center px-1"
-                     style={{ fontSize: '9vw' }} 
-                   >
-                     Natthamonpisit & Sorot
-                   </h1>
-
-                   <div className="flex flex-col items-center gap-1 text-[#5D4037] font-serif text-sm drop-shadow-md">
-                     <div className="flex items-center gap-2">
-                       <span className="font-semibold text-lg">March 21, 2026</span>
-                     </div>
-                     <p className="font-medium text-sm text-[#B78A7D] tracking-wide">Dalva le ville, Bangkok</p>
-                   </div>
-                </div>
-
-                <div className="mb-4">
-                  <div className="flex items-center justify-center pt-2">
-                    <TimeUnit value={timeLeft.days} label="Days" />
-                    <span className="font-serif text-lg text-[#8E5B50]/50 -mt-3">:</span>
-                    <TimeUnit value={timeLeft.hours} label="Hrs" />
-                    <span className="font-serif text-lg text-[#8E5B50]/50 -mt-3">:</span>
-                    <TimeUnit value={timeLeft.minutes} label="Mins" />
-                  </div>
-                </div>
-
-            </div>
+            {/* Layer C: Fades */}
+            <div className="absolute top-0 left-0 right-0 h-[20vh] bg-gradient-to-b from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 right-0 h-[30vh] bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent pointer-events-none"></div>
          </div>
 
          {/* 
-            PART B: FOOTER AREA
-            - Uses `bg-fixed` for texture to align with Global Background
+            LAYER D: CONTENT BLOCKS (Z-Index 10)
+            - This container sits ON TOP of the image.
          */}
-         <div className="relative flex-1 bg-[#FDFBF7] flex items-center justify-center overflow-hidden -mt-6 z-10 rounded-t-[2rem] shadow-[0_-10px_40px_rgba(253,251,247,1)]">
-            {/* Texture: Added bg-fixed */}
-            <div className="absolute inset-0 opacity-40 mix-blend-multiply pointer-events-none bg-fixed" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
+         
+         {/* [BLOCK 1] The Wedding Of (Intro) */}
+         <div className="relative z-10 flex-none pt-12 pb-2 flex items-end justify-center h-[15%]">
+            <p className="text-[#5D4037] font-sans tracking-[0.3em] uppercase text-[10px] font-bold drop-shadow-sm">
+              The Wedding Of
+            </p>
+         </div>
+
+         {/* [BLOCK 2] Names & Details (Main Content) */}
+         <div className="relative z-10 flex-grow flex flex-col items-center justify-center -mt-4">
+             <h1 
+               className="font-script text-[#C08E86] leading-none whitespace-nowrap drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)] text-center px-1"
+               style={{ fontSize: '9vw' }} 
+             >
+               Natthamonpisit & Sorot
+             </h1>
+             <div className="flex flex-col items-center gap-1 text-[#5D4037] font-serif text-sm drop-shadow-md mt-4">
+               <div className="flex items-center gap-2">
+                 <span className="font-semibold text-lg">March 21, 2026</span>
+               </div>
+               <p className="font-medium text-sm text-[#B78A7D] tracking-wide">Dalva le ville, Bangkok</p>
+             </div>
+         </div>
+
+         {/* [BLOCK 3] Countdown Timer */}
+         <div className="relative z-10 flex-none pb-8 flex items-center justify-center">
+            <div className="flex items-center justify-center pt-2">
+              <TimeUnit value={timeLeft.days} label="Days" />
+              <span className="font-serif text-lg text-[#8E5B50]/50 -mt-3">:</span>
+              <TimeUnit value={timeLeft.hours} label="Hrs" />
+              <span className="font-serif text-lg text-[#8E5B50]/50 -mt-3">:</span>
+              <TimeUnit value={timeLeft.minutes} label="Mins" />
+            </div>
+         </div>
+
+         {/* [BLOCK 4] Footer Star (The Anchor) */}
+         {/* 
+             - This block MUST have `bg-[#FDFBF7]` to be opaque.
+             - It uses `-mt-6` to pull itself UP over the image layer.
+             - It uses `bg-fixed` texture to match Gallery.
+         */}
+         <div className="relative z-20 flex-none h-[25%] bg-[#FDFBF7] rounded-t-[2rem] -mt-6 flex items-center justify-center shadow-[0_-10px_40px_rgba(253,251,247,1)]">
             
-            {/* Star Shape */}
+            {/* Texture Matcher */}
+            <div className="absolute inset-0 opacity-40 mix-blend-multiply pointer-events-none bg-fixed rounded-t-[2rem]" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
+
             <div className="relative z-10 flex flex-col items-center animate-pulse-slow">
                <svg className="w-14 h-14 text-[#C08E86]" viewBox="0 0 24 24" fill="currentColor">
                    <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/>
@@ -165,7 +170,7 @@ export const Hero: React.FC = () => {
 
       {/* 
         =======================================================================
-        💻 DESKTOP LAYOUT
+        💻 DESKTOP LAYOUT (Unchanged)
         =======================================================================
       */}
       <div className="hidden md:flex flex-col items-center justify-center w-full min-h-screen relative">
