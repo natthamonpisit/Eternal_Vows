@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { submitRsvp } from '../services/api';
 import { FadeInUp } from './FadeInUp';
@@ -47,7 +46,8 @@ export const RsvpForm: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Full Name</label>
+            {/* Updated Label: Full Name -> Name */}
+            <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Name</label>
             <input 
               type="text" 
               required
@@ -102,7 +102,8 @@ export const RsvpForm: React.FC = () => {
           )}
 
           <div>
-            <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Dietary Requirements / Note</label>
+            {/* Updated Label: Dietary Requirements / Note -> Note */}
+            <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Note</label>
             <textarea 
               rows={3}
               className="w-full border-2 border-gray-100 bg-gray-50/50 p-3 rounded-md font-serif focus:border-gold focus:outline-none transition-colors"
