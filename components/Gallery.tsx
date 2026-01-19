@@ -47,17 +47,18 @@ export const Gallery: React.FC = () => {
   };
 
   return (
-    // Updated: Removed min-h to let it flow naturally with Hero
-    <section className="pt-0 pb-24 px-4 relative flex flex-col justify-center">
+    // Updated: Added bg-[#FDFBF7] to be opaque matching Hero footer
+    <section className="pt-0 pb-24 px-4 relative flex flex-col justify-center bg-[#FDFBF7]">
       
       {/* 
-         REMOVED: bg-gradient-to-b (Taupe/5) 
-         Reason: It caused a visible color seam between Hero and Gallery.
-         Now it uses the global Cream background, ensuring a perfect match.
+         TEXTURE MATCHING:
+         This texture overlay uses `bg-fixed` to align perfectly with the viewport, 
+         just like the Hero Footer. This creates a seamless "continuous paper" effect.
       */}
+      <div className="absolute inset-0 opacity-40 mix-blend-multiply pointer-events-none bg-fixed z-0" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
 
       <FadeInUp>
-        <div className="text-center mb-16 md:mb-20">
+        <div className="text-center mb-16 md:mb-20 relative z-10">
           <p className="font-sans text-gold text-xs md:text-sm tracking-[0.3em] uppercase mb-4">Pre-Wedding Gallery</p>
           <h2 className="font-serif text-5xl md:text-7xl text-charcoal mb-6 text-gold-shine">Our Moments</h2>
         </div>
