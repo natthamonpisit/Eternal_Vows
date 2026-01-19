@@ -1,18 +1,20 @@
-
 import React, { useState, useEffect } from 'react';
 import { fetchGallery } from '../services/api';
 
 /* 
   ========================================================================================
-  🤵👰 COMPONENT: Hero (Layout V.14 - Final Correction)
+  🛑 STRICT DESIGN RULE (By P'Ouk) - DO NOT MODIFY LAYOUT
   ========================================================================================
   
-  [Mobile Structure - 4 Blocks]
-  1. Intro: "The Wedding Of" (On Transparent Paper)
-  2. Main: Image Background + Overlay Text (Names, Date, Location)
-     *** Names must be on ONE LINE ***
-  3. Timer: Countdown (On Transparent Paper)
-  4. Footer: Star (On Transparent Paper)
+  [Mobile Layout Structure - 4 Fixed Blocks]
+  1. Top Block: "The Wedding Of" text (On Transparent/Paper Background)
+  2. Image Block: Large Horizontal Image.
+     *** CRITICAL: Names + Date + Location MUST be overlaid ON THIS IMAGE ***
+  3. Countdown Block: Timer (On Transparent/Paper Background)
+  4. Footer Block: Star Icon (On Transparent/Paper Background)
+
+  [Typography Rule]
+  - Names "Natthamonpisit & Sorot" MUST remain on a SINGLE LINE.
 */
 
 export const Hero: React.FC = () => {
@@ -77,7 +79,7 @@ export const Hero: React.FC = () => {
       
       {/* 
         =======================================================================
-        📱 MOBILE LAYOUT (4 Vertical Blocks)
+        📱 MOBILE LAYOUT (LOCKED 4 BLOCKS)
         =======================================================================
       */}
       <div className="md:hidden w-full h-full flex flex-col">
@@ -102,7 +104,11 @@ export const Hero: React.FC = () => {
 
              {/* Text Content Overlay */}
              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 w-full">
-                {/* Names: Single Line forced by whitespace-nowrap & sizing */}
+                {/* 
+                    🛑 NAME RULE: SINGLE LINE ONLY 
+                    - whitespace-nowrap enforced
+                    - fontSize responsive (vw) to fit width
+                */}
                 <h1 
                   className="font-script text-[#FDFBF7] leading-none whitespace-nowrap drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] w-full px-1"
                   style={{ fontSize: '9vw' }} 
