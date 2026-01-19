@@ -57,9 +57,6 @@ export const Gallery: React.FC = () => {
         <div className="text-center mb-16 md:mb-20">
           <p className="font-sans text-gold text-xs md:text-sm tracking-[0.3em] uppercase mb-4">Pre-Wedding Gallery</p>
           <h2 className="font-serif text-5xl md:text-7xl text-charcoal mb-6 text-gold-shine">Our Moments</h2>
-          <p className="font-serif text-charcoal/60 italic max-w-2xl mx-auto px-4">
-            "Every picture tells a story of love, laughter, and our journey together."
-          </p>
         </div>
       </FadeInUp>
 

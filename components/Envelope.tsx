@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 
 interface EnvelopeProps {
@@ -128,14 +129,15 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
           imagesLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
       >
-        <div className="flex flex-col items-center space-y-6 animate-fade-in">
+        <div className="flex flex-col items-center space-y-6 animate-fade-in px-6 w-full">
           <div className="relative">
              <div className="w-16 h-16 border-4 border-gold/20 rounded-full"></div>
              <div className="absolute top-0 left-0 w-16 h-16 border-4 border-gold border-t-transparent rounded-full animate-spin"></div>
           </div>
-          <div className="text-center space-y-2">
-            <p className="font-script text-3xl md:text-4xl text-gold-shine">Natthamonpisit & Sorot</p>
-            <p className="font-sans text-[10px] md:text-xs uppercase tracking-[0.2em] text-charcoal/40 animate-pulse">Loading Invitation...</p>
+          <div className="text-center w-full">
+            {/* Added generous padding (px-8, py-6) and loose leading to handle script font swashes */}
+            <p className="font-script text-3xl md:text-5xl text-gold-shine px-8 py-6 leading-loose whitespace-nowrap">Natthamonpisit & Sorot</p>
+            <p className="font-sans text-[10px] md:text-xs uppercase tracking-[0.2em] text-charcoal/40 animate-pulse -mt-4">Loading Invitation...</p>
           </div>
         </div>
       </div>

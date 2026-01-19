@@ -89,8 +89,13 @@ export const Hero: React.FC = () => {
           </p>
           
           {/* Names: Dark Copper Gradient (Deep Brown -> Rose Gold -> Deep Brown) */}
-          {/* Fixed: Added px-4 and reduced mobile text size slightly to prevent 't' clipping */}
-          <h1 className="font-script text-[10vw] sm:text-[8vw] lg:text-9xl drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] leading-tight whitespace-nowrap px-4 py-2 bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-4 pr-6">
+          {/* Fixed: 
+              - Decreased font size for both mobile and desktop (8vw -> 7.5vw, 9xl -> 8xl)
+              - Increased padding-x (px-12) and padding-y (py-6)
+              - Changed leading to 'loose' to give vertical space for swashes
+              - Added 'pr-14' specifically to accommodate the trailing 't' swash
+          */}
+          <h1 className="font-script text-[7.5vw] sm:text-[7vw] lg:text-8xl xl:text-9xl drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] leading-loose whitespace-nowrap px-4 sm:px-12 py-6 bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent">
             Natthamonpisit <span className="bg-clip-text text-transparent bg-gradient-to-b from-[#B78A7D] to-[#8E5B50] mx-0.5 sm:mx-2 font-serif">&</span> Sorot
           </h1>
         </div>
