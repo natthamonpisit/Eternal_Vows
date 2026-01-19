@@ -29,11 +29,18 @@ export const submitGuestbook = async (data: Omit<GuestbookPayload, 'action'>): P
              headers: { 'Content-Type': 'application/json' },
              body: JSON.stringify({ image: data.image })
           });
-          const uploadResult = await uploadRes.json();
-          if (uploadResult.success) {
-             imageUrl = uploadResult.url;
+          
+          if (uploadRes.ok) {
+            const uploadResult = await uploadRes.json();
+            if (uploadResult.success) {
+               imageUrl = uploadResult.url;
+            } else {
+               throw new Error("Image upload failed: " + uploadResult.error);
+            }
           } else {
-             throw new Error("Image upload failed: " + uploadResult.error);
+             // In preview mode or if API fails, we can't upload. 
+             // Just skip upload or handle gracefully.
+             console.warn("Upload API not available in preview.");
           }
        } catch (err) {
           console.error("Cloudinary Upload Error", err);
@@ -72,13 +79,18 @@ export const fetchGallery = async (folderName?: string): Promise<GalleryItem[]> 
       : '/api/gallery';
       
     const response = await fetch(url);
+    if (!response.ok) {
+       // If API returns 404 (common in Preview) or 500
+       return [];
+    }
     const result = await response.json();
     if (result.success) {
       return result.data || [];
     }
     return [];
   } catch (error) {
-    console.warn("Gallery API Error:", error);
+    console.warn("Gallery API Error (likely preview mode):", error);
+    // Return empty array so frontend falls back to Mock Data
     return [];
   }
 };

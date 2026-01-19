@@ -10,12 +10,9 @@ export const Hero: React.FC = () => {
     seconds: 0
   });
 
-  // Default Fallback Image
-  const DEFAULT_BG_ID = "Wedding_OukBew/BG/7e0b499b-7fa4-4a7d-99e0-8068afce2e07_1_prgbpm";
-  const CLOUD_NAME = "damfrrvrb";
-  const [bgUrl, setBgUrl] = useState(`https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto,c_limit,w_1080/${DEFAULT_BG_ID}`);
+  const DEFAULT_BG_URL = "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1920&auto=format&fit=crop";
+  const [bgUrl, setBgUrl] = useState(DEFAULT_BG_URL);
 
-  // Fetch Background Dynamically from 'Wedding_OukBew/BG' folder
   useEffect(() => {
     const loadDynamicBg = async () => {
       try {
@@ -67,13 +64,10 @@ export const Hero: React.FC = () => {
       
       {/* 
         =======================================================================
-        MOBILE LAYOUT (Redesigned)
-        - Structure: Image Area (Top) + Content Area (Bottom) stacked clearly
-        - Seamless: Deep gradient fade
-        - Decor: Sparkles (Stars)
+        MOBILE LAYOUT
         =======================================================================
       */}
-      <div className="md:hidden relative w-full min-h-[100dvh] bg-[#FDFBF7] flex flex-col">
+      <div className="md:hidden relative w-full min-h-[100dvh] bg-[#FDFBF7] flex flex-col justify-between">
          
          {/* 1. IMAGE & TEXT AREA (Top Section) */}
          <div className="relative w-full">
@@ -81,18 +75,20 @@ export const Hero: React.FC = () => {
               src={bgUrl} 
               alt="Wedding Couple" 
               className="w-full h-auto object-contain block" 
+              onError={(e) => {
+                 (e.target as HTMLImageElement).src = DEFAULT_BG_URL;
+              }}
             />
             
-            {/* Seamless Fade Gradient: ไล่ระดับสูงขึ้นเพื่อความเนียน (40% ของความสูงรูป) */}
+            {/* Seamless Fade Gradient */}
             <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/90 to-transparent pointer-events-none"></div>
 
-            {/* Names Overlay: วางซ้อนบน Gradient ด้านล่างรูป */}
-            <div className="absolute bottom-0 left-0 right-0 pb-6 px-4 text-center z-10">
+            {/* Names Overlay */}
+            <div className="absolute bottom-0 left-0 right-0 pb-4 px-4 text-center z-10">
                 <p className="text-[#B78A7D] font-sans tracking-[0.25em] uppercase text-[10px] font-bold mb-1 shadow-white/50">
                   The Wedding Of
                 </p>
                 
-                {/* Rusty Pink Names with Glow */}
                 <h1 className="font-script leading-none py-2 flex flex-col items-center justify-center gap-2 w-full">
                   <span className="text-4xl text-[#C08E86] whitespace-nowrap drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
                     Natthamonpisit
@@ -107,23 +103,17 @@ export const Hero: React.FC = () => {
             </div>
          </div>
 
-         {/* 2. CONTENT AREA (Bottom Section) - แยกออกมาไม่ให้ทับกัน */}
-         <div className="flex-1 bg-[#FDFBF7] flex flex-col items-center justify-start pt-2 relative z-10 pb-16 px-4">
+         {/* 2. CONTENT AREA (Bottom Section) */}
+         <div className="flex-1 flex flex-col items-center justify-start pt-2 relative z-10 pb-6 px-4">
             
-            {/* Sparkles Decor (Stars) - กระจายตัว */}
+            {/* Sparkles Decor - Top */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {/* Top Left */}
                 <svg className="absolute top-4 left-8 w-4 h-4 text-[#EBCBC5] animate-pulse" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/></svg>
-                {/* Bottom Right */}
                 <svg className="absolute bottom-20 right-8 w-6 h-6 text-[#C08E86]/30 animate-pulse delay-700" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
-                {/* Center Random */}
-                <svg className="absolute top-1/2 left-4 w-3 h-3 text-[#B78A7D]/40 animate-pulse delay-300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/></svg>
-                {/* Top Right */}
-                <svg className="absolute top-0 right-12 w-5 h-5 text-[#EBCBC5] animate-pulse delay-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L15 9L24 12L15 15L12 24L9 15L0 12L9 9L12 0Z"/></svg>
             </div>
 
             {/* Countdown Timer */}
-            <div className="relative z-10 mt-2">
+            <div className="relative z-10 mt-1">
                 <div className="flex items-center justify-center bg-white/60 backdrop-blur-sm px-6 py-4 rounded-full border border-[#B78A7D]/20 shadow-[0_4px_20px_rgba(183,138,125,0.1)]">
                   <TimeUnit value={timeLeft.days} label="Days" />
                   <span className="font-serif text-lg text-[#8E5B50]/50 -mt-2">:</span>
@@ -139,11 +129,34 @@ export const Hero: React.FC = () => {
                 <p className="font-sans text-[#B78A7D] text-[10px] uppercase tracking-[0.2em] font-bold">
                     #OukBewTheWedding
                 </p>
-                <div className="flex items-center justify-center gap-2 text-[#5D4037]/80 font-serif text-sm">
-                   <span>March 21, 2026</span>
-                   <span className="w-1 h-1 bg-[#B78A7D] rounded-full"></span>
-                   <span>Bangkok</span>
+                <div className="flex flex-col items-center justify-center gap-1 text-[#5D4037] font-serif text-sm">
+                   <div className="flex items-center gap-2">
+                     <span>March 21, 2026</span>
+                     <span className="w-1 h-1 bg-[#B78A7D] rounded-full"></span>
+                     <span>Bangkok</span>
+                   </div>
+                   {/* Emphasized Venue Name */}
+                   <p className="font-semibold text-lg text-[#B78A7D] mt-1 drop-shadow-sm">Dalva le ville</p>
                 </div>
+            </div>
+
+            {/* Bottom Transition Decor: 3 Sparkles */}
+            {/* Moved UP significantly to bottom-28 (approx 7rem) to fill the white space gap */}
+            <div className="absolute bottom-28 left-0 right-0 flex justify-center items-end gap-6 md:gap-8 z-20 pointer-events-none">
+                {/* Small Left Star */}
+                <svg className="w-4 h-4 text-[#B78A7D]/60 animate-pulse" viewBox="0 0 24 24" fill="currentColor">
+                   <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/>
+                </svg>
+                
+                {/* Big Center Star */}
+                <svg className="w-12 h-12 text-[#C08E86] animate-pulse-slow mb-3" viewBox="0 0 24 24" fill="currentColor">
+                   <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/>
+                </svg>
+
+                {/* Small Right Star */}
+                <svg className="w-4 h-4 text-[#B78A7D]/60 animate-pulse delay-300" viewBox="0 0 24 24" fill="currentColor">
+                   <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/>
+                </svg>
             </div>
 
          </div>
@@ -152,7 +165,7 @@ export const Hero: React.FC = () => {
 
       {/* 
         =======================================================================
-        DESKTOP LAYOUT (Unchanged)
+        DESKTOP LAYOUT
         =======================================================================
       */}
       <div className="hidden md:flex flex-col items-center justify-center w-full min-h-screen relative">
@@ -209,6 +222,14 @@ export const Hero: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Desktop Bottom Decor - 3 Stars */}
+        <div className="absolute bottom-8 left-0 right-0 flex justify-center items-end gap-12 z-20 pointer-events-none">
+            <svg className="w-5 h-5 text-[#B78A7D]/60 animate-pulse" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+            <svg className="w-10 h-10 text-[#C08E86] animate-pulse-slow mb-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/></svg>
+            <svg className="w-5 h-5 text-[#B78A7D]/60 animate-pulse delay-300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+        </div>
+
       </div>
 
     </section>

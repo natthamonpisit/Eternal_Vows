@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req, res) {
@@ -19,8 +20,29 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Helper Function: Fetch Image URL and convert to Base64 for Gemini
+  async function urlToGenerativePart(url) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        console.warn(`Failed to fetch image: ${response.statusText}`);
+        return null;
+      }
+      const arrayBuffer = await response.arrayBuffer();
+      return {
+        inlineData: {
+          data: Buffer.from(arrayBuffer).toString("base64"),
+          mimeType: response.headers.get("content-type") || "image/jpeg",
+        },
+      };
+    } catch (error) {
+      console.error("Error converting image:", error);
+      return null;
+    }
+  }
+
   try {
-    const { message, history } = req.body;
+    const { message, history, image } = req.body;
 
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
@@ -80,7 +102,7 @@ export default async function handler(req, res) {
       model: 'gemini-2.5-flash',
       config: {
         systemInstruction: systemInstruction,
-        temperature: 0.7, // ลด Temperature ลงเล็กน้อยเพื่อให้เกาะติดข้อมูล Fact มากขึ้น
+        temperature: 0.7,
         // Enable Google Search and Google Maps Grounding
         tools: [
           { googleSearch: {} }, 
@@ -90,7 +112,22 @@ export default async function handler(req, res) {
       history: chatHistory
     });
 
-    const result = await chat.sendMessage({ message: message });
+    // Prepare content parts
+    let contentParts = [];
+    
+    // 1. If image URL is provided (e.g. from Cloudinary), convert to Base64 for Gemini
+    if (image) {
+      const imagePart = await urlToGenerativePart(image);
+      if (imagePart) {
+        contentParts.push(imagePart);
+      }
+    }
+
+    // 2. Add text message
+    contentParts.push({ text: message });
+
+    // Send to Gemini (Pass array of parts)
+    const result = await chat.sendMessage(contentParts);
     let responseText = result.text;
 
     // -------------------------------------------------------------------------

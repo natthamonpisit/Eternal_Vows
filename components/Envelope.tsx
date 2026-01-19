@@ -12,24 +12,28 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
   const CLOUD_NAME = "damfrrvrb";
   const BASE_URL = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto,w_1920/`;
 
-  // ---------------------------------------------------------------------------
-  // DESKTOP IMAGES (Horizontal)
-  // ---------------------------------------------------------------------------
-  const DESKTOP_CLOSED_ID = "Wedding_OukBew/Envelope/01_closed_envelope"; 
-  const DESKTOP_HALF_ID = "Wedding_OukBew/Envelope/02_Middle_open"; 
-  const DESKTOP_OPEN_ID = "Wedding_OukBew/Envelope/03_full_open"; 
-
-  // ---------------------------------------------------------------------------
-  // MOBILE IMAGES (Vertical/Portrait)
-  // ---------------------------------------------------------------------------
-  const MOBILE_CLOSED_ID = "Wedding_OukBew/Envelope/04_Closed_Iphone";
-  const MOBILE_HALF_ID = "Wedding_OukBew/Envelope/05_Half_open_iphone";
-  const MOBILE_OPEN_ID = "Wedding_OukBew/Envelope/06_Fullopen_iphone";
-
-
-  // ---------------------------------------------------------------------------
   const getUrl = (id: string) => {
+    if (id.startsWith('http')) return id;
     return `${BASE_URL}${id}`;
+  };
+
+  // ---------------------------------------------------------------------------
+  // IMAGES CONFIGURATION
+  // ---------------------------------------------------------------------------
+  
+  // 1. DESKTOP (Horizontal/Landscape)
+  const DESKTOP_IMAGES = {
+    closed: "Wedding_OukBew/Envelope/01_closed_envelope",
+    half:   "Wedding_OukBew/Envelope/02_Middle_open",
+    open:   "Wedding_OukBew/Envelope/03_full_open"
+  };
+
+  // 2. MOBILE (Vertical/Portrait)
+  // Reverted to specific mobile assets (04-06)
+  const MOBILE_IMAGES = {
+    closed: "Wedding_OukBew/Envelope/04_Closed_Iphone",
+    half:   "Wedding_OukBew/Envelope/05_Half_open_iphone",
+    open:   "Wedding_OukBew/Envelope/06_Fullopen_iphone"
   };
 
   const [stage, setStage] = useState<'closed' | 'half' | 'open'>('closed');
@@ -37,14 +41,13 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   
   // Detect Orientation
-  const [isPortrait, setIsPortrait] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerHeight > window.innerWidth;
-    }
-    return false;
-  });
+  const [isPortrait, setIsPortrait] = useState(true);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsPortrait(window.innerHeight > window.innerWidth);
+    }
+
     const handleResize = () => {
       setIsPortrait(window.innerHeight > window.innerWidth);
     };
@@ -52,20 +55,8 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Determine which set of images to use
   const currentImages = useMemo(() => {
-    if (isPortrait) {
-      return {
-        closed: MOBILE_CLOSED_ID,
-        half: MOBILE_HALF_ID,
-        open: MOBILE_OPEN_ID
-      };
-    }
-    return {
-      closed: DESKTOP_CLOSED_ID,
-      half: DESKTOP_HALF_ID,
-      open: DESKTOP_OPEN_ID
-    };
+    return isPortrait ? MOBILE_IMAGES : DESKTOP_IMAGES;
   }, [isPortrait]);
 
   // Pre-calculate glitter particles
@@ -81,7 +72,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
     }));
   }, []);
 
-  // Preload Images whenever orientation changes
+  // Preload Images
   useEffect(() => {
     setImagesLoaded(false);
     const imageUrls = [
@@ -94,7 +85,6 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
     const checkLoaded = () => {
       loadedCount++;
       if (loadedCount === imageUrls.length) {
-         // Add a small delay to ensure UI renders smoothly
          setTimeout(() => setImagesLoaded(true), 500);
       }
     };
@@ -105,6 +95,12 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
       img.onload = checkLoaded;
       img.onerror = checkLoaded;
     });
+
+    const timer = setTimeout(() => {
+       setImagesLoaded(true);
+    }, 4000);
+
+    return () => clearTimeout(timer);
   }, [currentImages]);
 
   const handleSequence = () => {
@@ -135,22 +131,17 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
              <div className="absolute top-0 left-0 w-16 h-16 border-4 border-gold border-t-transparent rounded-full animate-spin"></div>
           </div>
           <div className="text-center w-full">
-            {/* Added generous padding (px-8, py-6) and loose leading to handle script font swashes */}
             <p className="font-script text-3xl md:text-5xl text-gold-shine px-8 py-6 leading-loose whitespace-nowrap">Natthamonpisit & Sorot</p>
             <p className="font-sans text-[10px] md:text-xs uppercase tracking-[0.2em] text-charcoal/40 animate-pulse -mt-4">Loading Invitation...</p>
           </div>
         </div>
       </div>
 
-      {/* 
-         Responsive Container 
-         - Mobile/Portrait: w-full h-full (Fill Screen)
-         - Desktop/Landscape: aspect-[16/9] (Constrained Cinematic Ratio)
-      */}
+      {/* Envelope Container */}
       <div className={`relative transition-all duration-1000 transform duration-700 shadow-2xl z-10 
         ${isPortrait 
-           ? 'w-full h-full' 
-           : 'w-full max-w-[177.78vh] aspect-[16/9]' 
+           ? 'w-full h-full'
+           : 'w-full max-w-[177.78vh] aspect-[16/9]'
         }
         ${imagesLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}
       `}>
@@ -173,24 +164,17 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
           style={{ backgroundImage: `url("${getUrl(currentImages.open)}")` }}
         ></div>
 
-
         {/* Controls Layer */}
         <div className={`absolute inset-0 z-20 transition-opacity duration-300 ${stage !== 'closed' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-          
-          {/* Invisible Click Area */}
           <button 
             onClick={handleSequence}
-            disabled={!imagesLoaded}
             className="absolute inset-0 w-full h-full bg-transparent cursor-pointer"
             aria-label="Open Invitation"
           ></button>
 
-          {/* 
-              Text Positioned Relative to Image
-              Adjust position based on orientation if needed
-          */}
-          <div className={`absolute left-0 right-0 text-center px-4 pointer-events-none ${isPortrait ? 'top-[30%]' : 'top-[22%]'}`}>
-             <p className="font-sans text-xs sm:text-sm md:text-lg tracking-[0.25em] uppercase font-bold text-white/90 drop-shadow-md animate-float">
+          {/* Adjusted Position: Moved UP to sit above the wax seal */}
+          <div className={`absolute left-0 right-0 text-center px-4 pointer-events-none ${isPortrait ? 'top-[35%]' : 'top-[30%]'}`}>
+             <p className="font-sans text-xs sm:text-sm md:text-lg tracking-[0.25em] uppercase font-bold text-white/90 drop-shadow-md animate-float bg-black/20 inline-block px-4 py-2 rounded-full backdrop-blur-sm border border-white/20">
                Tap to Open
              </p>
           </div>
@@ -198,7 +182,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
 
       </div>
 
-      {/* Magical White Flash Overlay (Glitter Dust Effect) */}
+      {/* Magical White Flash Overlay */}
       <div className={`fixed inset-0 z-50 pointer-events-none flex items-center justify-center overflow-hidden transition-all duration-[1000ms] ease-out ${isWhiteFlash ? 'opacity-100' : 'opacity-0'}`}>
         <div className="absolute inset-0 bg-[#FDFBF7] backdrop-blur-xl"></div>
         <div className={`absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,1)_0%,rgba(253,251,247,0.8)_60%,transparent_100%)] transition-transform duration-[1500ms] ease-out ${isWhiteFlash ? 'scale-150 opacity-100' : 'scale-50 opacity-0'}`}></div>
