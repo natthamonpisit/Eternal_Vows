@@ -106,7 +106,8 @@ export const Hero: React.FC = () => {
                 </h1>
                 
                 <div className="mt-3 flex flex-col items-center gap-1 text-[#FDFBF7] drop-shadow-md animate-fade-in">
-                   <span className="font-serif text-lg tracking-wide">March 21, 2026</span>
+                   {/* Changed to font-sans */}
+                   <span className="font-sans text-lg tracking-widest font-bold">March 21, 2026</span>
                    <p className="font-sans text-[9px] uppercase tracking-[0.2em] opacity-90 text-[#EBCBC5]">Dalva le ville, Bangkok</p>
                 </div>
              </div>
@@ -178,7 +179,8 @@ export const Hero: React.FC = () => {
                     </h1>
                     
                     <div className="flex items-center gap-6 text-[#FDFBF7] mt-2 animate-fade-in backdrop-blur-sm bg-white/5 px-8 py-2 rounded-full border border-white/10">
-                       <span className="font-serif text-2xl lg:text-3xl tracking-wide font-medium">March 21, 2026</span>
+                       {/* Changed to font-sans */}
+                       <span className="font-sans text-xl lg:text-2xl tracking-widest font-bold">March 21, 2026</span>
                        <span className="w-2 h-2 rounded-full bg-[#EBCBC5]"></span>
                        <span className="font-sans text-xs lg:text-sm uppercase tracking-[0.25em] text-[#EBCBC5] font-bold">Dalva le ville, Bangkok</span>
                     </div>

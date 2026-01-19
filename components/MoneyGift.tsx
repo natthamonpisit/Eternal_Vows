@@ -19,9 +19,11 @@ export const MoneyGift: React.FC = () => {
         <div className="max-w-2xl mx-auto space-y-6 md:space-y-8 bg-[#FAF9F6] border-4 border-gold/40 p-8 md:p-12 rounded-xl shadow-2xl relative transition-all duration-300">
           
           <div className="text-center">
-             <h2 className="font-script text-4xl md:text-5xl text-gold-shine leading-normal py-2">Gift with Love</h2>
+             {/* Changed to font-sans */}
+             <h2 className="font-sans text-4xl md:text-5xl text-gold-shine leading-normal py-2 uppercase tracking-wider font-bold">Gift with Love</h2>
              {view === 'info' && (
-                <p className="font-serif text-base md:text-lg text-gray-600 leading-relaxed px-2 md:px-8 mt-4">
+                /* Changed to font-sans */
+                <p className="font-sans text-sm md:text-base text-gray-600 leading-relaxed px-2 md:px-8 mt-4 font-medium">
                   Your presence is the most precious gift to us. For your convenience, we have provided this digital option for those who wish to offer a token of celebration without the need to carry cash.
                 </p>
              )}
@@ -47,7 +49,8 @@ export const MoneyGift: React.FC = () => {
                   onClick={handleCopy}
                   className="flex items-center gap-2 px-4 py-2 bg-white border border-gold/30 rounded-full shadow-sm hover:shadow-md hover:border-gold transition-all group-hover:-translate-y-0.5"
                 >
-                  <span className="font-mono text-lg md:text-xl text-charcoal font-bold tracking-wider">{ACCOUNT_NUMBER}</span>
+                  {/* Changed from font-mono to font-sans */}
+                  <span className="font-sans text-lg md:text-xl text-charcoal font-bold tracking-wider">{ACCOUNT_NUMBER}</span>
                   <svg className={`w-4 h-4 text-gold transition-all ${copied ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                   
                   {/* Success Checkmark */}
@@ -164,7 +167,8 @@ const SlipUploadForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
          <div className="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
          </div>
-         <h3 className="font-serif text-3xl text-charcoal mb-2">Slip Sent!</h3>
+         {/* Changed to font-sans */}
+         <h3 className="font-sans text-3xl text-charcoal mb-2 font-bold uppercase tracking-wide">Slip Sent!</h3>
          <p className="text-gray-500 font-sans text-sm uppercase tracking-wide">Thank you for your kindness.</p>
        </div>
      );
@@ -186,7 +190,8 @@ const SlipUploadForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
            <input 
              type="text" 
              required
-             className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-lg font-serif focus:border-gold focus:outline-none transition-colors rounded-none placeholder-gray-300"
+             /* Changed to font-sans */
+             className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-lg font-sans font-medium focus:border-gold focus:outline-none transition-colors rounded-none placeholder-gray-300"
              placeholder="e.g. Somchai Jai-dee"
              value={name}
              onChange={e => setName(e.target.value)}
@@ -203,7 +208,8 @@ const SlipUploadForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <div className="w-10 h-10 mx-auto mb-3 text-gray-400 group-hover:text-gold transition-colors">
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                 </div>
-                <p className="font-serif text-gray-500">Tap to select image</p>
+                {/* Changed to font-sans */}
+                <p className="font-sans text-gray-500 font-medium">Tap to select image</p>
              </div>
            ) : (
              <div className="relative rounded-lg overflow-hidden border border-gray-200">

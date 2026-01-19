@@ -28,8 +28,9 @@ export const RsvpForm: React.FC = () => {
     return (
       <FadeInUp>
         <div className="max-w-xl mx-auto text-center py-20 px-6 bg-white shadow-xl rounded-lg border-t-4 border-gold animate-fade-in mx-4">
-          <h3 className="font-script text-5xl text-gold-shine mb-4">Thank You!</h3>
-          <p className="font-serif text-xl text-charcoal">Your response has been recorded.</p>
+          {/* Changed to font-sans */}
+          <h3 className="font-sans text-4xl text-gold-shine mb-4 font-bold uppercase tracking-wider">Thank You!</h3>
+          <p className="font-sans text-lg text-charcoal">Your response has been recorded.</p>
           <p className="font-sans text-sm text-gray-500 mt-2 uppercase tracking-widest">We can't wait to see you</p>
         </div>
       </FadeInUp>
@@ -40,18 +41,19 @@ export const RsvpForm: React.FC = () => {
     <section className="max-w-xl mx-auto bg-white p-6 md:p-12 shadow-2xl rounded-sm mx-4 md:mx-auto">
       <FadeInUp>
         <div className="text-center mb-8 md:mb-10">
-          <h2 className="font-serif text-3xl md:text-4xl text-charcoal">R.S.V.P</h2>
+          {/* Changed to font-sans */}
+          <h2 className="font-sans text-4xl md:text-5xl text-charcoal font-bold tracking-widest">R.S.V.P</h2>
           <p className="font-sans text-[10px] md:text-xs text-gold uppercase tracking-[0.2em] mt-2">Please respond by February 21st</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            {/* Updated Label: Full Name -> Name */}
             <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Name</label>
             <input 
               type="text" 
               required
-              className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-base md:text-lg font-serif focus:border-gold focus:outline-none transition-colors rounded-none"
+              /* Changed to font-sans */
+              className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-base md:text-lg font-sans font-medium focus:border-gold focus:outline-none transition-colors rounded-none placeholder-gray-300"
               placeholder="Mr. & Mrs. John Doe"
               value={formData.name}
               onChange={e => setFormData({...formData, name: e.target.value})}
@@ -70,7 +72,8 @@ export const RsvpForm: React.FC = () => {
                     onChange={() => setFormData({...formData, attending: 'yes'})}
                     className="accent-gold w-5 h-5"
                   />
-                  <span className="ml-2 font-serif text-lg">Joyfully Accept</span>
+                  {/* Changed to font-sans */}
+                  <span className="ml-2 font-sans text-base font-medium">Joyfully Accept</span>
                 </label>
                 <label className="flex items-center cursor-pointer">
                   <input 
@@ -80,7 +83,8 @@ export const RsvpForm: React.FC = () => {
                     onChange={() => setFormData({...formData, attending: 'no'})}
                     className="accent-gray-500 w-5 h-5"
                   />
-                  <span className="ml-2 font-serif text-lg">Regretfully Decline</span>
+                  {/* Changed to font-sans */}
+                  <span className="ml-2 font-sans text-base font-medium">Regretfully Decline</span>
                 </label>
               </div>
             </div>
@@ -90,7 +94,8 @@ export const RsvpForm: React.FC = () => {
             <div>
               <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Total Guests</label>
               <select 
-                className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-base md:text-lg font-serif focus:border-gold focus:outline-none rounded-none"
+                /* Changed to font-sans */
+                className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-base md:text-lg font-sans font-medium focus:border-gold focus:outline-none rounded-none"
                 value={formData.attendees}
                 onChange={e => setFormData({...formData, attendees: parseInt(e.target.value)})}
               >
@@ -102,11 +107,11 @@ export const RsvpForm: React.FC = () => {
           )}
 
           <div>
-            {/* Updated Label: Dietary Requirements / Note -> Note */}
             <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Note</label>
             <textarea 
               rows={3}
-              className="w-full border-2 border-gray-100 bg-gray-50/50 p-3 rounded-md font-serif focus:border-gold focus:outline-none transition-colors"
+              /* Changed to font-sans */
+              className="w-full border-2 border-gray-100 bg-gray-50/50 p-3 rounded-md font-sans font-medium focus:border-gold focus:outline-none transition-colors"
               value={formData.note}
               onChange={e => setFormData({...formData, note: e.target.value})}
             ></textarea>

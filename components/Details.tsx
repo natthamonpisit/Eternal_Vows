@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { fetchGallery } from '../services/api';
 import { GalleryItem } from '../types';
@@ -200,7 +199,8 @@ export const Details: React.FC = () => {
           <div>
             <FadeInUp>
               <div className="text-center mb-16 space-y-4">
-                <h2 className="font-serif text-5xl md:text-7xl text-[#FDFBF7] drop-shadow-sm">The Schedule</h2>
+                {/* Changed to font-sans */}
+                <h2 className="font-sans text-4xl md:text-6xl text-[#FDFBF7] drop-shadow-sm uppercase tracking-wider font-bold">The Schedule</h2>
                 <div className="flex items-center justify-center gap-4">
                   <div className="h-px w-8 md:w-12 bg-[#F3E5AB]/40"></div>
                   <p className="font-sans text-[#F3E5AB] uppercase tracking-[0.25em] text-xs md:text-sm font-bold">Saturday, March 21st</p>
@@ -233,7 +233,7 @@ export const Details: React.FC = () => {
                            <div className="w-14 h-14 text-[#F3E5AB]/80 group-hover:text-white transition-colors duration-500">
                               {event.icon}
                            </div>
-                           <span className="font-serif text-3xl text-[#F3E5AB] font-medium tracking-wider drop-shadow-sm min-w-[80px] text-right">
+                           <span className="font-sans text-2xl text-[#F3E5AB] font-bold tracking-wider drop-shadow-sm min-w-[80px] text-right">
                               {event.time}
                            </span>
                         </div>
@@ -247,11 +247,14 @@ export const Details: React.FC = () => {
                         {/* 2. Content */}
                         <div className="flex-1 pl-16 md:pl-24 pt-1">
                            {/* Mobile Time Display */}
-                           <span className="md:hidden block font-serif text-xl text-[#F3E5AB] font-bold mb-1">
+                           <span className="md:hidden block font-sans text-xl text-[#F3E5AB] font-bold mb-1">
                               {event.time}
                            </span>
 
-                           <h3 className="font-serif text-3xl md:text-4xl text-[#FDFBF7] mb-1 drop-shadow-sm group-hover:translate-x-1 transition-transform duration-300">
+                           {/* Keep Event Title Serif or Sans? User didn't specify Event Titles, but implied consistency. 
+                               Sticking to Sans for headers as requested for main section headers. 
+                               But visually, sub-headers in cards often match. Let's make them Sans for full consistency. */}
+                           <h3 className="font-sans text-2xl md:text-3xl text-[#FDFBF7] mb-1 drop-shadow-sm group-hover:translate-x-1 transition-transform duration-300 font-bold uppercase tracking-wide">
                               {event.title}
                            </h3>
                            <p className="font-sans text-[#F3E5AB]/70 uppercase tracking-widest text-xs font-medium border-t border-white/10 inline-block pt-2">
@@ -272,7 +275,8 @@ export const Details: React.FC = () => {
           <div className="border-t border-cream/20 pt-16 md:pt-24">
              <FadeInUp>
                <div className="text-center mb-12">
-                  <h2 className="font-serif text-4xl md:text-6xl text-cream drop-shadow-sm mb-2">The Venue</h2>
+                  {/* Changed to font-sans */}
+                  <h2 className="font-sans text-4xl md:text-6xl text-cream drop-shadow-sm mb-2 uppercase tracking-wider font-bold">The Venue</h2>
                   <p className="font-sans text-cream/80 uppercase tracking-[0.2em] text-sm md:text-base font-bold">Atmosphere & Location</p>
                </div>
              </FadeInUp>
@@ -307,8 +311,9 @@ export const Details: React.FC = () => {
                           </div>
                        </div>
                        <div className="text-center mt-6">
-                          <h3 className="font-serif text-3xl text-[#F9E4B7] drop-shadow-md font-medium">Dalva le ville</h3>
-                          <p className="font-sans text-lg font-bold uppercase tracking-widest text-[#F9E4B7] drop-shadow-md mt-1">Bangkok, Thailand</p>
+                          {/* Changed to font-sans */}
+                          <h3 className="font-sans text-2xl text-[#F9E4B7] drop-shadow-md font-bold uppercase tracking-wider">Dalva le ville</h3>
+                          <p className="font-sans text-sm font-bold uppercase tracking-widest text-[#F9E4B7] drop-shadow-md mt-1">Bangkok, Thailand</p>
                        </div>
                     </div>
                   </div>
@@ -336,7 +341,8 @@ export const Details: React.FC = () => {
                       )}
                    </div>
                    <FadeInUp delay="600ms">
-                     <p className="text-center lg:text-left font-serif text-cream/80 italic text-sm">
+                     {/* Changed to font-sans */}
+                     <p className="text-center lg:text-left font-sans text-cream/80 italic text-sm tracking-wide">
                        "A classic and elegant atmosphere to celebrate our special day."
                      </p>
                    </FadeInUp>
@@ -350,7 +356,8 @@ export const Details: React.FC = () => {
              ========================================= */}
           <FadeInUp>
             <div className="py-12 bg-white/95 backdrop-blur-sm rounded-xl shadow-xl text-center relative mx-0 border border-white/40">
-              <h3 className="font-serif text-4xl md:text-5xl text-gold-shine mb-8">Dress Code</h3>
+              {/* Changed to font-sans */}
+              <h3 className="font-sans text-4xl md:text-5xl text-gold-shine mb-8 uppercase tracking-wider font-bold">Dress Code</h3>
               
               <div className="flex justify-center items-start gap-4 md:gap-8 flex-wrap px-2">
                  {[

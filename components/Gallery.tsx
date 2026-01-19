@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { fetchGallery } from '../services/api';
 import { GalleryItem } from '../types';
@@ -54,7 +53,8 @@ export const Gallery: React.FC = () => {
       <FadeInUp>
         <div className="text-center mb-16 md:mb-20 relative z-10">
           <p className="font-sans text-gold text-xs md:text-sm tracking-[0.3em] uppercase mb-4">Pre-Wedding Gallery</p>
-          <h2 className="font-serif text-5xl md:text-7xl text-charcoal mb-6 text-gold-shine">Our Moments</h2>
+          {/* Changed to font-sans */}
+          <h2 className="font-sans text-4xl md:text-6xl text-charcoal mb-6 text-gold-shine uppercase tracking-wider font-bold">Our Moments</h2>
         </div>
       </FadeInUp>
 
@@ -63,7 +63,7 @@ export const Gallery: React.FC = () => {
         {loading ? (
           <div className="w-full aspect-video bg-white/50 rounded-sm flex flex-col justify-center items-center shadow-lg border border-gold/10">
             <div className="w-12 h-12 border-4 border-gold/30 border-t-gold rounded-full animate-spin mb-4"></div>
-            <p className="font-serif text-charcoal/60 italic">Loading gallery...</p>
+            <p className="font-sans text-charcoal/60 uppercase tracking-widest text-xs">Loading gallery...</p>
           </div>
         ) : (
           /* THE FRAME Container */
