@@ -28,8 +28,8 @@ export const RsvpForm: React.FC = () => {
     return (
       <FadeInUp>
         <div className="max-w-xl mx-auto text-center py-20 px-6 bg-white shadow-xl rounded-lg border-t-4 border-gold animate-fade-in mx-4">
-          {/* Changed to font-sans */}
-          <h3 className="font-sans text-4xl text-gold-shine mb-4 font-bold uppercase tracking-wider">Thank You!</h3>
+          {/* Matches Gift with Love style */}
+          <h3 className="font-sans text-4xl md:text-5xl text-gold-shine mb-4 font-bold uppercase tracking-wider">Thank You!</h3>
           <p className="font-sans text-lg text-charcoal">Your response has been recorded.</p>
           <p className="font-sans text-sm text-gray-500 mt-2 uppercase tracking-widest">We can't wait to see you</p>
         </div>
@@ -41,9 +41,10 @@ export const RsvpForm: React.FC = () => {
     <section className="max-w-xl mx-auto bg-white p-6 md:p-12 shadow-2xl rounded-sm mx-4 md:mx-auto">
       <FadeInUp>
         <div className="text-center mb-8 md:mb-10">
-          {/* Changed to font-sans */}
-          <h2 className="font-sans text-4xl md:text-5xl text-charcoal font-bold tracking-widest">R.S.V.P</h2>
-          <p className="font-sans text-[10px] md:text-xs text-gold uppercase tracking-[0.2em] mt-2">Please respond by February 21st</p>
+          {/* Matches Gift with Love style: text-4xl md:text-5xl, text-gold-shine, uppercase, tracking-wider, font-bold */}
+          <h2 className="font-sans text-4xl md:text-5xl text-gold-shine font-bold tracking-wider uppercase">R.S.V.P</h2>
+          {/* Design System Update: text-sm md:text-base, font-medium (Thin) */}
+          <p className="font-sans text-gold text-sm md:text-base uppercase tracking-[0.2em] mt-2 font-medium">Please respond by February 21st</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -52,7 +53,6 @@ export const RsvpForm: React.FC = () => {
             <input 
               type="text" 
               required
-              /* Changed to font-sans */
               className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-base md:text-lg font-sans font-medium focus:border-gold focus:outline-none transition-colors rounded-none placeholder-gray-300"
               placeholder="Mr. & Mrs. John Doe"
               value={formData.name}
@@ -72,7 +72,6 @@ export const RsvpForm: React.FC = () => {
                     onChange={() => setFormData({...formData, attending: 'yes'})}
                     className="accent-gold w-5 h-5"
                   />
-                  {/* Changed to font-sans */}
                   <span className="ml-2 font-sans text-base font-medium">Joyfully Accept</span>
                 </label>
                 <label className="flex items-center cursor-pointer">
@@ -83,7 +82,6 @@ export const RsvpForm: React.FC = () => {
                     onChange={() => setFormData({...formData, attending: 'no'})}
                     className="accent-gray-500 w-5 h-5"
                   />
-                  {/* Changed to font-sans */}
                   <span className="ml-2 font-sans text-base font-medium">Regretfully Decline</span>
                 </label>
               </div>
@@ -94,7 +92,6 @@ export const RsvpForm: React.FC = () => {
             <div>
               <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Total Guests</label>
               <select 
-                /* Changed to font-sans */
                 className="w-full border-b-2 border-gray-200 bg-transparent py-2 px-1 text-base md:text-lg font-sans font-medium focus:border-gold focus:outline-none rounded-none"
                 value={formData.attendees}
                 onChange={e => setFormData({...formData, attendees: parseInt(e.target.value)})}
@@ -110,7 +107,6 @@ export const RsvpForm: React.FC = () => {
             <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Note</label>
             <textarea 
               rows={3}
-              /* Changed to font-sans */
               className="w-full border-2 border-gray-100 bg-gray-50/50 p-3 rounded-md font-sans font-medium focus:border-gold focus:outline-none transition-colors"
               value={formData.note}
               onChange={e => setFormData({...formData, note: e.target.value})}

@@ -11,6 +11,37 @@ import { LiveWall } from './components/LiveWall';
 import { ChatWidget } from './components/ChatWidget';
 import { MusicPlayer } from './components/MusicPlayer';
 
+/*
+  ========================================================================================
+  🎨 DESIGN SYSTEM RULES (ห้ามลบ / DO NOT DELETE)
+  ========================================================================================
+  
+  0. HERO SECTION
+     - Freestyle: ปรับเปลี่ยนได้ตามจริตบ่าวสาว (No strict rules)
+
+  1. MAIN SECTION HEADINGS (หัวข้อใหญ่ของแต่ละ Block)
+     - Font: font-sans (Montserrat)
+     - Size: text-4xl md:text-5xl
+     - Weight: font-bold
+     - Case: UPPERCASE
+     - Tracking: tracking-wider
+     - Effect:
+       * บนพื้นขาว/สว่าง: className="text-gold-shine"
+       * บนพื้นเข้ม/สี:   className="text-cream-shine"
+
+  2. SUB-HEADINGS / DESCRIPTIONS (หัวข้อรอง / คำอธิบาย)
+     - Reference: อิงตามคำว่า "Atmosphere & Location" ในหน้า Venue
+     - Font: font-sans (Montserrat)
+     - Size: text-sm md:text-base
+     - Weight: font-medium (ตัวบาง)
+     - Case: UPPERCASE
+     - Tracking: tracking-[0.2em] หรือ tracking-widest
+     - Color:
+       * บนพื้นขาว: text-gray-500 หรือ text-gold (ตามบริบท)
+       * บนพื้นเข้ม: text-cream/80 หรือ text-[#F3E5AB]
+  ========================================================================================
+*/
+
 export default function App() {
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false);
   const [showContent, setShowContent] = useState(false);

@@ -199,11 +199,12 @@ export const Details: React.FC = () => {
           <div>
             <FadeInUp>
               <div className="text-center mb-16 space-y-4">
-                {/* Changed to font-sans */}
-                <h2 className="font-sans text-4xl md:text-6xl text-[#FDFBF7] drop-shadow-sm uppercase tracking-wider font-bold">The Schedule</h2>
+                {/* Changed to use text-cream-shine for visibility on dark background */}
+                <h2 className="font-sans text-4xl md:text-5xl text-cream-shine drop-shadow-sm uppercase tracking-wider font-bold">The Schedule</h2>
                 <div className="flex items-center justify-center gap-4">
                   <div className="h-px w-8 md:w-12 bg-[#F3E5AB]/40"></div>
-                  <p className="font-sans text-[#F3E5AB] uppercase tracking-[0.25em] text-xs md:text-sm font-bold">Saturday, March 21st</p>
+                  {/* Design System Update: text-sm md:text-base, font-medium (Thin) */}
+                  <p className="font-sans text-[#F3E5AB] uppercase tracking-[0.25em] text-sm md:text-base font-medium">Saturday, March 21st</p>
                   <div className="h-px w-8 md:w-12 bg-[#F3E5AB]/40"></div>
                 </div>
                 
@@ -275,9 +276,10 @@ export const Details: React.FC = () => {
           <div className="border-t border-cream/20 pt-16 md:pt-24">
              <FadeInUp>
                <div className="text-center mb-12">
-                  {/* Changed to font-sans */}
-                  <h2 className="font-sans text-4xl md:text-6xl text-cream drop-shadow-sm mb-2 uppercase tracking-wider font-bold">The Venue</h2>
-                  <p className="font-sans text-cream/80 uppercase tracking-[0.2em] text-sm md:text-base font-bold">Atmosphere & Location</p>
+                  {/* Changed to use text-cream-shine for visibility on dark background */}
+                  <h2 className="font-sans text-4xl md:text-5xl text-cream-shine drop-shadow-sm mb-2 uppercase tracking-wider font-bold">The Venue</h2>
+                  {/* Design System Update: text-sm md:text-base, font-medium (Thin) */}
+                  <p className="font-sans text-cream/80 uppercase tracking-[0.2em] text-sm md:text-base font-medium">Atmosphere & Location</p>
                </div>
              </FadeInUp>
 
@@ -311,7 +313,6 @@ export const Details: React.FC = () => {
                           </div>
                        </div>
                        <div className="text-center mt-6">
-                          {/* Changed to font-sans */}
                           <h3 className="font-sans text-2xl text-[#F9E4B7] drop-shadow-md font-bold uppercase tracking-wider">Dalva le ville</h3>
                           <p className="font-sans text-sm font-bold uppercase tracking-widest text-[#F9E4B7] drop-shadow-md mt-1">Bangkok, Thailand</p>
                        </div>
@@ -341,7 +342,6 @@ export const Details: React.FC = () => {
                       )}
                    </div>
                    <FadeInUp delay="600ms">
-                     {/* Changed to font-sans */}
                      <p className="text-center lg:text-left font-sans text-cream/80 italic text-sm tracking-wide">
                        "A classic and elegant atmosphere to celebrate our special day."
                      </p>
@@ -356,7 +356,6 @@ export const Details: React.FC = () => {
              ========================================= */}
           <FadeInUp>
             <div className="py-12 bg-white/95 backdrop-blur-sm rounded-xl shadow-xl text-center relative mx-0 border border-white/40">
-              {/* Changed to font-sans */}
               <h3 className="font-sans text-4xl md:text-5xl text-gold-shine mb-8 uppercase tracking-wider font-bold">Dress Code</h3>
               
               <div className="flex justify-center items-start gap-4 md:gap-8 flex-wrap px-2">

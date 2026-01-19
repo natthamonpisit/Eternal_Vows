@@ -52,9 +52,10 @@ export const Gallery: React.FC = () => {
       
       <FadeInUp>
         <div className="text-center mb-16 md:mb-20 relative z-10">
-          <p className="font-sans text-gold text-xs md:text-sm tracking-[0.3em] uppercase mb-4">Pre-Wedding Gallery</p>
-          {/* Changed to font-sans */}
-          <h2 className="font-sans text-4xl md:text-6xl text-charcoal mb-6 text-gold-shine uppercase tracking-wider font-bold">Our Moments</h2>
+          {/* Design System Update: text-sm md:text-base, font-medium (Thin) */}
+          <p className="font-sans text-gold text-sm md:text-base tracking-[0.3em] uppercase mb-4 font-medium">Pre-Wedding Gallery</p>
+          {/* Main Heading: text-gold-shine */}
+          <h2 className="font-sans text-4xl md:text-5xl text-gold-shine mb-6 uppercase tracking-wider font-bold">Our Moments</h2>
         </div>
       </FadeInUp>
 
