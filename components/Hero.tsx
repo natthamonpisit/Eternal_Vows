@@ -4,14 +4,13 @@ import { fetchGallery } from '../services/api';
 
 /* 
   ========================================================================================
-  🤵👰 COMPONENT: Hero (ส่วนหัวข้อหน้าแรก - Re-Layout V.9 4-Block Structure)
+  🤵👰 COMPONENT: Hero (ส่วนหัวข้อหน้าแรก - Re-Layout V.11 Seamless Texture Everywhere)
   ========================================================================================
   
-  [Structure Idea: 4 Vertical Blocks]
-  1. Intro Box: "The Wedding Of"
-  2. Main Box: Names, Date, Location
-  3. Timer Box: Countdown
-  4. Footer Box: Star Shape (Solid Cream connecting to Gallery)
+  [Request]
+  1. Fill the cream color (#FDFBF7) and texture (cream-paper) up to the top.
+  2. Make the whole website look like one continuous piece of paper.
+  3. Image container background becomes transparent to reveal the paper texture.
 */
 
 export const Hero: React.FC = () => {
@@ -78,29 +77,33 @@ export const Hero: React.FC = () => {
     <section className="relative w-full bg-[#FDFBF7]">
       
       {/* 
+         GLOBAL TEXTURE LAYER (The Base)
+         This creates the seamless paper look from the very top.
+      */}
+      <div className="absolute inset-0 opacity-40 mix-blend-multiply pointer-events-none bg-fixed z-0" 
+           style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}>
+      </div>
+
+      {/* 
         =======================================================================
         📱 MOBILE LAYOUT (4-Block Vertical Stack)
         =======================================================================
       */}
-      <div className="md:hidden relative w-full h-[100dvh] flex flex-col">
+      <div className="md:hidden relative w-full h-[100dvh] flex flex-col z-10">
          
          {/* 
             LAYER B: BACKGROUND IMAGE (Underlying Layer)
-            - Covers the top 75% of the screen (Blocks 1, 2, 3)
+            - bg-transparent: To let the global texture show through the empty spaces
          */}
-         <div className="absolute top-0 left-0 w-full h-[75%] overflow-hidden z-0">
+         <div className="absolute top-0 left-0 w-full h-[75%] overflow-hidden z-0 bg-transparent">
             <div 
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              className="absolute inset-0 bg-contain bg-center bg-no-repeat"
               style={{ backgroundImage: `url("${bgUrl}")` }}
             ></div>
-            {/* Layer C: Fades */}
-            <div className="absolute top-0 left-0 right-0 h-[20vh] bg-gradient-to-b from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 right-0 h-[30vh] bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent pointer-events-none"></div>
          </div>
 
          {/* 
             LAYER D: CONTENT BLOCKS (Z-Index 10)
-            - This container sits ON TOP of the image.
          */}
          
          {/* [BLOCK 1] The Wedding Of (Intro) */}
@@ -138,14 +141,9 @@ export const Hero: React.FC = () => {
          </div>
 
          {/* [BLOCK 4] Footer Star (The Anchor) */}
-         {/* 
-             - This block MUST have `bg-[#FDFBF7]` to be opaque.
-             - It uses `-mt-6` to pull itself UP over the image layer.
-             - It uses `bg-fixed` texture to match Gallery.
-         */}
          <div className="relative z-20 flex-none h-[25%] bg-[#FDFBF7] rounded-t-[2rem] -mt-6 flex items-center justify-center shadow-[0_-10px_40px_rgba(253,251,247,1)]">
             
-            {/* Texture Matcher */}
+            {/* Texture Matcher: Uses the exact same texture settings */}
             <div className="absolute inset-0 opacity-40 mix-blend-multiply pointer-events-none bg-fixed rounded-t-[2rem]" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
 
             <div className="relative z-10 flex flex-col items-center animate-pulse-slow">
@@ -170,18 +168,15 @@ export const Hero: React.FC = () => {
 
       {/* 
         =======================================================================
-        💻 DESKTOP LAYOUT (Unchanged)
+        💻 DESKTOP LAYOUT (Updated Base)
         =======================================================================
       */}
-      <div className="hidden md:flex flex-col items-center justify-center w-full min-h-screen relative">
+      <div className="hidden md:flex flex-col items-center justify-center w-full min-h-screen relative bg-transparent">
         <div className="absolute inset-0 z-0">
           <div 
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[20s] hover:scale-105"
+              className="absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-[20s] hover:scale-105"
               style={{ backgroundImage: `url("${bgUrl}")` }}
           ></div>
-          <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-gray-200/50 to-transparent mix-blend-multiply"></div>
-          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent"></div>
-          <div className="absolute inset-0 bg-white/10 mix-blend-overlay"></div>
         </div>
 
         <div className="flex-1 w-full max-w-7xl flex flex-col items-center justify-center relative z-20 px-4 pb-12">
