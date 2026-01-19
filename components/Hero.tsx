@@ -83,7 +83,8 @@ export const Hero: React.FC = () => {
          
          {/* [BLOCK 1] Intro - Size updated to 18px */}
          <div className="flex-none h-[15%] flex items-center justify-center z-10">
-            <p className="text-[#5D4037] font-sans tracking-[0.3em] uppercase text-[18px] font-bold mt-2">
+            {/* Updated text color to text-gold-shine */}
+            <p className="text-gold-shine font-sans tracking-[0.3em] uppercase text-[18px] font-bold mt-2">
               The Wedding Of
             </p>
          </div>
@@ -155,7 +156,8 @@ export const Hero: React.FC = () => {
         
          {/* [BLOCK 1] Intro - Size updated to text-2xl */}
          <div className="flex-none h-[15%] flex items-center justify-center">
-            <p className="text-[#5D4037] font-sans tracking-[0.4em] uppercase text-2xl font-bold translate-y-2">
+            {/* Updated text color to text-gold-shine */}
+            <p className="text-gold-shine font-sans tracking-[0.4em] uppercase text-2xl font-bold translate-y-2">
               The Wedding Of
             </p>
          </div>
