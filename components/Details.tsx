@@ -31,48 +31,75 @@ export const Details: React.FC = () => {
     loadVenueImages();
   }, []);
 
+  // Updated Schedule Data
   const events = [
     { 
-      time: "07:00", 
-      title: "Buddhist Alms Giving", 
-      desc: "Morning Blessing",
+      time: "07:09", 
+      title: "Buddhist Ceremony", 
+      desc: "Monk Blessing & Merit Making",
       icon: (
-        // Lotus Icon
+        // Lotus / Praying Hands
         <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4c-2 3-4 6-4 9 0 2 2 3 4 3s4-1 4-3c0-3-2-6-4-9z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 13c-2 0-3 1-3 3 0 2 2 3 4 3" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 13c2 0 3 1 3 3 0 2-2 3-4 3" />
+           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M12 5v10m-3-3l3-3 3 3" />
         </svg>
       )
     },
     { 
-      time: "09:00", 
-      title: "Wedding Ceremony", 
-      desc: "Engagement & Vows",
+      time: "08:29", 
+      title: "Engagement Ceremony", 
+      desc: "Ring Exchange",
       icon: (
-        // Diamond Ring Icon
+        // Diamond Ring
         <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7l3-4 3 4H9z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7l3 3 3-3" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 10a6 6 0 100 12 6 6 0 000-12z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v7" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M9 7l3-4 3 4H9z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M9 7l3 3 3-3" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M12 10a6 6 0 100 12 6 6 0 000-12z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M15 13l2 2m-8-2l-2 2" />
         </svg>
       )
     },
     { 
-      time: "11:00", 
+      time: "09:09", 
+      title: "Tea Ceremony", 
+      desc: "Pay Respects to Elders",
+      icon: (
+        // Tea / Cup
+        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M6 1V4M10 1V4M14 1V4" />
+        </svg>
+      )
+    },
+    { 
+      time: "09:49", 
+      title: "Water Pouring", 
+      desc: "Rod Nam Sangha Ceremony",
+      icon: (
+        // Water / Conch Shell Vibe
+        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M12 8v4m0 4h.01" />
+        </svg>
+      )
+    },
+    { 
+      time: "11:09", 
       title: "Wedding Reception", 
-      desc: "Celebration & Banquet",
+      desc: "Lunch Banquet & Celebration",
       icon: (
-        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" /></svg>
+        // Cheers / Glasses
+        <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M8 21h8m-4-8v8m-4-8a3 3 0 01-3-3V5a2 2 0 012-2h4a2 2 0 012 2v5a3 3 0 01-3 3zm8 0a3 3 0 01-3-3V5a2 2 0 012-2h4a2 2 0 012 2v5a3 3 0 01-3 3z" />
+        </svg>
       )
     }
   ];
 
   const addToCalendarUrl = () => {
     const title = encodeURIComponent("Wedding of Natthamonpisit & Sorot");
-    const dates = "20260321T020000Z/20260321T070000Z";
-    const details = encodeURIComponent("Join us in celebrating our special day! Ceremony starts at 09:00 AM.");
+    const dates = "20260321T000000Z/20260321T070000Z";
+    const details = encodeURIComponent("Join us in celebrating our special day! Ceremony starts at 07:09 AM.");
     const location = encodeURIComponent("Dalva le ville, Bangkok");
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&location=${location}&sf=true&output=xml`;
   };
@@ -85,7 +112,7 @@ export const Details: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10 space-y-24">
         
         {/* =========================================
-            SECTION 1: THE SCHEDULE (Centered)
+            SECTION 1: THE SCHEDULE (Redesigned)
            ========================================= */}
         <div>
           <div className="text-center mb-16 space-y-4">
@@ -107,48 +134,42 @@ export const Details: React.FC = () => {
             </a>
           </div>
 
-          <div className="max-w-xl mx-auto relative">
-             {/* Vertical Timeline Line */}
-             <div className="absolute left-8 md:left-1/2 top-4 bottom-4 w-px bg-cream/30 md:-ml-px"></div>
+          <div className="max-w-3xl mx-auto relative pl-0 md:pl-10">
+             {/* 
+                 Vertical Timeline Line 
+                 - Moved to left side (approx 120px on desktop)
+             */}
+             <div className="absolute left-[34px] md:left-[140px] top-4 bottom-4 w-px bg-gradient-to-b from-transparent via-cream/40 to-transparent"></div>
 
-             <div className="space-y-12">
+             <div className="space-y-10 md:space-y-12">
                {events.map((event, idx) => (
-                 <div key={idx} className={`relative flex items-center gap-8 md:gap-0 ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                 <div key={idx} className="relative flex items-start group">
                    
-                    {/* Time & Title (Side A) */}
-                    <div className="hidden md:block w-1/2 px-8 text-right">
-                       {idx % 2 === 0 ? (
-                         <>
-                           <span className="font-serif text-5xl text-cream leading-none block mb-1">{event.time}</span>
-                           <h3 className="font-sans font-bold text-xs text-cream/80 uppercase tracking-widest">{event.title}</h3>
-                         </>
-                       ) : (
-                         <p className="font-serif text-cream/80 italic text-xl">{event.desc}</p>
-                       )}
+                    {/* Time (Left Side) */}
+                    <div className="hidden md:block w-[110px] text-right pt-3 pr-8">
+                       <span className="font-serif text-3xl text-gold-shine font-medium tracking-wide drop-shadow-sm">{event.time}</span>
                     </div>
 
-                    {/* Icon (Center) */}
-                    <div className="relative z-10 flex-shrink-0 w-16 flex justify-center">
-                       <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-cream/50 bg-old-rose flex items-center justify-center text-cream shadow-sm relative z-20">
+                    {/* Icon (On the Line) */}
+                    <div className="relative z-10 flex-shrink-0">
+                       <div className="w-[68px] h-[68px] md:w-[60px] md:h-[60px] rounded-full border border-gold/30 bg-[#A67B73] flex items-center justify-center text-cream shadow-[0_4px_20px_rgba(0,0,0,0.15)] group-hover:scale-110 group-hover:bg-gold transition-all duration-500 relative">
+                          {/* Inner Glow Ring */}
+                          <div className="absolute inset-1 rounded-full border border-white/20"></div>
                           {event.icon}
+                          
+                          {/* Mobile Time Badge (Floating on Icon) */}
+                          <div className="md:hidden absolute -top-3 -right-2 bg-cream text-old-rose px-2 py-0.5 rounded-full shadow-md">
+                             <span className="font-serif text-sm font-bold">{event.time}</span>
+                          </div>
                        </div>
                     </div>
 
-                    {/* Desc (Side B) */}
-                    <div className={`flex-1 md:w-1/2 md:px-8 text-left md:text-left`}>
-                       <div className="md:hidden">
-                          <span className="font-serif text-4xl text-cream leading-none block mb-1">{event.time}</span>
-                          <h3 className="font-sans font-bold text-xs text-cream/80 uppercase tracking-widest mb-1">{event.title}</h3>
-                       </div>
-                       
-                       {idx % 2 === 0 ? (
-                         <p className="font-serif text-cream/80 italic text-lg md:text-xl">{event.desc}</p>
-                       ) : (
-                         <div className="hidden md:block">
-                            <span className="font-serif text-5xl text-cream leading-none block mb-1">{event.time}</span>
-                            <h3 className="font-sans font-bold text-xs text-cream/80 uppercase tracking-widest">{event.title}</h3>
-                         </div>
-                       )}
+                    {/* Content (Right Side) */}
+                    <div className="flex-1 pl-6 pt-1">
+                       <h3 className="font-serif text-3xl md:text-4xl text-cream mb-1 drop-shadow-sm">{event.title}</h3>
+                       <p className="font-sans text-cream/70 uppercase tracking-widest text-xs font-medium border-t border-white/10 inline-block pt-2">
+                         {event.desc}
+                       </p>
                     </div>
 
                  </div>
@@ -158,7 +179,7 @@ export const Details: React.FC = () => {
         </div>
 
         {/* =========================================
-            SECTION 2: LOCATION & VENUE (New)
+            SECTION 2: LOCATION & VENUE
            ========================================= */}
         <div className="border-t border-cream/20 pt-16 md:pt-24">
            <div className="text-center mb-12">
