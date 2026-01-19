@@ -220,7 +220,13 @@ export const Hero: React.FC = () => {
          </div>
 
          {/* [BLOCK 4] Footer Star */}
-         <div className="flex-none h-[10%] flex items-start justify-center pt-2">
+         {/* 
+            DESIGN UPDATE: 
+            - Increased height to h-[12%] (was 10%)
+            - Added pb-8 for bottom spacing
+            - Added z-30 relative to force this block to be ON TOP of any following sections
+         */}
+         <div className="flex-none h-[12%] flex items-start justify-center pt-2 pb-8 z-30 relative">
              <div className="flex flex-col items-center animate-pulse-slow hover:text-[#B78A7D] transition-colors cursor-default">
                <svg className="w-10 h-10 lg:w-12 lg:h-12 text-[#C08E86]" viewBox="0 0 24 24" fill="currentColor">
                    <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/>
