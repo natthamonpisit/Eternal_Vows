@@ -63,111 +63,133 @@ export const Hero: React.FC = () => {
   );
 
   return (
-    <section className="relative h-screen min-h-[600px] flex flex-col items-center text-center px-4 overflow-hidden bg-[#FDFBF7]">
+    <section className="relative min-h-screen bg-[#FDFBF7] overflow-x-hidden">
       
       {/* 
-          1. Main Background Image 
-          - Mobile: Fit Width (100% auto), Top Aligned, No Repeat -> Shows full horizontal image at top.
-          - Desktop: Cover, Center -> Standard full screen background.
+        =======================================================================
+        MOBILE LAYOUT (Overlay Style)
+        - Image: Full Screen Height (object-cover)
+        - Text: Overlays the image at the bottom
+        - Gradient: Ensures readability
+        =======================================================================
       */}
-      <div 
-        className="absolute inset-0 z-0 transition-transform duration-[20s] ease-linear hover:scale-105"
-        style={{ 
-          backgroundImage: `url("${bgUrl}")`,
-          backgroundSize: 'var(--bg-size, cover)',
-          backgroundPosition: 'var(--bg-pos, center)',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-        <style>{`
-          @media (max-width: 768px) {
-            div[style*="background-image"] {
-              --bg-size: 100% auto;
-              --bg-pos: top center;
-            }
-          }
-          @media (min-width: 769px) {
-             div[style*="background-image"] {
-              --bg-size: cover;
-              --bg-pos: center center;
-            }
-          }
-        `}</style>
+      <div className="md:hidden relative w-full h-[100dvh] overflow-hidden">
+         
+         {/* Background Image - Full Screen */}
+         <div className="absolute inset-0 z-0">
+            <img 
+              src={bgUrl} 
+              alt="Wedding Couple" 
+              className="w-full h-full object-cover object-top" 
+            />
+            {/* Gradient Overlay for Text Readability (Bottom Up) */}
+            <div className="absolute bottom-0 left-0 right-0 h-[65%] bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/90 to-transparent pointer-events-none"></div>
+         </div>
+
+         {/* Content - Positioned Absolute Bottom */}
+         <div className="absolute bottom-0 left-0 right-0 z-10 pb-12 pt-12 px-4 flex flex-col items-center justify-end h-full pointer-events-none">
+            
+            {/* Wrapper for content to push it to bottom but not edge */}
+            <div className="flex flex-col items-center justify-end h-full pb-8 pointer-events-auto">
+                <div className="text-center w-full relative">
+                  <p className="text-[#8E5B50] font-sans tracking-[0.25em] uppercase text-[10px] font-bold drop-shadow-sm mb-2">
+                    The Wedding Of
+                  </p>
+                  
+                  {/* Names */}
+                  <h1 className="font-script leading-normal py-2 drop-shadow-sm flex flex-col items-center justify-center gap-1 w-full">
+                    <span className="text-4xl text-[#4A3728] px-1 whitespace-nowrap">
+                      Natthamonpisit
+                    </span>
+                    <span className="font-serif text-2xl text-[#B78A7D] px-1">
+                      &
+                    </span>
+                    <span className="text-4xl text-[#4A3728] px-1 whitespace-nowrap">
+                      Sorot
+                    </span>
+                  </h1>
+                </div>
+
+                {/* Info Section */}
+                <div className="flex flex-col items-center gap-5 mt-4 w-full px-4">
+                  <div className="flex flex-col items-center justify-center gap-1 text-sm font-serif text-[#5D4037] font-medium">
+                    <span>March 21, 2026</span>
+                    <div className="w-8 h-px bg-[#8E5B50]/30 my-1"></div>
+                    <span className="text-xs tracking-wide">Dalva le ville, Bangkok</span>
+                  </div>
+                  
+                  {/* Countdown Timer */}
+                  <div className="flex items-center justify-center bg-white/60 backdrop-blur-md px-4 py-3 rounded-full border border-white/60 shadow-lg mt-2">
+                    <TimeUnit value={timeLeft.days} label="Days" />
+                    <span className="font-serif text-lg text-[#8E5B50]/50 -mt-2">:</span>
+                    <TimeUnit value={timeLeft.hours} label="Hours" />
+                    <span className="font-serif text-lg text-[#8E5B50]/50 -mt-2">:</span>
+                    <TimeUnit value={timeLeft.minutes} label="Mins" />
+                  </div>
+                </div>
+            </div>
+
+         </div>
       </div>
 
-      {/* 2. Soft Overlay (Desktop Only - To let mobile image pop) */}
-      <div className="hidden md:block absolute inset-0 bg-[#FDFBF7]/60 z-10 mix-blend-overlay"></div>
-      
-      {/* 3. Gradient Fade (Desktop Only) */}
-      <div className="hidden md:block absolute inset-0 bg-gradient-to-b from-[#FDFBF7]/90 via-white/30 to-[#FDFBF7] z-10"></div>
-      
-      {/* Mobile Fade: Gradient at the bottom of the image area to blend into text area */}
-      <div className="md:hidden absolute top-[40vw] left-0 right-0 h-24 bg-gradient-to-b from-transparent to-[#FDFBF7] z-10"></div>
-
-      {/* 4. Texture Overlay (Layer 10) */}
-      <div className="absolute inset-0 opacity-40 pointer-events-none z-10 mix-blend-multiply" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
 
       {/* 
-         Main Content Area
-         - Mobile: Pushed down (mt) to sit BELOW the image (approx 55vw down).
-         - Desktop: Centered as before.
+        =======================================================================
+        DESKTOP LAYOUT (Unchanged)
+        =======================================================================
       */}
-      <div className="animate-slide-up space-y-2 sm:space-y-4 w-full max-w-full md:max-w-7xl flex flex-col items-center relative z-50 mx-auto 
-          mt-[60vw] md:mt-0 md:justify-center md:h-full md:py-10">
-        
-        <div className="space-y-1 md:space-y-6 w-full px-1">
-          {/* Headline */}
-          <p className="text-[#8E5B50] font-sans tracking-[0.25em] uppercase text-[10px] sm:text-sm md:text-xl font-bold drop-shadow-sm mb-2 md:mb-0">
-            The Wedding Of
-          </p>
-          
-          {/* Names */}
-          {/* 
-             MOBILE FIX: 
-             - Flex Column (Stacked)
-             - Text Size using 'vw' units: Ensures "Natthamonpisit" fits perfectly without wrapping or being too small.
-             - Tight leading to keep the block compact.
-          */}
-          <h1 className="font-script leading-[1.1] md:leading-tight py-1 px-1 md:px-4 drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] flex flex-col md:flex-row items-center justify-center md:gap-4">
-            
-            {/* Name 1 */}
-            <span className="text-[11vw] md:text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-1 whitespace-nowrap">
-              Natthamonpisit
-            </span>
-
-            {/* Ampersand - Small & Elegant in between */}
-            <span className="font-serif text-xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-b from-[#B78A7D] to-[#8E5B50] my-[-5px] md:my-0">
-              &
-            </span>
-
-            {/* Name 2 */}
-            <span className="text-[11vw] md:text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-1 whitespace-nowrap">
-              Sorot
-            </span>
-          </h1>
+      <div className="hidden md:flex flex-col items-center justify-center w-full min-h-screen relative">
+        {/* Background Layers */}
+        <div className="absolute inset-0 z-0">
+          <div 
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[20s] hover:scale-105"
+              style={{ backgroundImage: `url("${bgUrl}")` }}
+          ></div>
+          <div className="absolute inset-0 bg-[#FDFBF7]/60 mix-blend-overlay"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7]/90 via-white/30 to-[#FDFBF7]"></div>
         </div>
 
-        {/* Info Section */}
-        <div className="flex flex-col items-center gap-4 sm:gap-8 w-full pt-4 md:pt-6">
-          {/* Date & Location */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-1 sm:gap-3 md:gap-8 text-sm sm:text-lg md:text-2xl font-serif text-[#5D4037] font-medium drop-shadow-sm">
-            <span>March 21, 2026</span>
-            <span className="hidden md:block w-2 h-2 rounded-full bg-[#8E5B50]"></span>
-            <span className="text-xs sm:text-lg md:text-2xl">Dalva le ville, Bangkok</span>
-          </div>
-          
-          {/* Divider */}
-          <div className="w-8 sm:w-16 h-px bg-[#8E5B50]/50 my-1 sm:my-2"></div>
+        {/* Texture */}
+        <div className="absolute inset-0 opacity-40 pointer-events-none z-10 mix-blend-multiply" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
 
-          {/* Countdown Timer */}
-          <div className="flex items-center justify-center mt-1 scale-[0.8] sm:scale-100 bg-white/70 backdrop-blur-md px-4 py-3 sm:px-8 sm:py-5 rounded-full border border-white/60 shadow-lg ring-1 ring-[#8E5B50]/10 max-w-[98vw]">
-            <TimeUnit value={timeLeft.days} label="Days" />
-            <span className="font-serif text-lg sm:text-2xl text-[#8E5B50]/50 -mt-2 sm:-mt-4">:</span>
-            <TimeUnit value={timeLeft.hours} label="Hours" />
-            <span className="font-serif text-lg sm:text-2xl text-[#8E5B50]/50 -mt-2 sm:-mt-4">:</span>
-            <TimeUnit value={timeLeft.minutes} label="Minutes" />
-            <span className="font-serif text-lg sm:text-2xl text-[#8E5B50]/50 -mt-2 sm:-mt-4">:</span>
-            <TimeUnit value={timeLeft.seconds} label="Seconds" />
+        {/* Content */}
+        <div className="flex-1 w-full max-w-7xl flex flex-col items-center justify-center relative z-20 px-4 pb-12">
+          <div className="text-center w-full relative pt-2">
+            <p className="text-[#8E5B50] font-sans tracking-[0.25em] uppercase text-xl font-bold drop-shadow-sm mb-1">
+              The Wedding Of
+            </p>
+            
+            <h1 className="font-script leading-normal py-6 px-2 drop-shadow-sm flex flex-row items-center justify-center gap-4">
+              <span className="text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-2 px-2 whitespace-nowrap">
+                Natthamonpisit
+              </span>
+              <span className="font-serif text-5xl text-[#B78A7D]">
+                &
+              </span>
+              <span className="text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-2 px-2 whitespace-nowrap">
+                Sorot
+              </span>
+            </h1>
+          </div>
+
+          <div className="flex flex-col items-center gap-8 mt-4 w-full">
+            <div className="flex flex-row items-center justify-center gap-8 text-2xl font-serif text-[#5D4037] font-medium drop-shadow-sm">
+              <span>March 21, 2026</span>
+              <span className="w-2 h-2 rounded-full bg-[#8E5B50]"></span>
+              <span className="text-2xl">Dalva le ville, Bangkok</span>
+            </div>
+            
+            <div className="w-16 h-px bg-[#8E5B50]/50 my-2"></div>
+
+            <div className="flex items-center justify-center bg-white/70 backdrop-blur-md px-8 py-5 rounded-full border border-white/60 shadow-lg ring-1 ring-[#8E5B50]/10">
+              <TimeUnit value={timeLeft.days} label="Days" />
+              <span className="font-serif text-xl text-[#8E5B50]/50 -mt-3">:</span>
+              <TimeUnit value={timeLeft.hours} label="Hours" />
+              <span className="font-serif text-xl text-[#8E5B50]/50 -mt-3">:</span>
+              <TimeUnit value={timeLeft.minutes} label="Minutes" />
+              <span className="font-serif text-xl text-[#8E5B50]/50 -mt-3">:</span>
+              <TimeUnit value={timeLeft.seconds} label="Seconds" />
+            </div>
           </div>
         </div>
       </div>
