@@ -1,4 +1,28 @@
 
+/*
+  ========================================================================================
+  📊 BACKEND: Google Apps Script
+  ========================================================================================
+  
+  [Description]
+  ใช้เป็น Database ง่ายๆ สำหรับเก็บข้อมูล RSVP และ Guestbook ลง Google Sheet
+  
+  [Spreadsheet Info]
+  - Sheet ID: '10nq4glCrBgH0wdqeAFFqYfAk-5FZ7Swr4-6c-K5y0iQ'
+  
+  [Sheets Structure]
+  1. RSVP
+     - Columns: [Timestamp, Name, Attending, Guests, Note]
+     
+  2. GuestBook
+     - Columns: [Timestamp, Name, Message, ImageURL]
+     
+  [Deployment]
+  - ต้อง Deploy เป็น Web App
+  - Execute as: Me (เจ้าของบัญชี)
+  - Who has access: Anyone (เพื่อเปิด Public API)
+*/
+
 // ---------------- CONFIGURATION ----------------
 const CONFIG = {
   SHEET_ID: '10nq4glCrBgH0wdqeAFFqYfAk-5FZ7Swr4-6c-K5y0iQ', 

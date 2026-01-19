@@ -1,4 +1,20 @@
 
+/*
+  ========================================================================================
+  🤖 API: Gemini AI Wedding Concierge
+  ========================================================================================
+  
+  [Persona]
+  - Natthamonpisit (Ouk): เจ้าบ่าว (สุภาพ, ทางการ)
+  - Sorot (Bew): เจ้าสาว (สดใส, ขี้เล่น)
+  - แมว 3 ตัว: ก้อน (ส้ม), กลม (เทา), กึ๋ย (ดำ)
+  
+  [Capabilities]
+  - ตอบคำถามเกี่ยวกับงานแต่ง (Date, Location, Schedule)
+  - ค้นหาข้อมูลด้วย Google Search
+  - หาแผนที่ด้วย Google Maps
+*/
+
 import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req, res) {
@@ -47,7 +63,7 @@ export default async function handler(req, res) {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     // -------------------------------------------------------------------------
-    // SYSTEM INSTRUCTION: กำหนดขอบเขต AI (Persona & Scope)
+    // 📝 SYSTEM INSTRUCTION: กำหนดขอบเขต AI (Persona & Scope)
     // -------------------------------------------------------------------------
     const systemInstruction = `
       คุณคือ "AI ตัวแทนคู่บ่าวสาว" (Virtual Natthamonpisit & Sorot) 
@@ -131,7 +147,7 @@ export default async function handler(req, res) {
     let responseText = result.text;
 
     // -------------------------------------------------------------------------
-    // GROUNDING METADATA EXTRACTION
+    // 🗺️ GROUNDING METADATA EXTRACTION
     // ดึง Link จาก Google Search / Maps มาต่อท้ายข้อความ (ตามกฏ Google GenAI SDK)
     // -------------------------------------------------------------------------
     const groundingMetadata = result.candidates?.[0]?.groundingMetadata;

@@ -1,4 +1,23 @@
 
+/*
+  ========================================================================================
+  📸 API: Cloudinary Gallery Fetcher
+  ========================================================================================
+  
+  [Description]
+  ดึงรูปภาพจาก Cloudinary โดยใช้ Search API เพื่อให้ได้รายการรูปแบบ Real-time
+  
+  [Cloudinary Folder Structure]
+  - Pre-wedding Gallery: 'Wedding_OukBew/Ourmoment' (Default)
+  - Venue/Location:      'Wedding_OukBew/Location'
+  - Backgrounds:         'Wedding_OukBew/BG'
+  - Guestbook Uploads:   'Wedding_OukBew/Guestbook'
+  
+  [Important Config]
+  - cloud_name: 'damfrrvrb'
+  - api_key/secret: Hardcoded (ควรย้ายไป ENV ใน Production จริง แต่ตอนนี้ใช้แบบนี้เพื่อความเร็วในการ Setup)
+*/
+
 import { v2 as cloudinary } from 'cloudinary';
 
 // Configuration
@@ -9,7 +28,7 @@ cloudinary.config({
 });
 
 export default async function handler(req, res) {
-  // CORS configuration
+  // CORS Handling
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
@@ -24,27 +43,27 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Get folder from query param, default to 'Wedding_OukBew/Ourmoment'
+    // 📂 รับชื่อ Folder จาก Query Param (Default: Ourmoment)
     const targetFolder = req.query.folder || 'Wedding_OukBew/Ourmoment';
 
-    // Note: Search API requires a few minutes for new images to be indexed.
+    // Search API execution
     const result = await cloudinary.search
       .expression(`folder:${targetFolder}`)
       .sort_by('public_id', 'desc')
       .max_results(100)
       .execute();
 
+    // Map ข้อมูลส่งกลับ Frontend
     const images = result.resources.map(file => ({
-      // Transform: Quality auto, Format auto, Width 600 for thumb
+      // thumb: รูปเล็กสำหรับ Grid (width: 600px)
       thumb: cloudinary.url(file.public_id, { width: 600, quality: 'auto', fetch_format: 'auto', crop: 'scale' }),
-      // Transform: Quality auto, Format auto, Width 1920 for full
+      // full: รูปใหญ่สำหรับ Lightbox (width: 1920px)
       full: cloudinary.url(file.public_id, { width: 1920, quality: 'auto', fetch_format: 'auto', crop: 'scale' })
     }));
 
     res.status(200).json({ success: true, data: images });
   } catch (error) {
     console.error('Cloudinary Gallery Error:', error);
-    // Return empty array instead of crashing
     res.status(500).json({ success: false, error: error.message, data: [] });
   }
 }
