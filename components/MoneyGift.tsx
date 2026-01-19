@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { FadeInUp } from './FadeInUp';
 
@@ -19,7 +18,7 @@ export const MoneyGift: React.FC = () => {
           {/* Added leading-normal and py-2 to prevent script font clipping */}
           <h2 className="font-script text-4xl md:text-5xl text-gold-shine leading-normal py-2">Gift with Love</h2>
           <p className="font-serif text-base md:text-lg text-gray-600 leading-relaxed px-2 md:px-8">
-            Your presence at our wedding is the greatest gift of all. However, if you wish to honor us with a gift, a cash contribution towards our new life together would be deeply appreciated.
+            Your presence is the most precious gift to us. For your convenience, we have provided this digital option for those who wish to offer a token of celebration without the need to carry cash.
           </p>
           
           <div className="py-4 md:py-6">

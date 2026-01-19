@@ -3,20 +3,14 @@ import { fetchGallery } from '../services/api';
 
 /* 
   ========================================================================================
-  🛑 STRICT DESIGN RULE (By P'Ouk) - DO NOT MODIFY LAYOUT
+  HERO COMPONENT - 4 BLOCKS CONCEPT (Unified Mobile & Desktop)
   ========================================================================================
   
-  [Mobile Layout Structure - 4 Fixed Blocks]
-  1. Top Block: "The Wedding Of" text (On Transparent/Paper Background)
-     - UPDATED: Centered Vertically, Slightly Larger Font
-  2. Image Block: Large Horizontal Image.
-     *** CRITICAL: Names + Date + Location MUST be overlaid ON THIS IMAGE ***
-  3. Countdown Block: Timer (On Transparent/Paper Background)
-     - UPDATED: Include Seconds
-  4. Footer Block: Star Icon (On Transparent/Paper Background)
-
-  [Typography Rule]
-  - Names "Natthamonpisit & Sorot" MUST remain on a SINGLE LINE.
+  Structure:
+  1. Top Block: "The Wedding Of" (Paper Texture)
+  2. Image Block: Main Visual + Names Overlay (Hero Image)
+  3. Countdown Block: Timer (Paper Texture)
+  4. Footer Block: Star Icon (Paper Texture)
 */
 
 export const Hero: React.FC = () => {
@@ -64,13 +58,13 @@ export const Hero: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Adjusted mx for mobile to fit 4 units (Days, Hrs, Mins, Secs)
+  // Responsive Time Unit
   const TimeUnit = ({ value, label }: { value: number, label: string }) => (
-    <div className="flex flex-col items-center mx-1.5 sm:mx-3">
-      <span className="font-serif text-xl sm:text-2xl text-[#5D4037] font-medium tabular-nums leading-none drop-shadow-sm">
+    <div className="flex flex-col items-center mx-1.5 sm:mx-3 md:mx-6">
+      <span className="font-serif text-xl sm:text-2xl md:text-4xl lg:text-5xl text-[#5D4037] font-medium tabular-nums leading-none drop-shadow-sm transition-all">
         {String(value).padStart(2, '0')}
       </span>
-      <span className="font-sans text-[9px] text-[#8E5B50] uppercase tracking-[0.1em] mt-1 font-bold">
+      <span className="font-sans text-[9px] md:text-xs text-[#8E5B50] uppercase tracking-[0.1em] mt-1 md:mt-3 font-bold transition-all">
         {label}
       </span>
     </div>
@@ -82,37 +76,28 @@ export const Hero: React.FC = () => {
       
       {/* 
         =======================================================================
-        📱 MOBILE LAYOUT (LOCKED 4 BLOCKS)
+        📱 MOBILE LAYOUT (4 BLOCKS)
         =======================================================================
       */}
       <div className="md:hidden w-full h-full flex flex-col">
          
-         {/* [BLOCK 1] Intro - Top Paper Area */}
-         {/* UPDATED: items-center (Center Vertically), text-xs (Larger) */}
+         {/* [BLOCK 1] Intro */}
          <div className="flex-none h-[15%] flex items-center justify-center z-10">
             <p className="text-[#5D4037] font-sans tracking-[0.3em] uppercase text-xs font-bold mt-2">
               The Wedding Of
             </p>
          </div>
 
-         {/* [BLOCK 2] Image Card & Main Text (Overlaid) */}
+         {/* [BLOCK 2] Image Card */}
          <div className="flex-grow w-full relative z-0">
-             {/* Background Image */}
              <div 
                className="absolute inset-0 bg-cover bg-center bg-no-repeat shadow-inner"
                style={{ backgroundImage: `url("${bgUrl}")` }}
              >
-               {/* Overlay for text readability */}
                <div className="absolute inset-0 bg-black/25"></div>
              </div>
 
-             {/* Text Content Overlay */}
              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 w-full">
-                {/* 
-                    🛑 NAME RULE: SINGLE LINE ONLY 
-                    - whitespace-nowrap enforced
-                    - fontSize responsive (vw) to fit width
-                */}
                 <h1 
                   className="font-script text-[#FDFBF7] leading-none whitespace-nowrap drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] w-full px-1"
                   style={{ fontSize: '9vw' }} 
@@ -127,8 +112,7 @@ export const Hero: React.FC = () => {
              </div>
          </div>
 
-         {/* [BLOCK 3] Countdown - Bottom Paper Area */}
-         {/* UPDATED: Added Seconds back */}
+         {/* [BLOCK 3] Countdown */}
          <div className="flex-none h-[18%] flex items-center justify-center z-10">
             <div className="flex items-center justify-center">
               <TimeUnit value={timeLeft.days} label="Days" />
@@ -141,7 +125,7 @@ export const Hero: React.FC = () => {
             </div>
          </div>
 
-         {/* [BLOCK 4] Footer Star - Bottom Anchor */}
+         {/* [BLOCK 4] Footer Star */}
          <div className="flex-none h-[12%] flex items-start justify-center pt-2 z-10">
             <div className="flex flex-col items-center animate-pulse-slow">
                <svg className="w-10 h-10 text-[#C08E86]" viewBox="0 0 24 24" fill="currentColor">
@@ -163,53 +147,75 @@ export const Hero: React.FC = () => {
 
       {/* 
         =======================================================================
-        💻 DESKTOP LAYOUT (Full Screen Elegance)
+        💻 DESKTOP LAYOUT (ADAPTED 4 BLOCKS CONCEPT)
         =======================================================================
       */}
-      <div className="hidden md:flex flex-col items-center justify-center w-full min-h-screen relative">
-        <div className="absolute inset-0 z-0">
-          <div 
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 scale-105"
-              style={{ backgroundImage: `url("${bgUrl}")` }}
-          ></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7] via-transparent to-[#FDFBF7]"></div>
-        </div>
-
-        <div className="flex-1 w-full max-w-7xl flex flex-col items-center justify-center relative z-20 px-4 pb-12">
-          <div className="text-center w-full relative pt-2">
-            <p className="text-[#8E5B50] font-sans tracking-[0.25em] uppercase text-xl font-bold drop-shadow-sm mb-1">
+      <div className="hidden md:flex flex-col w-full h-full relative z-10">
+        
+         {/* [BLOCK 1] Intro */}
+         <div className="flex-none h-[15%] flex items-center justify-center">
+            <p className="text-[#5D4037] font-sans tracking-[0.4em] uppercase text-sm lg:text-base font-bold translate-y-2">
               The Wedding Of
             </p>
-            {/* Desktop: Names also on one line */}
-            <h1 className="font-script leading-normal py-6 px-2 drop-shadow-sm flex flex-row items-center justify-center gap-4 whitespace-nowrap">
-              <span className="text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-2 px-2">
-                Natthamonpisit
-              </span>
-              <span className="font-serif text-5xl text-[#B78A7D]">&</span>
-              <span className="text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-2 px-2">
-                Sorot
-              </span>
-            </h1>
-          </div>
+         </div>
 
-          <div className="flex flex-col items-center gap-8 mt-4 w-full">
-            <div className="flex flex-row items-center justify-center gap-8 text-2xl font-serif text-[#5D4037] font-medium drop-shadow-sm">
-              <span>March 21, 2026</span>
-              <span className="w-2 h-2 rounded-full bg-[#8E5B50]"></span>
-              <span className="text-2xl">Dalva le ville, Bangkok</span>
+         {/* [BLOCK 2] Image Card */}
+         {/* Uses padding to create a 'frame' effect on desktop, more elegant than full bleed */}
+         <div className="flex-grow w-full px-8 lg:px-12 pb-4">
+             <div className="w-full h-full relative rounded-sm overflow-hidden shadow-2xl group">
+                 {/* Bg Image */}
+                 <div 
+                   className="absolute inset-0 bg-cover bg-center bg-no-repeat transform group-hover:scale-105 transition-transform duration-[20s]"
+                   style={{ backgroundImage: `url("${bgUrl}")` }}
+                 >
+                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/15 transition-colors duration-700"></div>
+                 </div>
+                 
+                 {/* Content */}
+                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                    <h1 className="font-script text-7xl lg:text-9xl text-[#FDFBF7] drop-shadow-lg whitespace-nowrap leading-none pb-4">
+                      Natthamonpisit & Sorot
+                    </h1>
+                    
+                    <div className="flex items-center gap-6 text-[#FDFBF7] mt-2 animate-fade-in backdrop-blur-sm bg-white/5 px-8 py-2 rounded-full border border-white/10">
+                       <span className="font-serif text-2xl lg:text-3xl tracking-wide font-medium">March 21, 2026</span>
+                       <span className="w-2 h-2 rounded-full bg-[#EBCBC5]"></span>
+                       <span className="font-sans text-xs lg:text-sm uppercase tracking-[0.25em] text-[#EBCBC5] font-bold">Dalva le ville, Bangkok</span>
+                    </div>
+                 </div>
+             </div>
+         </div>
+
+         {/* [BLOCK 3] Countdown */}
+         <div className="flex-none h-[15%] flex items-center justify-center">
+             <div className="flex items-center justify-center">
+                  <TimeUnit value={timeLeft.days} label="Days" />
+                  <span className="font-serif text-3xl md:text-5xl text-[#8E5B50]/50 -mt-4 mx-2 md:mx-4">:</span>
+                  <TimeUnit value={timeLeft.hours} label="Hours" />
+                  <span className="font-serif text-3xl md:text-5xl text-[#8E5B50]/50 -mt-4 mx-2 md:mx-4">:</span>
+                  <TimeUnit value={timeLeft.minutes} label="Minutes" />
+                  <span className="font-serif text-3xl md:text-5xl text-[#8E5B50]/50 -mt-4 mx-2 md:mx-4">:</span>
+                  <TimeUnit value={timeLeft.seconds} label="Seconds" />
+             </div>
+         </div>
+
+         {/* [BLOCK 4] Footer Star */}
+         <div className="flex-none h-[10%] flex items-start justify-center pt-2">
+             <div className="flex flex-col items-center animate-pulse-slow hover:text-[#B78A7D] transition-colors cursor-default">
+               <svg className="w-10 h-10 lg:w-12 lg:h-12 text-[#C08E86]" viewBox="0 0 24 24" fill="currentColor">
+                   <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/>
+               </svg>
+               <div className="flex gap-8 mt-1 opacity-60">
+                  <svg className="w-4 h-4 text-[#B78A7D]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/>
+                  </svg>
+                  <svg className="w-4 h-4 text-[#B78A7D]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/>
+                  </svg>
+               </div>
             </div>
-            <div className="w-16 h-px bg-[#8E5B50]/50 my-2"></div>
-            <div className="flex items-center justify-center bg-white/70 backdrop-blur-md px-8 py-5 rounded-full border border-white/60 shadow-lg ring-1 ring-[#8E5B50]/10">
-              <TimeUnit value={timeLeft.days} label="Days" />
-              <span className="font-serif text-xl text-[#8E5B50]/50 -mt-3">:</span>
-              <TimeUnit value={timeLeft.hours} label="Hours" />
-              <span className="font-serif text-xl text-[#8E5B50]/50 -mt-3">:</span>
-              <TimeUnit value={timeLeft.minutes} label="Minutes" />
-              <span className="font-serif text-xl text-[#8E5B50]/50 -mt-3">:</span>
-              <TimeUnit value={timeLeft.seconds} label="Seconds" />
-            </div>
-          </div>
-        </div>
+         </div>
+
       </div>
 
     </section>
