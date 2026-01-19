@@ -13,33 +13,57 @@ import { MusicPlayer } from './components/MusicPlayer';
 
 /*
   ========================================================================================
-  🎨 DESIGN SYSTEM RULES (ห้ามลบ / DO NOT DELETE)
+  🎨 CORE DESIGN SYSTEM & MAINTENANCE GUIDE (บันทึกการออกแบบหลัก ห้ามลบ)
   ========================================================================================
   
-  0. HERO SECTION
-     - Freestyle: ปรับเปลี่ยนได้ตามจริตบ่าวสาว (No strict rules)
+  Concept: "Minimal Luxury Stationery"
+  Mood: เรียบหรู, ผู้ดี, กระดาษการ์ด, ทองรมควัน, โปร่งสบาย
+  
+  ----------------------------------------------------------------------------------------
+  1. TYPOGRAPHY RULES (ตัวอักษร)
+  ----------------------------------------------------------------------------------------
+  [Main Headings] (หัวข้อใหญ่ของแต่ละ Section)
+  - Font: font-sans (Montserrat)
+  - Size: text-4xl md:text-5xl
+  - Style: UPPERCASE, font-bold, tracking-wider
+  - Effect: 
+    * พื้นขาว: className="text-gold-shine" (Metallic Rose Gold)
+    * พื้นเข้ม: className="text-cream-shine" (Pearl White)
 
-  1. MAIN SECTION HEADINGS (หัวข้อใหญ่ของแต่ละ Block)
-     - Font: font-sans (Montserrat)
-     - Size: text-4xl md:text-5xl
-     - Weight: font-bold
-     - Case: UPPERCASE
-     - Tracking: tracking-wider
-     - Effect:
-       * บนพื้นขาว/สว่าง: className="text-gold-shine"
-       * บนพื้นเข้ม/สี:   className="text-cream-shine"
+  [Sub-Headings] (คำอธิบายรอง)
+  - Font: font-sans
+  - Size: text-sm md:text-base
+  - Style: UPPERCASE, font-medium, tracking-[0.2em]
+  
+  [Body Text]
+  - Font: font-serif (Cormorant Garamond) -> ให้ความรู้สึกเหมือนนิยาย/จดหมาย
 
-  2. SUB-HEADINGS / DESCRIPTIONS (หัวข้อรอง / คำอธิบาย)
-     - Reference: อิงตามคำว่า "Atmosphere & Location" ในหน้า Venue
-     - Font: font-sans (Montserrat)
-     - Size: text-sm md:text-base
-     - Weight: font-medium (ตัวบาง)
-     - Case: UPPERCASE
-     - Tracking: tracking-[0.2em] หรือ tracking-widest
-     - Color:
-       * บนพื้นขาว: text-gray-500 หรือ text-gold (ตามบริบท)
-       * บนพื้นเข้ม: text-cream/80 หรือ text-[#F3E5AB]
-  ========================================================================================
+  ----------------------------------------------------------------------------------------
+  2. SECTION STRATEGY (กฏการจัดวาง Layout)
+  ----------------------------------------------------------------------------------------
+  
+  TYPE A: "THE VISUAL FLOW" (สำหรับ Gallery / รูปภาพ)
+  - Behavior: พื้นหลังใส (Transparent) เห็น Texture กระดาษด้านหลัง
+  - Style: No borders, Floating images, Open space.
+  - Component: <Gallery />
+
+  TYPE B: "THE GRAND STATEMENT" (สำหรับ Schedule / Venue)
+  - Behavior: แถบสีทึบเต็มจอ (Full Width Solid Block)
+  - Color: bg-old-rose (Pink Taupe)
+  - Role: ใช้พักสายตา และเน้นข้อมูลสำคัญ
+  - Component: <Details />
+
+  TYPE C: "THE STATIONERY SUITE" (สำหรับ Interactive Forms ทั้งหมด)
+  *** กฏเหล็ก (Strict Rule): ห้ามเปลี่ยน Style แยกกัน ต้องเหมือนกันทั้ง 3 ส่วน ***
+  - Components: <RsvpForm />, <MoneyGift />, <Guestbook />
+  - Container Style:
+    * Background: bg-white (กระดาษขาว)
+    * Border: border border-gold/40 (ขอบทองบาง 1px ห้ามหนา)
+    * Shadow: shadow-2xl (เงานุ่มลึก ให้ดูลอยมีมิติ)
+    * Layout: Header/Title ต้องอยู่ "ข้างใน" การ์ด
+    * Width: max-w-3xl (เท่ากันหมด)
+
+  ----------------------------------------------------------------------------------------
 */
 
 export default function App() {
@@ -91,7 +115,7 @@ export default function App() {
       {/* 
           GLOBAL BACKGROUND TEXTURE 
           - Fixed position: Texture stays still while content scrolls (Parallax feel)
-          - Seamless base for all transparent sections
+          - Seamless base for all transparent sections (Type A Sections)
       */}
       <div className="fixed inset-0 z-[-1] bg-[#FDFBF7] pointer-events-none">
          <div className="absolute inset-0 opacity-40 mix-blend-multiply" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
@@ -121,15 +145,16 @@ export default function App() {
         
         {/* 
             SEAMLESS MAIN CONTAINER 
-            - Removed max-w-7xl and space-y-24 to allow full-width sections to touch 
         */}
         <main className="w-full relative z-10">
           
+          {/* TYPE A: VISUAL FLOW */}
           <Gallery />
           
-          {/* Details handles its own background and transitions */}
+          {/* TYPE B: GRAND STATEMENT (Solid Background) */}
           <Details />
           
+          {/* TYPE C: STATIONERY SUITE (Card Style Components) */}
           <div id="rsvp-section" className="scroll-mt-20 py-24 px-4 sm:px-6">
              <div className="max-w-7xl mx-auto">
                 <RsvpForm />
@@ -196,7 +221,7 @@ const FloatingCTA = () => {
       <a 
         href="#rsvp-section"
         onClick={handleClick}
-        // Change from bg-charcoal to bg-[#C5908E] (Dusty Pink)
+        // Change from bg-charcoal to bg-[#C5908E] (Dusty Pink) to match theme
         className="bg-[#C5908E] text-white font-sans uppercase tracking-widest text-[10px] font-bold py-3 px-5 rounded-full shadow-xl hover:bg-[#B78A7D] transition-colors cursor-pointer border border-white/20"
       >
         RSVP Now
