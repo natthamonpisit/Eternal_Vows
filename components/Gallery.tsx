@@ -53,8 +53,8 @@ export const Gallery: React.FC = () => {
       
       <FadeInUp>
         <div className="text-center mb-16 md:mb-20 relative z-10">
-          {/* Main Heading First */}
-          <h2 className="font-sans text-4xl md:text-5xl text-gold-shine mb-3 uppercase tracking-wider font-bold">Our Moments</h2>
+          {/* Main Heading First - Updated to Mobile text-3xl */}
+          <h2 className="font-sans text-3xl md:text-5xl text-gold-shine mb-3 uppercase tracking-wider font-bold">Our Moments</h2>
           {/* Subheading Moved Below */}
           <p className="font-sans text-gray-500 text-sm md:text-base tracking-[0.3em] uppercase font-medium">Pre-Wedding Gallery</p>
         </div>

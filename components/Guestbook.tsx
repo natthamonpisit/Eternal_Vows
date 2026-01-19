@@ -15,7 +15,8 @@ export const Guestbook: React.FC = () => {
           
           {/* Header moved INSIDE the card */}
           <div className="text-center mb-10 md:mb-12 relative z-10">
-             <h2 className="font-sans text-4xl md:text-5xl text-gold-shine mb-3 uppercase tracking-wider font-bold">Guestbook</h2>
+             {/* DESIGN RULE UPDATE: Mobile text-3xl, Desktop text-5xl */}
+             <h2 className="font-sans text-3xl md:text-5xl text-gold-shine mb-3 uppercase tracking-wider font-bold">Guestbook</h2>
              <p className="font-sans text-gray-500 text-xs md:text-base uppercase tracking-widest font-medium">
                Share your memories & blessings
              </p>

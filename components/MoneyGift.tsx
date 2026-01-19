@@ -22,7 +22,12 @@ export const MoneyGift: React.FC = () => {
         <div className="bg-white border border-gold/40 p-6 md:p-16 rounded-sm shadow-2xl relative transition-all duration-300">
           
           <div className="text-center mb-8">
-             <h2 className="font-sans text-4xl md:text-5xl text-gold-shine leading-normal py-2 uppercase tracking-wider font-bold">Gift with Love</h2>
+             {/* 
+                 DESIGN RULE UPDATE:
+                 Mobile: text-3xl (30px) -> Fixes line wrap issue for "Gift with Love"
+                 Desktop: text-5xl (48px)
+             */}
+             <h2 className="font-sans text-3xl md:text-5xl text-gold-shine leading-normal py-2 uppercase tracking-wider font-bold">Gift with Love</h2>
              {view === 'info' && (
                 <p className="font-sans text-xs md:text-base text-gray-500 leading-relaxed px-0 md:px-12 mt-2 font-medium tracking-wide">
                   Your presence is the most precious gift to us. For those who wish to offer a token of celebration, we have provided this digital option.
@@ -59,7 +64,7 @@ export const MoneyGift: React.FC = () => {
                     {copied ? (
                       <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                     ) : (
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                     )}
                   </div>
                 </button>

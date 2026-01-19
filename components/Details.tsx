@@ -199,8 +199,12 @@ export const Details: React.FC = () => {
           <div>
             <FadeInUp>
               <div className="text-center mb-16 space-y-4">
-                {/* Changed to use text-cream-shine for visibility on dark background */}
-                <h2 className="font-sans text-4xl md:text-5xl text-cream-shine drop-shadow-sm uppercase tracking-wider font-bold">The Schedule</h2>
+                {/* 
+                  DESIGN RULE: HEADINGS
+                  Mobile: text-3xl (30px) - Reduced for breathing room
+                  Desktop: text-5xl (48px)
+                */}
+                <h2 className="font-sans text-3xl md:text-5xl text-cream-shine drop-shadow-sm uppercase tracking-wider font-bold">The Schedule</h2>
                 <div className="flex items-center justify-center gap-4">
                   <div className="h-px w-8 md:w-12 bg-[#F3E5AB]/40"></div>
                   {/* Design System Update: text-sm md:text-base, font-medium (Thin) */}
@@ -247,15 +251,20 @@ export const Details: React.FC = () => {
 
                         {/* 2. Content */}
                         <div className="flex-1 pl-16 md:pl-24 pt-1">
-                           {/* Mobile Time Display */}
-                           <span className="md:hidden block font-sans text-xl text-[#F3E5AB] font-bold mb-1">
+                           {/* 
+                              DESIGN RULE: EVENT TIME
+                              Mobile: text-lg (Reduced from xl)
+                           */}
+                           <span className="md:hidden block font-sans text-lg text-[#F3E5AB] font-bold mb-1">
                               {event.time}
                            </span>
 
-                           {/* Keep Event Title Serif or Sans? User didn't specify Event Titles, but implied consistency. 
-                               Sticking to Sans for headers as requested for main section headers. 
-                               But visually, sub-headers in cards often match. Let's make them Sans for full consistency. */}
-                           <h3 className="font-sans text-2xl md:text-3xl text-[#FDFBF7] mb-1 drop-shadow-sm group-hover:translate-x-1 transition-transform duration-300 font-bold uppercase tracking-wide">
+                           {/* 
+                              DESIGN RULE: EVENT TITLES
+                              Mobile: text-xl (Reduced from 2xl)
+                              Desktop: text-3xl
+                           */}
+                           <h3 className="font-sans text-xl md:text-3xl text-[#FDFBF7] mb-1 drop-shadow-sm group-hover:translate-x-1 transition-transform duration-300 font-bold uppercase tracking-wide">
                               {event.title}
                            </h3>
                            <p className="font-sans text-[#F3E5AB]/70 uppercase tracking-widest text-xs font-medium border-t border-white/10 inline-block pt-2">
@@ -276,8 +285,8 @@ export const Details: React.FC = () => {
           <div className="border-t border-cream/20 pt-16 md:pt-24">
              <FadeInUp>
                <div className="text-center mb-12">
-                  {/* Changed to use text-cream-shine for visibility on dark background */}
-                  <h2 className="font-sans text-4xl md:text-5xl text-cream-shine drop-shadow-sm mb-2 uppercase tracking-wider font-bold">The Venue</h2>
+                  {/* DESIGN RULE: SECTION HEADER - Mobile: text-3xl */}
+                  <h2 className="font-sans text-3xl md:text-5xl text-cream-shine drop-shadow-sm mb-2 uppercase tracking-wider font-bold">The Venue</h2>
                   {/* Design System Update: text-sm md:text-base, font-medium (Thin) */}
                   <p className="font-sans text-cream/80 uppercase tracking-[0.2em] text-sm md:text-base font-medium">Atmosphere & Location</p>
                </div>
@@ -371,7 +380,8 @@ export const Details: React.FC = () => {
              ========================================= */}
           <FadeInUp>
             <div className="py-12 bg-white/95 backdrop-blur-sm rounded-xl shadow-xl text-center relative mx-0 border border-white/40">
-              <h3 className="font-sans text-4xl md:text-5xl text-gold-shine mb-8 uppercase tracking-wider font-bold">Dress Code</h3>
+              {/* DESIGN RULE: SECTION HEADER - Mobile: text-3xl */}
+              <h3 className="font-sans text-3xl md:text-5xl text-gold-shine mb-8 uppercase tracking-wider font-bold">Dress Code</h3>
               
               <div className="flex justify-center items-start gap-4 md:gap-8 flex-wrap px-2">
                  {[

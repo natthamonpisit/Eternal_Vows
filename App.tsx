@@ -20,23 +20,23 @@ import { MusicPlayer } from './components/MusicPlayer';
   Mood: เรียบหรู, ผู้ดี, กระดาษการ์ด, ทองรมควัน, โปร่งสบาย
   
   ----------------------------------------------------------------------------------------
-  1. TYPOGRAPHY RULES (ตัวอักษร)
+  1. TYPOGRAPHY SCALING STRATEGY (กฏขนาดตัวอักษร Mobile vs Desktop)
   ----------------------------------------------------------------------------------------
-  [Main Headings] (หัวข้อใหญ่ของแต่ละ Section)
-  - Font: font-sans (Montserrat)
-  - Size: text-4xl md:text-5xl
-  - Style: UPPERCASE, font-bold, tracking-wider
-  - Effect: 
-    * พื้นขาว: className="text-gold-shine" (Metallic Rose Gold)
-    * พื้นเข้ม: className="text-cream-shine" (Pearl White)
+  *Update: ลดขนาด Mobile ลง 20-25% เพื่อแก้ปัญหาคำตกหล่นและพื้นที่หายใจ*
 
-  [Sub-Headings] (คำอธิบายรอง)
-  - Font: font-sans
-  - Size: text-sm md:text-base
-  - Style: UPPERCASE, font-medium, tracking-[0.2em]
-  
-  [Body Text]
-  - Font: font-serif (Cormorant Garamond) -> ให้ความรู้สึกเหมือนนิยาย/จดหมาย
+  [Main Headings] (หัวข้อใหญ่ของแต่ละ Section เช่น RSVP, GIFT WITH LOVE)
+  - Mobile:  text-3xl (30px) -> กระชับ ไม่ล้นจอ
+  - Desktop: text-5xl (48px) -> หรูหรา เต็มตา
+  - Style:   UPPERCASE, font-bold, tracking-wider
+
+  [Card Titles / Event Names] (ชื่อพิธีการใน Schedule, หัวข้อย่อย)
+  - Mobile:  text-xl (20px)  -> อ่านง่าย ไม่กินพื้นที่
+  - Desktop: text-3xl (30px)
+  - Style:   UPPERCASE, font-bold, tracking-wide
+
+  [Body Text / Details] (เวลา, คำบรรยาย)
+  - Mobile:  text-sm (14px)
+  - Desktop: text-base (16px)
 
   ----------------------------------------------------------------------------------------
   2. SECTION STRATEGY (กฏการจัดวาง Layout)

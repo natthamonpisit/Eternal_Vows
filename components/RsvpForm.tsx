@@ -31,7 +31,7 @@ export const RsvpForm: React.FC = () => {
           <div className="w-16 h-16 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-6">
              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
           </div>
-          <h3 className="font-sans text-4xl md:text-5xl text-gold-shine mb-4 font-bold uppercase tracking-wider">Thank You!</h3>
+          <h3 className="font-sans text-3xl md:text-5xl text-gold-shine mb-4 font-bold uppercase tracking-wider">Thank You!</h3>
           <p className="font-sans text-lg text-charcoal">Your response has been recorded.</p>
           <p className="font-sans text-sm text-gray-400 mt-2 uppercase tracking-widest">We can't wait to see you</p>
         </div>
@@ -49,7 +49,8 @@ export const RsvpForm: React.FC = () => {
           
           {/* Header moved inside */}
           <div className="text-center mb-10 md:mb-12">
-            <h2 className="font-sans text-4xl md:text-5xl text-gold-shine font-bold tracking-wider uppercase mb-3">R.S.V.P</h2>
+            {/* DESIGN RULE UPDATE: Mobile text-3xl, Desktop text-5xl */}
+            <h2 className="font-sans text-3xl md:text-5xl text-gold-shine font-bold tracking-wider uppercase mb-3">R.S.V.P</h2>
             <p className="font-sans text-gray-500 text-xs md:text-base uppercase tracking-[0.2em] font-medium">Please respond by February 21st</p>
           </div>
 
