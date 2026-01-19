@@ -1,60 +1,66 @@
+
 import React, { useState, useRef } from 'react';
 import { submitGuestbook } from '../services/api';
+import { FadeInUp } from './FadeInUp';
 
 export const Guestbook: React.FC = () => {
   const [isWriting, setIsWriting] = useState(false);
 
   return (
     <section className="max-w-4xl mx-auto px-4 text-center">
-      <div className="mb-10 relative">
-        <h2 className="font-serif text-5xl text-charcoal mb-4">Guestbook</h2>
-        <p className="font-sans text-xs md:text-sm text-gold uppercase tracking-widest font-bold">
-          Share your memories & blessings
-        </p>
-      </div>
+      <FadeInUp>
+        <div className="mb-10 relative">
+          <h2 className="font-serif text-5xl text-charcoal mb-4">Guestbook</h2>
+          <p className="font-sans text-xs md:text-sm text-gold uppercase tracking-widest font-bold">
+            Share your memories & blessings
+          </p>
+        </div>
+      </FadeInUp>
 
       {!isWriting ? (
         // CLEAN STATE: Selection Buttons
-        <div className="bg-[#FAF9F6] p-8 md:p-12 rounded-xl border border-gold/20 shadow-lg max-w-2xl mx-auto animate-fade-in">
-           <div className="flex flex-col gap-6 items-center">
-              
-              {/* Option 1: View Live Wall */}
-              <button 
-                onClick={() => window.open('/#live', '_blank')}
-                className="group relative w-full max-w-sm flex items-center justify-center gap-4 px-6 py-4 bg-white border border-gold/30 rounded-lg hover:border-gold hover:shadow-md transition-all duration-300"
-              >
-                 <div className="w-10 h-10 rounded-full bg-gold/10 text-gold flex items-center justify-center group-hover:bg-gold group-hover:text-white transition-colors">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                 </div>
-                 <div className="text-left flex-1">
-                    <span className="block font-serif text-xl text-charcoal group-hover:text-gold transition-colors">View Live Wall</span>
-                    <span className="block font-sans text-[10px] text-gray-400 uppercase tracking-wider">See all wishes on projector mode</span>
-                 </div>
-                 <svg className="w-5 h-5 text-gray-300 group-hover:text-gold transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-              </button>
+        <FadeInUp delay="100ms">
+          <div className="bg-[#FAF9F6] p-8 md:p-12 rounded-xl border border-gold/20 shadow-lg max-w-2xl mx-auto">
+             <div className="flex flex-col gap-6 items-center">
+                
+                {/* Option 1: View Live Wall */}
+                <button 
+                  onClick={() => window.open('/#live', '_blank')}
+                  className="group relative w-full max-w-sm flex items-center justify-center gap-4 px-6 py-4 bg-white border border-gold/30 rounded-lg hover:border-gold hover:shadow-md transition-all duration-300"
+                >
+                   <div className="w-10 h-10 rounded-full bg-gold/10 text-gold flex items-center justify-center group-hover:bg-gold group-hover:text-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                   </div>
+                   <div className="text-left flex-1">
+                      <span className="block font-serif text-xl text-charcoal group-hover:text-gold transition-colors">View Live Wall</span>
+                      <span className="block font-sans text-[10px] text-gray-400 uppercase tracking-wider">See all wishes on projector mode</span>
+                   </div>
+                   <svg className="w-5 h-5 text-gray-300 group-hover:text-gold transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </button>
 
-              <div className="flex items-center gap-4 w-full max-w-xs opacity-50">
-                 <div className="h-px bg-charcoal/20 flex-1"></div>
-                 <span className="font-serif italic text-charcoal/60">or</span>
-                 <div className="h-px bg-charcoal/20 flex-1"></div>
-              </div>
+                <div className="flex items-center gap-4 w-full max-w-xs opacity-50">
+                   <div className="h-px bg-charcoal/20 flex-1"></div>
+                   <span className="font-serif italic text-charcoal/60">or</span>
+                   <div className="h-px bg-charcoal/20 flex-1"></div>
+                </div>
 
-              {/* Option 2: Write a Wish (Primary Action) */}
-              <button 
-                onClick={() => setIsWriting(true)}
-                className="group relative w-full max-w-sm flex items-center justify-center gap-4 px-6 py-5 bg-charcoal text-white rounded-lg shadow-lg hover:bg-gold transition-all duration-300 transform hover:-translate-y-1"
-              >
-                 <div className="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center group-hover:bg-white group-hover:text-gold transition-colors">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                 </div>
-                 <div className="text-left flex-1">
-                    <span className="block font-serif text-xl font-medium">Leave a Wish</span>
-                    <span className="block font-sans text-[10px] text-white/60 uppercase tracking-wider group-hover:text-white/80">Sign the guestbook</span>
-                 </div>
-              </button>
+                {/* Option 2: Write a Wish (Primary Action) */}
+                <button 
+                  onClick={() => setIsWriting(true)}
+                  className="group relative w-full max-w-sm flex items-center justify-center gap-4 px-6 py-5 bg-charcoal text-white rounded-lg shadow-lg hover:bg-gold transition-all duration-300 transform hover:-translate-y-1"
+                >
+                   <div className="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center group-hover:bg-white group-hover:text-gold transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                   </div>
+                   <div className="text-left flex-1">
+                      <span className="block font-serif text-xl font-medium">Leave a Wish</span>
+                      <span className="block font-sans text-[10px] text-white/60 uppercase tracking-wider group-hover:text-white/80">Sign the guestbook</span>
+                   </div>
+                </button>
 
-           </div>
-        </div>
+             </div>
+          </div>
+        </FadeInUp>
       ) : (
         // FORM STATE
         <div className="animate-fade-in relative">
