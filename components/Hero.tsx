@@ -67,15 +67,15 @@ export const Hero: React.FC = () => {
       
       {/* 
         =======================================================================
-        MOBILE LAYOUT
-        - Seamless Fade: Gradient from Image to Cream
-        - Text: Rusty Pink (Rose Gold) + Glow
-        - Decor: Vector Rose at bottom
+        MOBILE LAYOUT (Redesigned)
+        - Structure: Image Area (Top) + Content Area (Bottom) stacked clearly
+        - Seamless: Deep gradient fade
+        - Decor: Sparkles (Stars)
         =======================================================================
       */}
       <div className="md:hidden relative w-full min-h-[100dvh] bg-[#FDFBF7] flex flex-col">
          
-         {/* 1. Image Section */}
+         {/* 1. IMAGE & TEXT AREA (Top Section) */}
          <div className="relative w-full">
             <img 
               src={bgUrl} 
@@ -83,67 +83,70 @@ export const Hero: React.FC = () => {
               className="w-full h-auto object-contain block" 
             />
             
-            {/* Seamless Fade Gradient: ไล่จากรูป (Transparent) ลงมาเป็นสีครีม (#FDFBF7) ให้เนียน */}
-            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent pointer-events-none"></div>
-         </div>
+            {/* Seamless Fade Gradient: ไล่ระดับสูงขึ้นเพื่อความเนียน (40% ของความสูงรูป) */}
+            <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/90 to-transparent pointer-events-none"></div>
 
-         {/* 2. Text Overlay (Floating higher up on the image) */}
-         <div className="absolute top-[28%] left-0 right-0 z-20 flex flex-col items-center justify-center px-4">
-            
-            <p className="text-[#EBCBC5] font-sans tracking-[0.25em] uppercase text-[10px] font-bold mb-2 drop-shadow-md">
-              The Wedding Of
-            </p>
-            
-            {/* Names: Rusty Pink (Theme Color) with Text Shadow/Glow for readability */}
-            <h1 className="font-script leading-tight py-2 flex flex-col items-center justify-center gap-1 w-full drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-              <span className="text-4xl text-[#EBCBC5] whitespace-nowrap bg-clip-text">
-                Natthamonpisit
-              </span>
-              <span className="font-serif text-2xl text-[#C08E86] relative top-1">
-                &
-              </span>
-              <span className="text-4xl text-[#EBCBC5] whitespace-nowrap">
-                Sorot
-              </span>
-            </h1>
-
-            {/* Date - Darker tone (Old Rose) because it might sit on the faded part */}
-             <div className="flex flex-col items-center gap-2 mt-3 font-serif text-[#C08E86] text-sm font-medium tracking-wide drop-shadow-sm">
-                <span>March 21, 2026</span>
-                <span className="w-1 h-1 rounded-full bg-[#C08E86]"></span>
-                <span className="text-xs uppercase tracking-widest">Dalva le ville, Bangkok</span>
+            {/* Names Overlay: วางซ้อนบน Gradient ด้านล่างรูป */}
+            <div className="absolute bottom-0 left-0 right-0 pb-6 px-4 text-center z-10">
+                <p className="text-[#B78A7D] font-sans tracking-[0.25em] uppercase text-[10px] font-bold mb-1 shadow-white/50">
+                  The Wedding Of
+                </p>
+                
+                {/* Rusty Pink Names with Glow */}
+                <h1 className="font-script leading-none py-2 flex flex-col items-center justify-center gap-2 w-full">
+                  <span className="text-4xl text-[#C08E86] whitespace-nowrap drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
+                    Natthamonpisit
+                  </span>
+                  <span className="font-serif text-2xl text-[#B78A7D] relative">
+                    &
+                  </span>
+                  <span className="text-4xl text-[#C08E86] whitespace-nowrap drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
+                    Sorot
+                  </span>
+                </h1>
             </div>
          </div>
 
-         {/* 3. Bottom Section: Timer & Rose Decor */}
-         <div className="flex-1 bg-[#FDFBF7] flex flex-col items-center justify-start pt-4 relative -mt-4 z-10 pb-12">
+         {/* 2. CONTENT AREA (Bottom Section) - แยกออกมาไม่ให้ทับกัน */}
+         <div className="flex-1 bg-[#FDFBF7] flex flex-col items-center justify-start pt-2 relative z-10 pb-16 px-4">
             
-            {/* VECTOR ROSE (Line Art) - Background Decor */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-64 h-64 opacity-10 pointer-events-none text-[#B78A7D]">
-                <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" strokeWidth="1.5">
-                   <path d="M100 130 C 90 120, 80 140, 100 180 C 120 140, 110 120, 100 130" /> {/* Stem/Leaf base */}
-                   <path d="M100 130 C 70 110, 60 70, 100 40 C 140 70, 130 110, 100 130" /> {/* Outer Bud */}
-                   <path d="M100 40 C 80 60, 85 90, 100 100 C 115 90, 120 60, 100 40" /> {/* Inner Petals */}
-                   <path d="M100 40 C 95 35, 105 35, 100 40" /> {/* Tip */}
-                   <path d="M70 100 Q 50 80 60 120" strokeLinecap="round" /> {/* Left Leaf */}
-                   <path d="M130 100 Q 150 80 140 120" strokeLinecap="round" /> {/* Right Leaf */}
-                </svg>
+            {/* Sparkles Decor (Stars) - กระจายตัว */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                {/* Top Left */}
+                <svg className="absolute top-4 left-8 w-4 h-4 text-[#EBCBC5] animate-pulse" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/></svg>
+                {/* Bottom Right */}
+                <svg className="absolute bottom-20 right-8 w-6 h-6 text-[#C08E86]/30 animate-pulse delay-700" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                {/* Center Random */}
+                <svg className="absolute top-1/2 left-4 w-3 h-3 text-[#B78A7D]/40 animate-pulse delay-300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/></svg>
+                {/* Top Right */}
+                <svg className="absolute top-0 right-12 w-5 h-5 text-[#EBCBC5] animate-pulse delay-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L15 9L24 12L15 15L12 24L9 15L0 12L9 9L12 0Z"/></svg>
             </div>
 
             {/* Countdown Timer */}
-            <div className="relative z-10 flex items-center justify-center bg-white/80 backdrop-blur-sm px-5 py-4 rounded-full border border-[#B78A7D]/20 shadow-[0_4px_20px_rgba(183,138,125,0.15)] mt-2 mx-4">
-              <TimeUnit value={timeLeft.days} label="Days" />
-              <span className="font-serif text-lg text-[#8E5B50]/50 -mt-2">:</span>
-              <TimeUnit value={timeLeft.hours} label="Hours" />
-              <span className="font-serif text-lg text-[#8E5B50]/50 -mt-2">:</span>
-              <TimeUnit value={timeLeft.minutes} label="Mins" />
+            <div className="relative z-10 mt-2">
+                <div className="flex items-center justify-center bg-white/60 backdrop-blur-sm px-6 py-4 rounded-full border border-[#B78A7D]/20 shadow-[0_4px_20px_rgba(183,138,125,0.1)]">
+                  <TimeUnit value={timeLeft.days} label="Days" />
+                  <span className="font-serif text-lg text-[#8E5B50]/50 -mt-2">:</span>
+                  <TimeUnit value={timeLeft.hours} label="Hours" />
+                  <span className="font-serif text-lg text-[#8E5B50]/50 -mt-2">:</span>
+                  <TimeUnit value={timeLeft.minutes} label="Mins" />
+                </div>
             </div>
 
-            <p className="mt-8 font-sans text-[10px] text-[#8E5B50]/60 uppercase tracking-widest relative z-10">
-                #OukBewTheWedding
-            </p>
-         </div>
+            {/* Info */}
+            <div className="text-center mt-6 space-y-2 relative z-10">
+                <div className="h-px w-12 bg-[#B78A7D]/30 mx-auto mb-4"></div>
+                <p className="font-sans text-[#B78A7D] text-[10px] uppercase tracking-[0.2em] font-bold">
+                    #OukBewTheWedding
+                </p>
+                <div className="flex items-center justify-center gap-2 text-[#5D4037]/80 font-serif text-sm">
+                   <span>March 21, 2026</span>
+                   <span className="w-1 h-1 bg-[#B78A7D] rounded-full"></span>
+                   <span>Bangkok</span>
+                </div>
+            </div>
 
+         </div>
       </div>
 
 
