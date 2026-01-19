@@ -47,16 +47,10 @@ export const Gallery: React.FC = () => {
   };
 
   return (
-    // Updated: Added bg-[#FDFBF7] to be opaque matching Hero footer
-    <section className="pt-0 pb-24 px-4 relative flex flex-col justify-center bg-[#FDFBF7]">
+    // Updated: Removed bg-[#FDFBF7] and texture overlay.
+    // Now completely transparent to show the global App.tsx texture.
+    <section className="pt-0 pb-24 px-4 relative flex flex-col justify-center">
       
-      {/* 
-         TEXTURE MATCHING:
-         This texture overlay uses `bg-fixed` to align perfectly with the viewport, 
-         just like the Hero Footer. This creates a seamless "continuous paper" effect.
-      */}
-      <div className="absolute inset-0 opacity-40 mix-blend-multiply pointer-events-none bg-fixed z-0" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
-
       <FadeInUp>
         <div className="text-center mb-16 md:mb-20 relative z-10">
           <p className="font-sans text-gold text-xs md:text-sm tracking-[0.3em] uppercase mb-4">Pre-Wedding Gallery</p>
