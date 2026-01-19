@@ -98,13 +98,21 @@ export const Gallery: React.FC = () => {
         <FadeInUp delay="400ms">
           <div className="mt-12 md:mt-16 text-center">
               <a 
-                href="https://www.instagram.com/explore/tags/NatSorotWedding/" 
+                href="https://www.instagram.com/explore/tags/OukBewtheWedding/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-charcoal/60 hover:text-gold transition-colors font-sans text-xs uppercase tracking-widest border-b border-transparent hover:border-gold pb-0.5"
+                className="group relative inline-flex items-center justify-center p-[2px] overflow-hidden rounded-full transition-transform hover:scale-105 duration-300"
               >
-                <span>View more on Instagram #NatSorotWedding</span>
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                {/* The Rainbow Gradient Background (Instagram Colors) */}
+                <span className="absolute inset-0 bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045]"></span>
+                
+                {/* The Inner Content (White Pill) */}
+                <span className="relative flex items-center gap-2 px-6 py-2.5 transition-all ease-in duration-200 bg-white rounded-full group-hover:bg-opacity-0">
+                    <span className="font-sans text-xs font-bold uppercase tracking-widest bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] bg-clip-text text-transparent group-hover:text-white">
+                       View on Instagram #OukBewtheWedding
+                    </span>
+                    <svg className="w-4 h-4 text-[#fd1d1d] group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                </span>
               </a>
           </div>
         </FadeInUp>

@@ -10,7 +10,7 @@ export const Hero: React.FC = () => {
     seconds: 0
   });
 
-  // Default Fallback Image (รูปปัจจุบันที่พี่ส่งมา)
+  // Default Fallback Image
   const DEFAULT_BG_ID = "Wedding_OukBew/BG/7e0b499b-7fa4-4a7d-99e0-8068afce2e07_1_prgbpm";
   const CLOUD_NAME = "damfrrvrb";
   const [bgUrl, setBgUrl] = useState(`https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto,c_cover/${DEFAULT_BG_ID}`);
@@ -65,55 +65,74 @@ export const Hero: React.FC = () => {
   return (
     <section className="relative h-screen min-h-[700px] flex flex-col items-center text-center px-4 overflow-hidden">
       
-      {/* 1. Main Background Image */}
+      {/* 1. Main Background Image (Layer 0) */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 transition-transform duration-[20s] ease-linear hover:scale-105"
         style={{ backgroundImage: `url("${bgUrl}")` }}
       ></div>
 
-      {/* 2. Soft Overlay (Cream Tint) - Helps text pop against the photo */}
-      <div className="absolute inset-0 bg-[#FDFBF7]/60 z-0 mix-blend-overlay"></div>
+      {/* 2. Soft Overlay (Layer 10) */}
+      <div className="absolute inset-0 bg-[#FDFBF7]/60 z-10 mix-blend-overlay"></div>
       
-      {/* 3. Gradient Fade (Top & Bottom) - Ensures text readability at top, and smooth transition at bottom */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7]/90 via-white/30 to-[#FDFBF7] z-0"></div>
+      {/* 3. Gradient Fade (Layer 10) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7]/90 via-white/30 to-[#FDFBF7] z-10"></div>
 
-      {/* 4. Texture Overlay (Original Paper Texture) - Keeps the vintage feel */}
-      <div className="absolute inset-0 opacity-40 pointer-events-none z-0 mix-blend-multiply" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
+      {/* 4. Texture Overlay (Layer 10) */}
+      <div className="absolute inset-0 opacity-40 pointer-events-none z-10 mix-blend-multiply" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
 
-      {/* Main Content Area - Top Aligned with Padding */}
-      <div className="pt-20 sm:pt-24 md:pt-32 animate-slide-up space-y-2 sm:space-y-3 md:space-y-4 max-w-5xl flex flex-col items-center relative z-10 w-full">
-        <div className="space-y-4 w-full px-2">
-          {/* Headline: The Wedding Of (Solid Dark Rose) */}
-          <p className="text-[#8E5B50] font-sans tracking-[0.25em] uppercase text-sm sm:text-xl md:text-3xl font-bold drop-shadow-sm">
+      {/* Main Content Area - Z-Index 50 (TOPMOST) */}
+      {/* 
+          FIX: Added max-w-[95vw] to ensure it never exceeds screen width on mobile.
+          Use flex layout to center everything perfectly.
+      */}
+      <div className="pt-24 sm:pt-28 md:pt-36 animate-slide-up space-y-4 w-full max-w-[95vw] md:max-w-7xl flex flex-col items-center relative z-50 mx-auto">
+        <div className="space-y-2 md:space-y-6 w-full px-2">
+          {/* Headline */}
+          <p className="text-[#8E5B50] font-sans tracking-[0.25em] uppercase text-sm sm:text-lg md:text-2xl font-bold drop-shadow-sm">
             The Wedding Of
           </p>
           
-          {/* Names: Dark Copper Gradient (Deep Brown -> Rose Gold -> Deep Brown) */}
-          {/* Fixed: 
-              - Decreased font size for both mobile and desktop (8vw -> 7.5vw, 9xl -> 8xl)
-              - Increased padding-x (px-12) and padding-y (py-6)
-              - Changed leading to 'loose' to give vertical space for swashes
-              - Added 'pr-14' specifically to accommodate the trailing 't' swash
+          {/* Names */}
+          {/* 
+             MAJOR LAYOUT FIX:
+             - Mobile: flex-col (Stack names vertically) -> Prevents overflow
+             - Desktop: flex-row (Names side by side) -> Classic look
+             - Removed whitespace-nowrap to allow natural flow
+             - Increased py-4 to py-8 to prevent clipping of swashes
           */}
-          <h1 className="font-script text-[7.5vw] sm:text-[7vw] lg:text-8xl xl:text-9xl drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] leading-loose whitespace-nowrap px-4 sm:px-12 py-6 bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent">
-            Natthamonpisit <span className="bg-clip-text text-transparent bg-gradient-to-b from-[#B78A7D] to-[#8E5B50] mx-0.5 sm:mx-2 font-serif">&</span> Sorot
+          <h1 className="font-script leading-normal py-4 px-2 md:px-4 drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4">
+            
+            {/* Name 1 */}
+            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-2 md:pb-0">
+              Natthamonpisit
+            </span>
+
+            {/* Ampersand */}
+            <span className="font-serif text-3xl sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-b from-[#B78A7D] to-[#8E5B50] my-1 md:my-0">
+              &
+            </span>
+
+            {/* Name 2 */}
+            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-2 md:pb-0">
+              Sorot
+            </span>
           </h1>
         </div>
 
         {/* Info Section */}
-        <div className="flex flex-col items-center gap-2 sm:gap-4 w-full">
-          {/* Date & Location: Dark Bronze */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-8 text-lg sm:text-2xl md:text-3xl lg:text-4xl font-serif text-[#5D4037] font-medium drop-shadow-sm">
+        <div className="flex flex-col items-center gap-4 sm:gap-6 w-full pt-4">
+          {/* Date & Location */}
+          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-8 text-lg sm:text-xl md:text-3xl font-serif text-[#5D4037] font-medium drop-shadow-sm">
             <span>March 21, 2026</span>
             <span className="hidden md:block w-2 h-2 rounded-full bg-[#8E5B50]"></span>
-            <span>Dalva le ville, Bangkok</span>
+            <span className="text-base sm:text-xl md:text-3xl">Dalva le ville, Bangkok</span>
           </div>
           
           {/* Divider */}
-          <div className="w-12 sm:w-16 h-px bg-[#8E5B50]/50 my-1"></div>
+          <div className="w-12 sm:w-16 h-px bg-[#8E5B50]/50 my-2"></div>
 
           {/* Countdown Timer */}
-          <div className="flex items-center justify-center mt-0 scale-90 sm:scale-100 bg-white/60 backdrop-blur-md px-6 py-4 rounded-full border border-white/60 shadow-lg ring-1 ring-[#8E5B50]/10">
+          <div className="flex items-center justify-center mt-2 scale-90 sm:scale-100 bg-white/70 backdrop-blur-md px-6 py-4 sm:px-8 sm:py-5 rounded-full border border-white/60 shadow-lg ring-1 ring-[#8E5B50]/10 max-w-[90vw]">
             <TimeUnit value={timeLeft.days} label="Days" />
             <span className="font-serif text-xl sm:text-2xl text-[#8E5B50]/50 -mt-3 sm:-mt-4">:</span>
             <TimeUnit value={timeLeft.hours} label="Hours" />
@@ -126,7 +145,7 @@ export const Hero: React.FC = () => {
       </div>
 
       {/* Arrow Container */}
-      <div className="flex-1 flex items-center justify-center relative z-10 w-full pb-24">
+      <div className="flex-1 flex items-center justify-center relative z-20 w-full pb-24">
         <div className="animate-bounce text-[#5D4037]/80 drop-shadow-sm">
           <svg className="w-8 h-8 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
