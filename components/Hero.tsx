@@ -13,7 +13,7 @@ export const Hero: React.FC = () => {
   // Default Fallback Image
   const DEFAULT_BG_ID = "Wedding_OukBew/BG/7e0b499b-7fa4-4a7d-99e0-8068afce2e07_1_prgbpm";
   const CLOUD_NAME = "damfrrvrb";
-  const [bgUrl, setBgUrl] = useState(`https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto,c_cover/${DEFAULT_BG_ID}`);
+  const [bgUrl, setBgUrl] = useState(`https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto,c_limit,w_1080/${DEFAULT_BG_ID}`);
 
   // Fetch Background Dynamically from 'Wedding_OukBew/BG' folder
   useEffect(() => {
@@ -67,69 +67,73 @@ export const Hero: React.FC = () => {
       
       {/* 
         =======================================================================
-        MOBILE LAYOUT (Overlay Style)
-        - Image: Full Screen Height (object-cover)
-        - Text: Overlays the image at the bottom
-        - Gradient: Ensures readability
+        MOBILE LAYOUT (Horizontal Image Full View)
+        - Image: w-full h-auto (Natural Aspect Ratio - No Cropping)
+        - Text: Overlays the image, Higher up, Lighter Color, Single Line
         =======================================================================
       */}
-      <div className="md:hidden relative w-full h-[100dvh] overflow-hidden">
+      <div className="md:hidden relative w-full h-[100dvh] bg-[#FDFBF7] flex flex-col">
          
-         {/* Background Image - Full Screen */}
-         <div className="absolute inset-0 z-0">
+         {/* 1. Image Section (Top) - Shows full width */}
+         <div className="relative w-full">
             <img 
               src={bgUrl} 
               alt="Wedding Couple" 
-              className="w-full h-full object-cover object-top" 
+              className="w-full h-auto object-contain block shadow-lg" 
             />
-            {/* Gradient Overlay for Text Readability (Bottom Up) */}
-            <div className="absolute bottom-0 left-0 right-0 h-[65%] bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/90 to-transparent pointer-events-none"></div>
+            {/* Dark Gradient Overlay on Image Bottom for Text Readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
          </div>
 
-         {/* Content - Positioned Absolute Bottom */}
-         <div className="absolute bottom-0 left-0 right-0 z-10 pb-12 pt-12 px-4 flex flex-col items-center justify-end h-full pointer-events-none">
+         {/* 2. Text Overlay (Floating on top of image) */}
+         {/* Positioned absolutely to overlap the image area */}
+         <div className="absolute top-[25%] left-0 right-0 z-20 flex flex-col items-center justify-center px-2 drop-shadow-lg">
             
-            {/* Wrapper for content to push it to bottom but not edge */}
-            <div className="flex flex-col items-center justify-end h-full pb-8 pointer-events-auto">
-                <div className="text-center w-full relative">
-                  <p className="text-[#8E5B50] font-sans tracking-[0.25em] uppercase text-[10px] font-bold drop-shadow-sm mb-2">
-                    The Wedding Of
-                  </p>
-                  
-                  {/* Names */}
-                  <h1 className="font-script leading-normal py-2 drop-shadow-sm flex flex-col items-center justify-center gap-1 w-full">
-                    <span className="text-4xl text-[#4A3728] px-1 whitespace-nowrap">
-                      Natthamonpisit
-                    </span>
-                    <span className="font-serif text-2xl text-[#B78A7D] px-1">
-                      &
-                    </span>
-                    <span className="text-4xl text-[#4A3728] px-1 whitespace-nowrap">
-                      Sorot
-                    </span>
-                  </h1>
-                </div>
+            <p className="text-[#FDFBF7]/90 font-sans tracking-[0.25em] uppercase text-[10px] font-bold mb-1 shadow-black/20">
+              The Wedding Of
+            </p>
+            
+            {/* Names: Single Line, Lighter Color, Smaller Size */}
+            <h1 className="font-script leading-tight py-2 flex flex-row flex-nowrap items-center justify-center gap-2 w-full">
+              <span className="text-3xl text-[#FDFBF7] whitespace-nowrap drop-shadow-md">
+                Natthamonpisit
+              </span>
+              <span className="font-serif text-xl text-[#EBCBC5] drop-shadow-md relative top-0.5">
+                &
+              </span>
+              <span className="text-3xl text-[#FDFBF7] whitespace-nowrap drop-shadow-md">
+                Sorot
+              </span>
+            </h1>
 
-                {/* Info Section */}
-                <div className="flex flex-col items-center gap-5 mt-4 w-full px-4">
-                  <div className="flex flex-col items-center justify-center gap-1 text-sm font-serif text-[#5D4037] font-medium">
-                    <span>March 21, 2026</span>
-                    <div className="w-8 h-px bg-[#8E5B50]/30 my-1"></div>
-                    <span className="text-xs tracking-wide">Dalva le ville, Bangkok</span>
-                  </div>
-                  
-                  {/* Countdown Timer */}
-                  <div className="flex items-center justify-center bg-white/60 backdrop-blur-md px-4 py-3 rounded-full border border-white/60 shadow-lg mt-2">
-                    <TimeUnit value={timeLeft.days} label="Days" />
-                    <span className="font-serif text-lg text-[#8E5B50]/50 -mt-2">:</span>
-                    <TimeUnit value={timeLeft.hours} label="Hours" />
-                    <span className="font-serif text-lg text-[#8E5B50]/50 -mt-2">:</span>
-                    <TimeUnit value={timeLeft.minutes} label="Mins" />
-                  </div>
-                </div>
+            {/* Date - Light Color to match */}
+             <div className="flex items-center gap-2 mt-2 text-[#FDFBF7]/90 font-serif text-sm font-medium tracking-wide">
+                <span>March 21, 2026</span>
+                <span className="w-1 h-1 rounded-full bg-[#EBCBC5]"></span>
+                <span>Bangkok</span>
             </div>
 
          </div>
+
+         {/* 3. Bottom Section (Cream Background) - Timer & Info */}
+         <div className="flex-1 bg-[#FDFBF7] flex flex-col items-center justify-start pt-12 relative -mt-6">
+            {/* Curve/Fade connector */}
+            <div className="absolute top-[-40px] left-0 right-0 h-12 bg-gradient-to-t from-[#FDFBF7] to-transparent"></div>
+
+            {/* Countdown Timer */}
+            <div className="flex items-center justify-center bg-white px-4 py-4 rounded-full border border-[#8E5B50]/20 shadow-xl mt-4 mx-4">
+              <TimeUnit value={timeLeft.days} label="Days" />
+              <span className="font-serif text-lg text-[#8E5B50]/50 -mt-2">:</span>
+              <TimeUnit value={timeLeft.hours} label="Hours" />
+              <span className="font-serif text-lg text-[#8E5B50]/50 -mt-2">:</span>
+              <TimeUnit value={timeLeft.minutes} label="Mins" />
+            </div>
+
+            <p className="mt-8 font-sans text-[10px] text-[#8E5B50]/60 uppercase tracking-widest">
+                #OukBewTheWedding
+            </p>
+         </div>
+
       </div>
 
 
