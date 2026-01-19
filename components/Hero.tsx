@@ -61,7 +61,12 @@ export const Hero: React.FC = () => {
   // Responsive Time Unit
   const TimeUnit = ({ value, label }: { value: number, label: string }) => (
     <div className="flex flex-col items-center mx-1.5 sm:mx-3 md:mx-6">
-      <span className="font-serif text-xl sm:text-2xl md:text-4xl lg:text-5xl text-[#5D4037] font-medium tabular-nums leading-none drop-shadow-sm transition-all">
+      {/* 
+         DESIGN UPDATE: Reduced desktop size by ~15% 
+         md:text-4xl -> md:text-3xl (30px)
+         lg:text-5xl -> lg:text-4xl (36px)
+      */}
+      <span className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl text-[#5D4037] font-medium tabular-nums leading-none drop-shadow-sm transition-all">
         {String(value).padStart(2, '0')}
       </span>
       <span className="font-sans text-[9px] md:text-xs text-[#8E5B50] uppercase tracking-[0.1em] mt-1 md:mt-3 font-bold transition-all">
@@ -203,12 +208,13 @@ export const Hero: React.FC = () => {
          {/* [BLOCK 3] Countdown */}
          <div className="flex-none h-[15%] flex items-center justify-center">
              <div className="flex items-center justify-center">
+                  {/* Separators updated to match new sizing: md:text-3xl */}
                   <TimeUnit value={timeLeft.days} label="Days" />
-                  <span className="font-serif text-3xl md:text-5xl text-[#8E5B50]/50 -mt-4 mx-2 md:mx-4">:</span>
+                  <span className="font-serif text-3xl md:text-4xl text-[#8E5B50]/50 -mt-4 mx-2 md:mx-4">:</span>
                   <TimeUnit value={timeLeft.hours} label="Hours" />
-                  <span className="font-serif text-3xl md:text-5xl text-[#8E5B50]/50 -mt-4 mx-2 md:mx-4">:</span>
+                  <span className="font-serif text-3xl md:text-4xl text-[#8E5B50]/50 -mt-4 mx-2 md:mx-4">:</span>
                   <TimeUnit value={timeLeft.minutes} label="Minutes" />
-                  <span className="font-serif text-3xl md:text-5xl text-[#8E5B50]/50 -mt-4 mx-2 md:mx-4">:</span>
+                  <span className="font-serif text-3xl md:text-4xl text-[#8E5B50]/50 -mt-4 mx-2 md:mx-4">:</span>
                   <TimeUnit value={timeLeft.seconds} label="Seconds" />
              </div>
          </div>

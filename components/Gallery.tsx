@@ -54,7 +54,8 @@ export const Gallery: React.FC = () => {
 
   return (
     // Section uses transparent background to show App global texture
-    <section className="pt-0 pb-16 px-4 relative flex flex-col justify-center">
+    // DESIGN FIX: Added 'md:pt-24' to push content down on desktop, preventing overlap with Hero Star
+    <section className="pt-0 md:pt-24 pb-16 px-4 relative flex flex-col justify-center">
       
       <FadeInUp>
         <div className="text-center mb-16 md:mb-20 relative z-10">
