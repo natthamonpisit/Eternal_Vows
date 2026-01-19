@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Envelope } from './components/Envelope';
 import { Hero } from './components/Hero';
@@ -56,6 +57,16 @@ export default function App() {
   // Normal Wedding Website Flow
   return (
     <div className="min-h-screen relative font-serif text-charcoal overflow-x-hidden">
+      
+      {/* 
+          GLOBAL BACKGROUND TEXTURE 
+          - Fixed position: Texture stays still while content scrolls (Parallax feel)
+          - Seamless base for all transparent sections
+      */}
+      <div className="fixed inset-0 z-[-1] bg-[#FDFBF7] pointer-events-none">
+         <div className="absolute inset-0 opacity-40 mix-blend-multiply" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
+      </div>
+
       {/* Background Music Player - Starts when envelope opens */}
       <MusicPlayer shouldPlay={isEnvelopeOpen} />
 
@@ -78,18 +89,33 @@ export default function App() {
       >
         <Hero />
         
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 pb-24">
+        {/* 
+            SEAMLESS MAIN CONTAINER 
+            - Removed max-w-7xl and space-y-24 to allow full-width sections to touch 
+        */}
+        <main className="w-full relative z-10">
+          
           <Gallery />
+          
+          {/* Details handles its own background and transitions */}
           <Details />
           
-          <div id="rsvp-section" className="scroll-mt-20">
-            <RsvpForm />
+          <div id="rsvp-section" className="scroll-mt-20 py-24 px-4 sm:px-6">
+             <div className="max-w-7xl mx-auto">
+                <RsvpForm />
+             </div>
           </div>
 
-          <MoneyGift />
+          <div className="py-12 px-4 sm:px-6">
+             <div className="max-w-7xl mx-auto">
+                <MoneyGift />
+             </div>
+          </div>
 
-          <div className="border-t border-gold/30 pt-20">
-            <Guestbook />
+          <div className="border-t border-gold/30 pt-20 pb-24 px-4 sm:px-6">
+             <div className="max-w-7xl mx-auto">
+               <Guestbook />
+             </div>
           </div>
         </main>
 
@@ -99,7 +125,6 @@ export default function App() {
         <ChatWidget />
 
         {/* Floating RSVP Button (Mobile Only) if not scrolled to RSVP yet */}
-        {/* Adjusted bottom position to not overlap with ChatWidget */}
         <FloatingCTA />
       </div>
     </div>
