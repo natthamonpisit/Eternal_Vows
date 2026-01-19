@@ -82,38 +82,37 @@ export const Hero: React.FC = () => {
 
       {/* Main Content Area - Z-Index 50 (TOPMOST) */}
       {/* 
-          FIX: Added max-w-[95vw] to ensure it never exceeds screen width on mobile.
-          Use flex layout to center everything perfectly.
+          FIX: Increased top padding (pt-32 -> pt-44) to create more space at the top
+          Added max-w-[95vw] to ensure it never exceeds screen width on mobile.
       */}
-      <div className="pt-24 sm:pt-28 md:pt-36 animate-slide-up space-y-4 w-full max-w-[95vw] md:max-w-7xl flex flex-col items-center relative z-50 mx-auto">
+      <div className="pt-32 sm:pt-40 md:pt-48 animate-slide-up space-y-4 w-full max-w-[95vw] md:max-w-7xl flex flex-col items-center relative z-50 mx-auto">
         <div className="space-y-2 md:space-y-6 w-full px-2">
           {/* Headline */}
-          <p className="text-[#8E5B50] font-sans tracking-[0.25em] uppercase text-sm sm:text-lg md:text-2xl font-bold drop-shadow-sm">
+          <p className="text-[#8E5B50] font-sans tracking-[0.25em] uppercase text-xs sm:text-sm md:text-xl font-bold drop-shadow-sm">
             The Wedding Of
           </p>
           
           {/* Names */}
           {/* 
-             MAJOR LAYOUT FIX:
-             - Mobile: flex-col (Stack names vertically) -> Prevents overflow
-             - Desktop: flex-row (Names side by side) -> Classic look
-             - Removed whitespace-nowrap to allow natural flow
-             - Increased py-4 to py-8 to prevent clipping of swashes
+             REDUCED FONT SIZES:
+             - Mobile: text-4xl (was 5xl)
+             - Tablet: text-5xl (was 6xl)
+             - Desktop: text-7xl (was 8xl)
           */}
-          <h1 className="font-script leading-normal py-4 px-2 md:px-4 drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4">
+          <h1 className="font-script leading-normal py-2 px-2 md:px-4 drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] flex flex-col md:flex-row items-center justify-center gap-1 md:gap-3">
             
             {/* Name 1 */}
-            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-2 md:pb-0">
+            <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-1 md:pb-0">
               Natthamonpisit
             </span>
 
             {/* Ampersand */}
-            <span className="font-serif text-3xl sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-b from-[#B78A7D] to-[#8E5B50] my-1 md:my-0">
+            <span className="font-serif text-2xl sm:text-3xl md:text-4xl bg-clip-text text-transparent bg-gradient-to-b from-[#B78A7D] to-[#8E5B50] my-0.5 md:my-0">
               &
             </span>
 
             {/* Name 2 */}
-            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-2 md:pb-0">
+            <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-1 md:pb-0">
               Sorot
             </span>
           </h1>
@@ -122,10 +121,10 @@ export const Hero: React.FC = () => {
         {/* Info Section */}
         <div className="flex flex-col items-center gap-4 sm:gap-6 w-full pt-4">
           {/* Date & Location */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-8 text-lg sm:text-xl md:text-3xl font-serif text-[#5D4037] font-medium drop-shadow-sm">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-8 text-base sm:text-lg md:text-2xl font-serif text-[#5D4037] font-medium drop-shadow-sm">
             <span>March 21, 2026</span>
             <span className="hidden md:block w-2 h-2 rounded-full bg-[#8E5B50]"></span>
-            <span className="text-base sm:text-xl md:text-3xl">Dalva le ville, Bangkok</span>
+            <span className="text-sm sm:text-lg md:text-2xl">Dalva le ville, Bangkok</span>
           </div>
           
           {/* Divider */}
@@ -144,14 +143,7 @@ export const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Arrow Container */}
-      <div className="flex-1 flex items-center justify-center relative z-20 w-full pb-24">
-        <div className="animate-bounce text-[#5D4037]/80 drop-shadow-sm">
-          <svg className="w-8 h-8 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
-          </svg>
-        </div>
-      </div>
+      {/* Arrow Container REMOVED as requested */}
     </section>
   );
 };
