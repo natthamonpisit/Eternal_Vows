@@ -4,23 +4,14 @@ import { fetchGallery } from '../services/api';
 
 /* 
   ========================================================================================
-  🤵👰 COMPONENT: Hero (ส่วนหัวข้อหน้าแรก - Re-Layout)
+  🤵👰 COMPONENT: Hero (ส่วนหัวข้อหน้าแรก - Re-Layout V.6)
   ========================================================================================
   
-  [Layout Concept - Based on Brief]
-  1. Top Section (~65% Height): 
-     - Background Image
-     - Top Gradient (Gray/White -> Transparent)
-     - Content (Names, Date, Countdown) centered
-     - Bottom Gradient (Transparent -> Site BG #FDFBF7)
-  
-  2. Bottom Section (~35% Height):
-     - Solid Background (#FDFBF7)
-     - Star Shape Icon centered
-     
-  [Spacing Logic]
-  - ใช้ h-[65vh] สำหรับส่วนรูปภาพเพื่อให้ได้สัดส่วนประมาณ 60-65% ตามที่ต้องการ
-  - ใช้ Flexbox จัด Content ให้อยู่กึ่งกลางของส่วนรูปภาพ
+  [Fixes based on Feedback]
+  1. Fading: Restore the original "Cream/White" fade (removed the black gradients).
+  2. Text Colors: Revert to Brown/Rose (#5D4037, #C08E86) to be visible on the cream fade.
+  3. Names: Increase size (7vw -> 9vw).
+  4. Layout: Keep "The Wedding Of" at top as confirmed correct.
 */
 
 export const Hero: React.FC = () => {
@@ -31,7 +22,8 @@ export const Hero: React.FC = () => {
     seconds: 0
   });
 
-  const DEFAULT_BG_URL = "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1920&auto=format&fit=crop";
+  // รูปขาวดำ
+  const DEFAULT_BG_URL = "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1920&auto=format&fit=crop&sat=-100";
   const [bgUrl, setBgUrl] = useState(DEFAULT_BG_URL);
 
   useEffect(() => {
@@ -72,11 +64,11 @@ export const Hero: React.FC = () => {
   }, []);
 
   const TimeUnit = ({ value, label }: { value: number, label: string }) => (
-    <div className="flex flex-col items-center mx-1.5 sm:mx-2 md:mx-3">
-      <span className="font-serif text-lg sm:text-2xl text-[#5D4037] font-medium tabular-nums leading-none drop-shadow-sm">
+    <div className="flex flex-col items-center mx-2 sm:mx-3">
+      <span className="font-serif text-xl sm:text-2xl text-[#5D4037] font-medium tabular-nums leading-none drop-shadow-md">
         {String(value).padStart(2, '0')}
       </span>
-      <span className="font-sans text-[8px] text-[#8E5B50] uppercase tracking-[0.1em] mt-1 font-semibold">
+      <span className="font-sans text-[9px] text-[#8E5B50] uppercase tracking-[0.1em] mt-1 font-bold shadow-white">
         {label}
       </span>
     </div>
@@ -87,84 +79,84 @@ export const Hero: React.FC = () => {
       
       {/* 
         =======================================================================
-        📱 MOBILE LAYOUT (Specific 60/40 Split Layout)
+        📱 MOBILE LAYOUT (Cream Fading Restored)
         =======================================================================
       */}
-      <div className="md:hidden flex flex-col w-full min-h-[100dvh]">
+      <div className="md:hidden flex flex-col w-full h-[100dvh]">
          
-         {/* --- TOP SECTION (65% Height) --- */}
-         <div className="relative w-full h-[65vh] overflow-hidden shadow-lg">
+         {/* 
+            PART A: IMAGE AREA (Top 75%) 
+         */}
+         <div className="relative h-[75%] w-full overflow-hidden">
             
-            {/* 1. Background Image */}
+            {/* 1. Background Image Layer */}
             <div 
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
               style={{ backgroundImage: `url("${bgUrl}")` }}
             ></div>
 
-            {/* 2. Top Fading (Gray/White -> Transparent) */}
-            <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-gray-200/80 via-gray-100/50 to-transparent mix-blend-multiply pointer-events-none z-10"></div>
+            {/* 2. Gradient Overlays (THE FADING IS BACK!) */}
+            {/* Top Fade: Cream -> Transparent */}
+            <div className="absolute top-0 left-0 right-0 h-[30vh] bg-gradient-to-b from-[#FDFBF7] via-[#FDFBF7]/60 to-transparent pointer-events-none z-10"></div>
+            
+            {/* Bottom Fade: Transparent -> Cream (Seamless connection to footer) */}
+            <div className="absolute bottom-0 left-0 right-0 h-[30vh] bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/60 to-transparent pointer-events-none z-10"></div>
 
-            {/* 3. Bottom Fading (Transparent -> Site BG #FDFBF7) */}
-            {/* ไล่สีให้กลืนไปกับ section ด้านล่าง */}
-            <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/90 to-transparent pointer-events-none z-10"></div>
-
-            {/* 4. CONTENT CENTERED (Sandwiched between gradients) */}
-            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center px-4 pt-10">
+            {/* 3. Content Layout Layer */}
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-between px-2 py-10">
                 
-                {/* Intro */}
-                <p className="text-[#5D4037] font-sans tracking-[0.25em] uppercase text-[10px] font-bold mb-2 shadow-white/50">
-                  The Wedding Of
-                </p>
-                
-                {/* Names */}
-                <h1 className="font-script leading-none flex flex-col items-center justify-center gap-2 w-full mb-4">
-                  <span className="text-4xl text-[#C08E86] whitespace-nowrap drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)]">
-                    Natthamonpisit
-                  </span>
-                  <span className="font-serif text-xl text-[#B78A7D]">
-                    &
-                  </span>
-                  <span className="text-4xl text-[#C08E86] whitespace-nowrap drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)]">
-                    Sorot
-                  </span>
-                </h1>
+                {/* [TOP] Intro - Sitting on Cream Fade */}
+                <div className="mt-8">
+                  <p className="text-[#5D4037] font-sans tracking-[0.3em] uppercase text-[10px] font-bold drop-shadow-sm">
+                    The Wedding Of
+                  </p>
+                </div>
 
-                {/* Date & Location */}
-                <div className="flex flex-col items-center justify-center gap-1 text-[#5D4037] font-serif text-sm mb-6">
-                   <div className="flex items-center gap-2 bg-white/40 backdrop-blur-[2px] px-3 py-1 rounded-full">
-                     <span>March 21, 2026</span>
-                     <span className="w-1 h-1 bg-[#B78A7D] rounded-full"></span>
-                     <span>Bangkok</span>
+                {/* [MIDDLE] Names & Date - Pop Effect */}
+                <div className="flex flex-col items-center justify-center w-full space-y-4">
+                   {/* Names: Increased size to 9vw */}
+                   <h1 
+                     className="font-script text-[#C08E86] leading-none whitespace-nowrap drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)] text-center px-1"
+                     style={{ fontSize: '9vw' }} 
+                   >
+                     Natthamonpisit & Sorot
+                   </h1>
+
+                   {/* Date & Location */}
+                   <div className="flex flex-col items-center gap-1 text-[#5D4037] font-serif text-sm drop-shadow-md">
+                     <div className="flex items-center gap-2">
+                       <span className="font-semibold text-lg">March 21, 2026</span>
+                     </div>
+                     <p className="font-medium text-sm text-[#B78A7D] tracking-wide">Dalva le ville, Bangkok</p>
                    </div>
-                   <p className="font-semibold text-base text-[#B78A7D] mt-1 drop-shadow-sm">Dalva le ville</p>
                 </div>
 
-                {/* Countdown Timer */}
-                <div className="flex items-center justify-center bg-white/70 backdrop-blur-md px-4 py-3 rounded-full border border-[#B78A7D]/20 shadow-[0_4px_15px_rgba(183,138,125,0.15)]">
-                  <TimeUnit value={timeLeft.days} label="Days" />
-                  <span className="font-serif text-lg text-[#8E5B50]/50 -mt-3">:</span>
-                  <TimeUnit value={timeLeft.hours} label="Hrs" />
-                  <span className="font-serif text-lg text-[#8E5B50]/50 -mt-3">:</span>
-                  <TimeUnit value={timeLeft.minutes} label="Mins" />
+                {/* [BOTTOM] Countdown - Sitting on Bottom Cream Fade */}
+                <div className="mb-2">
+                  <div className="flex items-center justify-center pt-2">
+                    <TimeUnit value={timeLeft.days} label="Days" />
+                    <span className="font-serif text-lg text-[#8E5B50]/50 -mt-3">:</span>
+                    <TimeUnit value={timeLeft.hours} label="Hrs" />
+                    <span className="font-serif text-lg text-[#8E5B50]/50 -mt-3">:</span>
+                    <TimeUnit value={timeLeft.minutes} label="Mins" />
+                  </div>
                 </div>
+
             </div>
          </div>
 
-         {/* --- BOTTOM SECTION (Remaining Space - Solid Color) --- */}
-         {/* Star Shape Decor */}
-         <div className="relative flex-1 bg-[#FDFBF7] min-h-[35vh] flex items-center justify-center overflow-hidden">
-            
-            {/* Background Texture for seamless feel */}
+         {/* 
+            PART B: FOOTER AREA (Bottom 25%) 
+         */}
+         <div className="relative h-[25%] bg-[#FDFBF7] flex items-center justify-center overflow-hidden -mt-1">
+            {/* Texture */}
             <div className="absolute inset-0 opacity-40 mix-blend-multiply pointer-events-none" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
             
-            {/* The Star Shape (As requested) */}
+            {/* Star Shape */}
             <div className="relative z-10 flex flex-col items-center animate-pulse-slow">
-               {/* Main 4-point Star */}
                <svg className="w-16 h-16 text-[#C08E86]" viewBox="0 0 24 24" fill="currentColor">
                    <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/>
                </svg>
-               
-               {/* Small accent stars */}
                <div className="absolute top-0 left-0 -translate-x-full -translate-y-1/2">
                   <svg className="w-4 h-4 text-[#B78A7D]/60 animate-pulse" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/>
@@ -176,11 +168,6 @@ export const Hero: React.FC = () => {
                   </svg>
                </div>
             </div>
-
-            {/* Optional text below star */}
-            <div className="absolute bottom-8 text-center opacity-50">
-               <p className="font-script text-xl text-[#B78A7D]">Save the Date</p>
-            </div>
          </div>
 
       </div>
@@ -188,9 +175,8 @@ export const Hero: React.FC = () => {
 
       {/* 
         =======================================================================
-        💻 DESKTOP LAYOUT (Retaining Full Screen for Grandeur)
+        💻 DESKTOP LAYOUT (Unchanged)
         =======================================================================
-        Using similar gradient logic for consistency but keeping full height
       */}
       <div className="hidden md:flex flex-col items-center justify-center w-full min-h-screen relative">
         {/* Background Layers */}
@@ -200,7 +186,6 @@ export const Hero: React.FC = () => {
               style={{ backgroundImage: `url("${bgUrl}")` }}
           ></div>
           
-          {/* Desktop Gradients */}
           <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-gray-200/50 to-transparent mix-blend-multiply"></div>
           <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/80 to-transparent"></div>
           
@@ -248,7 +233,7 @@ export const Hero: React.FC = () => {
           </div>
         </div>
 
-        {/* Desktop Bottom Star Decor */}
+        {/* Desktop Bottom Decor */}
         <div className="absolute bottom-12 left-0 right-0 flex justify-center items-end gap-12 z-20 pointer-events-none">
             <svg className="w-5 h-5 text-[#B78A7D]/60 animate-pulse" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
             <svg className="w-12 h-12 text-[#C08E86] animate-pulse-slow mb-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/></svg>
