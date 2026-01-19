@@ -48,12 +48,12 @@ export const Guestbook: React.FC = () => {
                        <div className="h-px bg-gold/50 flex-1"></div>
                     </div>
 
-                    {/* Option 2: Write a Wish - 'Cream Beige' Style */}
+                    {/* Option 2: Write a Wish - THEME UPDATE: SWAPPED COLORS & ROUNDED-FULL */}
                     <button 
                       onClick={() => setIsWriting(true)}
-                      className="group relative w-full flex items-center gap-6 px-6 py-5 bg-[#E6DABF] text-charcoal rounded-sm shadow-md hover:bg-gold hover:text-white transition-all duration-300 transform hover:-translate-y-0.5"
+                      className="group relative w-full flex items-center gap-6 px-6 py-5 bg-gold text-white rounded-full shadow-md hover:bg-[#E6DABF] hover:text-charcoal transition-all duration-300 transform hover:-translate-y-0.5"
                     >
-                       <div className="w-12 h-12 rounded-full bg-white/40 text-charcoal flex items-center justify-center group-hover:bg-white/20 group-hover:text-white transition-colors shrink-0">
+                       <div className="w-12 h-12 rounded-full bg-white/20 text-white flex items-center justify-center group-hover:bg-white/40 group-hover:text-charcoal transition-colors shrink-0">
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                        </div>
                        <div className="text-left flex-1">
@@ -251,10 +251,16 @@ const GuestbookForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
           />
         </div>
 
+        {/* 
+            THEME UPDATE: SWAPPED COLORS & ROUNDED-FULL
+            Default: bg-gold text-white
+            Hover: bg-[#E6DABF] text-charcoal
+            Shape: rounded-full
+        */}
         <button 
           type="submit" 
           disabled={status === 'processing' || status === 'submitting'}
-          className="w-full bg-[#E6DABF] text-charcoal py-4 px-6 font-sans text-xs font-bold uppercase tracking-widest hover:bg-gold hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md mt-4 flex items-center justify-center gap-2 rounded-sm border border-transparent hover:border-gold/20"
+          className="w-full bg-gold text-white py-4 px-6 font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#E6DABF] hover:text-charcoal transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md mt-4 flex items-center justify-center gap-2 rounded-full border border-transparent hover:border-gold/20 hover:shadow-lg"
         >
           {status === 'processing' || status === 'submitting' ? (
             <>

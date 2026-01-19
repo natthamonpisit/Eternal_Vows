@@ -128,11 +128,16 @@ export const RsvpForm: React.FC = () => {
               ></textarea>
             </div>
 
-            {/* Button: 'Cream Beige' Style to match Luxury theme */}
+            {/* 
+               THEME UPDATE: SWAPPED COLORS & ROUNDED-FULL
+               Default: bg-gold text-white (Strong Call to Action)
+               Hover: bg-[#E6DABF] text-charcoal (Soft Paper feel)
+               Shape: rounded-full (Pill shape)
+            */}
             <button 
               type="submit" 
               disabled={status === 'submitting'}
-              className="w-full bg-[#E6DABF] text-charcoal font-sans font-bold uppercase tracking-widest py-4 px-6 hover:bg-gold hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-6 shadow-md rounded-sm border border-transparent hover:border-gold/20"
+              className="w-full bg-gold text-white font-sans font-bold uppercase tracking-widest py-4 px-6 hover:bg-[#E6DABF] hover:text-charcoal transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-6 shadow-md rounded-full border border-transparent hover:border-gold/20 hover:shadow-lg"
             >
               {status === 'submitting' ? 'Sending Response...' : 'Confirm R.S.V.P'}
             </button>
