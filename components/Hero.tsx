@@ -4,16 +4,15 @@ import { fetchGallery } from '../services/api';
 
 /* 
   ========================================================================================
-  🤵👰 COMPONENT: Hero (ส่วนหัวข้อหน้าแรก - Re-Layout V.12 The One Paper Concept)
+  🤵👰 COMPONENT: Hero (Layout V.14 - Final Correction)
   ========================================================================================
   
-  [Design Concept]
-  - "Paper Everywhere": No local backgrounds. Everything is transparent to show the global App.tsx texture.
-  - 4 Vertical Blocks:
-    1. Intro: "The Wedding Of"
-    2. Main: Names -> Image (Landscape/Contain) -> Date/Location
-    3. Timer: Countdown
-    4. Footer: Star
+  [Mobile Structure - 4 Blocks]
+  1. Intro: "The Wedding Of" (On Transparent Paper)
+  2. Main: Image Background + Overlay Text (Names, Date, Location)
+     *** Names must be on ONE LINE ***
+  3. Timer: Countdown (On Transparent Paper)
+  4. Footer: Star (On Transparent Paper)
 */
 
 export const Hero: React.FC = () => {
@@ -73,61 +72,53 @@ export const Hero: React.FC = () => {
   );
 
   return (
-    // bg-transparent is KEY here. We rely 100% on App.tsx for the background color/texture.
-    <section className="relative w-full h-[100dvh] bg-transparent overflow-hidden">
+    // bg-transparent ensures global App texture visibility for Blocks 1, 3, 4
+    <section className="relative w-full h-[100dvh] bg-transparent overflow-hidden flex flex-col">
       
       {/* 
         =======================================================================
-        📱 MOBILE LAYOUT (Flexbox Stack)
+        📱 MOBILE LAYOUT (4 Vertical Blocks)
         =======================================================================
       */}
-      <div className="md:hidden w-full h-full flex flex-col px-4">
+      <div className="md:hidden w-full h-full flex flex-col">
          
-         {/* [BLOCK 1] The Wedding Of */}
-         <div className="flex-none h-[12%] flex items-end justify-center pb-2">
+         {/* [BLOCK 1] Intro - Top Paper Area */}
+         <div className="flex-none h-[15%] flex items-end justify-center pb-4 z-10">
             <p className="text-[#5D4037] font-sans tracking-[0.3em] uppercase text-[10px] font-bold">
               The Wedding Of
             </p>
          </div>
 
-         {/* [BLOCK 2] Names & Image & Date */}
-         <div className="flex-1 flex flex-col items-center min-h-0">
-             
-             {/* 2.1 Names */}
-             <div className="flex-none pt-2 pb-4 text-center z-10">
-                <h1 
-                  className="font-script text-[#C08E86] leading-none whitespace-nowrap drop-shadow-sm"
-                  style={{ fontSize: '13vw' }} 
-                >
-                  Natthamonpisit
-                </h1>
-                <h1 
-                  className="font-script text-[#C08E86] leading-none whitespace-nowrap drop-shadow-sm -mt-2"
-                  style={{ fontSize: '13vw' }} 
-                >
-                  & Sorot
-                </h1>
+         {/* [BLOCK 2] Image Card & Main Text (Overlaid) */}
+         <div className="flex-grow w-full relative z-0">
+             {/* Background Image */}
+             <div 
+               className="absolute inset-0 bg-cover bg-center bg-no-repeat shadow-inner"
+               style={{ backgroundImage: `url("${bgUrl}")` }}
+             >
+               {/* Overlay for text readability */}
+               <div className="absolute inset-0 bg-black/25"></div>
              </div>
 
-             {/* 2.2 Image (The Heart) */}
-             <div className="flex-1 w-full relative mb-4">
-                <div 
-                  className="absolute inset-0 bg-contain bg-center bg-no-repeat drop-shadow-xl"
-                  style={{ backgroundImage: `url("${bgUrl}")` }}
-                ></div>
-             </div>
-
-             {/* 2.3 Date & Location */}
-             <div className="flex-none pb-4 text-center">
-               <div className="flex flex-col items-center gap-1 text-[#5D4037] font-serif">
-                 <span className="font-semibold text-xl tracking-wide">March 21, 2026</span>
-                 <p className="font-medium text-xs text-[#B78A7D] tracking-[0.1em] uppercase">Dalva le ville, Bangkok</p>
-               </div>
+             {/* Text Content Overlay */}
+             <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 w-full">
+                {/* Names: Single Line forced by whitespace-nowrap & sizing */}
+                <h1 
+                  className="font-script text-[#FDFBF7] leading-none whitespace-nowrap drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] w-full px-1"
+                  style={{ fontSize: '9vw' }} 
+                >
+                  Natthamonpisit & Sorot
+                </h1>
+                
+                <div className="mt-3 flex flex-col items-center gap-1 text-[#FDFBF7] drop-shadow-md animate-fade-in">
+                   <span className="font-serif text-lg tracking-wide">March 21, 2026</span>
+                   <p className="font-sans text-[9px] uppercase tracking-[0.2em] opacity-90 text-[#EBCBC5]">Dalva le ville, Bangkok</p>
+                </div>
              </div>
          </div>
 
-         {/* [BLOCK 3] Countdown */}
-         <div className="flex-none pb-8 flex items-center justify-center">
+         {/* [BLOCK 3] Countdown - Bottom Paper Area */}
+         <div className="flex-none h-[18%] flex items-center justify-center z-10">
             <div className="flex items-center justify-center">
               <TimeUnit value={timeLeft.days} label="Days" />
               <span className="font-serif text-lg text-[#8E5B50]/50 -mt-3">:</span>
@@ -137,8 +128,8 @@ export const Hero: React.FC = () => {
             </div>
          </div>
 
-         {/* [BLOCK 4] Footer Star (The Anchor) */}
-         <div className="flex-none h-[12%] flex items-start justify-center pt-2">
+         {/* [BLOCK 4] Footer Star - Bottom Anchor */}
+         <div className="flex-none h-[12%] flex items-start justify-center pt-2 z-10">
             <div className="flex flex-col items-center animate-pulse-slow">
                <svg className="w-10 h-10 text-[#C08E86]" viewBox="0 0 24 24" fill="currentColor">
                    <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/>
@@ -159,15 +150,16 @@ export const Hero: React.FC = () => {
 
       {/* 
         =======================================================================
-        💻 DESKTOP LAYOUT
+        💻 DESKTOP LAYOUT (Full Screen Elegance)
         =======================================================================
       */}
       <div className="hidden md:flex flex-col items-center justify-center w-full min-h-screen relative">
         <div className="absolute inset-0 z-0">
           <div 
-              className="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-20 scale-95"
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 scale-105"
               style={{ backgroundImage: `url("${bgUrl}")` }}
           ></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7] via-transparent to-[#FDFBF7]"></div>
         </div>
 
         <div className="flex-1 w-full max-w-7xl flex flex-col items-center justify-center relative z-20 px-4 pb-12">
@@ -175,12 +167,13 @@ export const Hero: React.FC = () => {
             <p className="text-[#8E5B50] font-sans tracking-[0.25em] uppercase text-xl font-bold drop-shadow-sm mb-1">
               The Wedding Of
             </p>
-            <h1 className="font-script leading-normal py-6 px-2 drop-shadow-sm flex flex-row items-center justify-center gap-4">
-              <span className="text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-2 px-2 whitespace-nowrap">
+            {/* Desktop: Names also on one line */}
+            <h1 className="font-script leading-normal py-6 px-2 drop-shadow-sm flex flex-row items-center justify-center gap-4 whitespace-nowrap">
+              <span className="text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-2 px-2">
                 Natthamonpisit
               </span>
               <span className="font-serif text-5xl text-[#B78A7D]">&</span>
-              <span className="text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-2 px-2 whitespace-nowrap">
+              <span className="text-7xl bg-gradient-to-r from-[#4A3728] via-[#8E5B50] to-[#4A3728] bg-clip-text text-transparent pb-2 px-2">
                 Sorot
               </span>
             </h1>
