@@ -27,7 +27,10 @@ export const submitGuestbook = async (data: Omit<GuestbookPayload, 'action'>): P
           const uploadRes = await fetch('/api/upload', {
              method: 'POST',
              headers: { 'Content-Type': 'application/json' },
-             body: JSON.stringify({ image: data.image })
+             body: JSON.stringify({ 
+               image: data.image,
+               folder: 'Wedding_OukBew/Guestbook' // Explicitly set folder
+             })
           });
           
           if (uploadRes.ok) {
@@ -38,8 +41,6 @@ export const submitGuestbook = async (data: Omit<GuestbookPayload, 'action'>): P
                throw new Error("Image upload failed: " + uploadResult.error);
             }
           } else {
-             // In preview mode or if API fails, we can't upload. 
-             // Just skip upload or handle gracefully.
              console.warn("Upload API not available in preview.");
           }
        } catch (err) {
@@ -49,12 +50,11 @@ export const submitGuestbook = async (data: Omit<GuestbookPayload, 'action'>): P
     }
 
     // Step 2: Submit Text Data + Image URL to Google Sheets
-    // Note: We send the 'imageUrl' string instead of the base64 'image' data
     const payload = { 
        action: 'guestbook', 
        name: data.name, 
        message: data.message, 
-       image: imageUrl // Sending URL string now, not base64
+       image: imageUrl 
     };
 
     const response = await fetch(API_URL, {
@@ -70,9 +70,63 @@ export const submitGuestbook = async (data: Omit<GuestbookPayload, 'action'>): P
   }
 };
 
+// NEW FUNCTION: Submit Payment Slip
+export const submitSlip = async (data: { name: string; image: string }): Promise<ApiResponse<null>> => {
+  try {
+    let imageUrl = '';
+
+    if (!data.image) {
+      return { success: false, error: "Please attach a slip image." };
+    }
+
+    // 1. Upload to Cloudinary (Folder: slippayment)
+    try {
+      const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            image: data.image,
+            folder: 'Wedding_OukBew/slippayment' 
+          })
+      });
+      
+      if (uploadRes.ok) {
+        const uploadResult = await uploadRes.json();
+        if (uploadResult.success) {
+            imageUrl = uploadResult.url;
+        } else {
+            throw new Error("Slip upload failed: " + uploadResult.error);
+        }
+      } else {
+        throw new Error("Upload server error.");
+      }
+    } catch (err) {
+      console.error("Slip Upload Error", err);
+      return { success: false, error: "Failed to upload slip. Please try again." };
+    }
+
+    // 2. Submit to Google Sheets (Action: uploadSlip)
+    const payload = {
+      action: 'uploadSlip',
+      name: data.name,
+      image: imageUrl
+    };
+
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    
+    const result = await response.json();
+    return result;
+
+  } catch (error) {
+    console.error("Submit Slip Error:", error);
+    return { success: false, error: String(error) };
+  }
+};
+
 export const fetchGallery = async (folderName?: string): Promise<GalleryItem[]> => {
-  // Use our new Vercel API endpoint for Cloudinary
-  // Accepts optional folderName query param
   try {
     const url = folderName 
       ? `/api/gallery?folder=${encodeURIComponent(folderName)}`
@@ -80,7 +134,6 @@ export const fetchGallery = async (folderName?: string): Promise<GalleryItem[]> 
       
     const response = await fetch(url);
     if (!response.ok) {
-       // If API returns 404 (common in Preview) or 500
        return [];
     }
     const result = await response.json();
@@ -90,7 +143,6 @@ export const fetchGallery = async (folderName?: string): Promise<GalleryItem[]> 
     return [];
   } catch (error) {
     console.warn("Gallery API Error (likely preview mode):", error);
-    // Return empty array so frontend falls back to Mock Data
     return [];
   }
 };

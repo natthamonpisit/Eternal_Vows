@@ -24,15 +24,18 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { image } = req.body;
+    const { image, folder } = req.body;
 
     if (!image) {
       return res.status(400).json({ error: 'No image provided' });
     }
 
-    // Upload to 'Wedding_OukBew/Guestbook' folder
+    // Default to Guestbook if folder is not specified
+    const targetFolder = folder || 'Wedding_OukBew/Guestbook';
+
+    // Upload to specified folder
     const uploadResponse = await cloudinary.uploader.upload(image, {
-      folder: 'Wedding_OukBew/Guestbook',
+      folder: targetFolder,
       resource_type: 'auto'
     });
 
