@@ -8,9 +8,11 @@ import { fetchGallery } from '../services/api';
   
   [Mobile Layout Structure - 4 Fixed Blocks]
   1. Top Block: "The Wedding Of" text (On Transparent/Paper Background)
+     - UPDATED: Centered Vertically, Slightly Larger Font
   2. Image Block: Large Horizontal Image.
      *** CRITICAL: Names + Date + Location MUST be overlaid ON THIS IMAGE ***
   3. Countdown Block: Timer (On Transparent/Paper Background)
+     - UPDATED: Include Seconds
   4. Footer Block: Star Icon (On Transparent/Paper Background)
 
   [Typography Rule]
@@ -62,8 +64,9 @@ export const Hero: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // Adjusted mx for mobile to fit 4 units (Days, Hrs, Mins, Secs)
   const TimeUnit = ({ value, label }: { value: number, label: string }) => (
-    <div className="flex flex-col items-center mx-2 sm:mx-3">
+    <div className="flex flex-col items-center mx-1.5 sm:mx-3">
       <span className="font-serif text-xl sm:text-2xl text-[#5D4037] font-medium tabular-nums leading-none drop-shadow-sm">
         {String(value).padStart(2, '0')}
       </span>
@@ -85,8 +88,9 @@ export const Hero: React.FC = () => {
       <div className="md:hidden w-full h-full flex flex-col">
          
          {/* [BLOCK 1] Intro - Top Paper Area */}
-         <div className="flex-none h-[15%] flex items-end justify-center pb-4 z-10">
-            <p className="text-[#5D4037] font-sans tracking-[0.3em] uppercase text-[10px] font-bold">
+         {/* UPDATED: items-center (Center Vertically), text-xs (Larger) */}
+         <div className="flex-none h-[15%] flex items-center justify-center z-10">
+            <p className="text-[#5D4037] font-sans tracking-[0.3em] uppercase text-xs font-bold mt-2">
               The Wedding Of
             </p>
          </div>
@@ -124,6 +128,7 @@ export const Hero: React.FC = () => {
          </div>
 
          {/* [BLOCK 3] Countdown - Bottom Paper Area */}
+         {/* UPDATED: Added Seconds back */}
          <div className="flex-none h-[18%] flex items-center justify-center z-10">
             <div className="flex items-center justify-center">
               <TimeUnit value={timeLeft.days} label="Days" />
@@ -131,6 +136,8 @@ export const Hero: React.FC = () => {
               <TimeUnit value={timeLeft.hours} label="Hrs" />
               <span className="font-serif text-lg text-[#8E5B50]/50 -mt-3">:</span>
               <TimeUnit value={timeLeft.minutes} label="Mins" />
+              <span className="font-serif text-lg text-[#8E5B50]/50 -mt-3">:</span>
+              <TimeUnit value={timeLeft.seconds} label="Secs" />
             </div>
          </div>
 

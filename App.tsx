@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Envelope } from './components/Envelope';
 import { Hero } from './components/Hero';
@@ -166,7 +165,8 @@ const FloatingCTA = () => {
       <a 
         href="#rsvp-section"
         onClick={handleClick}
-        className="bg-charcoal text-white font-sans uppercase tracking-widest text-[10px] font-bold py-3 px-5 rounded-full shadow-xl hover:bg-black transition-colors cursor-pointer border border-white/20"
+        // Change from bg-charcoal to bg-[#C5908E] (Dusty Pink)
+        className="bg-[#C5908E] text-white font-sans uppercase tracking-widest text-[10px] font-bold py-3 px-5 rounded-full shadow-xl hover:bg-[#B78A7D] transition-colors cursor-pointer border border-white/20"
       >
         RSVP Now
       </a>
