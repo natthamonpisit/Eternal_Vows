@@ -3,14 +3,29 @@ import { fetchGallery } from '../services/api';
 
 /* 
   ========================================================================================
-  HERO COMPONENT - 4 BLOCKS CONCEPT (Unified Mobile & Desktop)
+  💎 HERO SECTION: MASTER LAYOUT (FINAL APPROVED)
   ========================================================================================
+  Ref: "พี่ชอบ layout นี้มากๆ" - Locked for production.
   
-  Structure:
-  1. Top Block: "The Wedding Of" (Paper Texture)
-  2. Image Block: Main Visual + Names Overlay (Hero Image)
-  3. Countdown Block: Timer (Paper Texture)
-  4. Footer Block: Star Icon (Paper Texture)
+  [ARCHITECTURE: THE 4-TIER VERTICAL STACK]
+  เราแบ่งหน้าจอเป็น 4 ส่วนในแนวตั้ง เพื่อให้ดูโปร่งและแพง (Vertical Rhythm)
+  
+  1. 👑 HEAD (15% Height): "The Wedding Of"
+     - หน้าที่: เปิดหัวอย่างสง่างาม
+  
+  2. 🖼️ BODY (Flex Grow): "Main Image"
+     - หน้าที่: จุดสายตาหลัก (Focal Point)
+     - Desktop Trick: ใช้ Padding ด้านข้างเพื่อให้ภาพดูเหมือน "กรอบรูป" ไม่เต็มจอจนอึดอัด
+  
+  3. ⏳ COUNTDOWN (15% Height): "Timer"
+     - หน้าที่: เชื่อมต่ออารมณ์ก่อนจบหน้าแรก
+     - Desktop Size: ลดขนาดลง 15% จากเดิมเพื่อให้ดู Minimal พอดีคำ
+  
+  4. ⭐ FOOTER (12% Height): "Star Icon" (**CRITICAL PART**)
+     - Height: 12% (เพิ่มจาก 10%) เพื่อกันที่ให้ดาวหายใจ
+     - Z-Index: z-30 relative (สำคัญมาก!) -> เพื่อให้ดาว "ลอยอยู่เหนือ" Section ถัดไป
+       เวลา Scroll หน้าถัดไปขึ้นมา ดาวจะไม่โดนกลืนหายไป
+  ========================================================================================
 */
 
 export const Hero: React.FC = () => {
@@ -221,10 +236,10 @@ export const Hero: React.FC = () => {
 
          {/* [BLOCK 4] Footer Star */}
          {/* 
-            DESIGN UPDATE: 
-            - Increased height to h-[12%] (was 10%)
-            - Added pb-8 for bottom spacing
-            - Added z-30 relative to force this block to be ON TOP of any following sections
+            DESIGN UPDATE (FINAL): 
+            - Height: 12% (Breathing room)
+            - Padding Bottom: pb-8
+            - Z-Index: z-30 relative (Prevents overlap by next section)
          */}
          <div className="flex-none h-[12%] flex items-start justify-center pt-2 pb-8 z-30 relative">
              <div className="flex flex-col items-center animate-pulse-slow hover:text-[#B78A7D] transition-colors cursor-default">
