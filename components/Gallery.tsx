@@ -29,54 +29,52 @@ export const Gallery: React.FC = () => {
     loadImages();
   }, []);
 
-  // 📱 MOBILE LOGIC: 2 Columns (Left/Right Distribution)
-  const mobileColumns = useMemo(() => {
-    // ใช้ Logic เดิมสำหรับมือถือเพราะจอแคบ การสลับฟันปลา work สุดแล้ว
-    const left: GalleryItem[] = [];
-    const right: GalleryItem[] = [];
-    images.forEach((img, i) => {
-      if (i % 2 === 0) left.push(img);
-      else right.push(img);
-    });
-    return { left, right };
-  }, [images]);
-
-  // 💻 DESKTOP LOGIC: Smart Masonry (Shortest Column First)
-  // Logic: คำนวณความสูงสะสมของแต่ละเสา แล้วหย่อนรูปลงในเสาที่ "เตี้ยที่สุด" ณ ขณะนั้น
-  const desktopColumns = useMemo(() => {
-    // 1. สร้างถังเก็บรูป 3 ใบ
-    const col1: GalleryItem[] = [];
-    const col2: GalleryItem[] = [];
-    const col3: GalleryItem[] = [];
+  /* 
+    ========================================================================================
+    🧠 CORE LOGIC: GREEDY MASONRY ALGORITHM (Shortest Column First)
+    ========================================================================================
+    [Note for Maintenance]
+    ห้ามเปลี่ยน Logic นี้กลับไปเป็น Grid หรือ Flex ธรรมดาเด็ดขาด
     
-    // 2. ตัวแปรเก็บความสูงสะสมของแต่ละเสา (เริ่มต้น 0)
-    // เราใช้ Aspect Ratio เป็นหน่วยความสูง (Height / Width)
-    const colHeights = [0, 0, 0]; 
+    Concept: "เทน้ำลงแก้วที่พร่องที่สุด"
+    1. สร้างถัง (Columns) ตามจำนวนที่ต้องการ (Mobile=2, Desktop=3)
+    2. วนลูปรูปทีละใบ คำนวณความสูงสัมพัทธ์ (Aspect Ratio)
+    3. เช็คว่า "เสาไหนเตี้ยสุด" ณ ขณะนั้น
+    4. หย่อนรูปลงเสานั้น แล้วบวกความสูงเพิ่ม
+    
+    Result: ท้ายตารางจะเท่ากันเสมอ ไม่ว่ารูปจะมาแนวตั้งหรือแนวนอนเยอะแค่ไหน
+  */
+  const distributeToColumns = (items: GalleryItem[], colCount: number) => {
+    // 1. Init Buckets
+    const columns: GalleryItem[][] = Array.from({ length: colCount }, () => []);
+    
+    // 2. Track Heights (Using Aspect Ratio as unit)
+    const colHeights = new Array(colCount).fill(0);
 
-    images.forEach((img) => {
-      // คำนวณความสูงสัมพัทธ์ (Aspect Ratio)
-      // ถ้าไม่มีข้อมูล (Mock data) ให้สมมติว่าเป็นสี่เหลี่ยมจัตุรัส (1)
+    items.forEach((img) => {
+      // Calculate Ratio (Height / Width)
+      // If dimensions missing, assume square (1)
       const ratio = (img.height && img.width) ? (img.height / img.width) : 1;
 
-      // 3. หาเสาที่เตี้ยที่สุด (Find index of min height)
+      // 3. Find Shortest Column
       const minHeight = Math.min(...colHeights);
       const shortestColIndex = colHeights.indexOf(minHeight);
 
-      // 4. หย่อนรูปลงเสานั้น และบวกความสูงเพิ่ม
-      if (shortestColIndex === 0) {
-        col1.push(img);
-      } else if (shortestColIndex === 1) {
-        col2.push(img);
-      } else {
-        col3.push(img);
-      }
-
-      // Update ความสูงของเสานั้น
+      // 4. Push Image
+      columns[shortestColIndex].push(img);
+      
+      // Update Height
       colHeights[shortestColIndex] += ratio;
     });
 
-    return [col1, col2, col3];
-  }, [images]);
+    return columns;
+  };
+
+  // 📱 MOBILE: 2 Columns (Smart Balanced)
+  const mobileColumns = useMemo(() => distributeToColumns(images, 2), [images]);
+
+  // 💻 DESKTOP: 3 Columns (Smart Balanced)
+  const desktopColumns = useMemo(() => distributeToColumns(images, 3), [images]);
 
   return (
     // Section uses transparent background to show App global texture
@@ -101,25 +99,26 @@ export const Gallery: React.FC = () => {
           <FadeInUp delay="200ms">
              
              {/* 
-                📱 MOBILE LAYOUT: DUAL COLUMN (Manual Masonry)
+                📱 MOBILE LAYOUT: 2 COLUMNS (Smart Masonry)
+                ใช้ Logic 'Shortest Column First' เพื่อเกลี่ยรูปให้เท่ากัน
              */}
              <div className="flex md:hidden gap-3 items-start">
-                <div className="flex-1 flex flex-col gap-3">
-                   {mobileColumns.left.map((img, idx) => (
-                      <ImageCard key={`m-l-${idx}`} img={img} onClick={() => setSelectedImage(img.full)} />
-                   ))}
-                </div>
-                <div className="flex-1 flex flex-col gap-3">
-                   {mobileColumns.right.map((img, idx) => (
-                      <ImageCard key={`m-r-${idx}`} img={img} onClick={() => setSelectedImage(img.full)} />
-                   ))}
-                </div>
+                {mobileColumns.map((col, colIdx) => (
+                  <div key={`m-col-${colIdx}`} className="flex-1 flex flex-col gap-3">
+                     {col.map((img, imgIdx) => (
+                        <ImageCard 
+                          key={`m-${colIdx}-${imgIdx}`} 
+                          img={img} 
+                          onClick={() => setSelectedImage(img.full)} 
+                        />
+                     ))}
+                  </div>
+                ))}
              </div>
 
              {/* 
-                💻 DESKTOP LAYOUT: TRIPLE COLUMN (Smart Masonry)
-                ใช้ Logic ใหม่: "Shortest Column First" 
-                เกลี่ยความสูงเสาให้เท่ากัน โดยดูจาก Ratio จริงของรูป
+                💻 DESKTOP LAYOUT: 3 COLUMNS (Smart Masonry)
+                ใช้ Logic 'Shortest Column First' เช่นกัน
              */}
              <div className="hidden md:flex gap-6 items-start">
                {desktopColumns.map((col, colIdx) => (
