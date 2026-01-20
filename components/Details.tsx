@@ -185,20 +185,22 @@ export const Details: React.FC = () => {
       
       {/* 
           Standard Color Block Section
+          MOBILE UPDATE: Reduced padding (py-12)
       */}
-      <div className="bg-old-rose py-24 relative overflow-hidden shadow-[0_0_50px_rgba(192,142,134,0.3)] z-10">
+      <div className="bg-old-rose py-12 md:py-24 relative overflow-hidden shadow-[0_0_50px_rgba(192,142,134,0.3)] z-10">
         
         {/* Background Texture for Details Section */}
         <div className="absolute inset-0 opacity-60 pointer-events-none mix-blend-overlay" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
 
-        <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10 space-y-24">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10 space-y-16 md:space-y-24">
           
           {/* =========================================
               SECTION 1: THE SCHEDULE
              ========================================= */}
           <div>
             <FadeInUp>
-              <div className="text-center mb-16 space-y-4">
+              {/* MOBILE UPDATE: Reduced margin-bottom (mb-8) */}
+              <div className="text-center mb-8 md:mb-16 space-y-2 md:space-y-4">
                 {/* 
                   DESIGN RULE: HEADINGS
                   Mobile: text-3xl (30px) - Reduced for breathing room
@@ -216,7 +218,7 @@ export const Details: React.FC = () => {
                   href={addToCalendarUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-2 border border-[#F3E5AB]/30 rounded-full text-[#F3E5AB] hover:bg-[#F3E5AB] hover:text-old-rose transition-all duration-300 text-xs font-sans uppercase tracking-widest font-bold mt-6"
+                  className="inline-flex items-center gap-2 px-6 py-2 border border-[#F3E5AB]/30 rounded-full text-[#F3E5AB] hover:bg-[#F3E5AB] hover:text-old-rose transition-all duration-300 text-xs font-sans uppercase tracking-widest font-bold mt-4 md:mt-6"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                   Add to Calendar
@@ -228,7 +230,8 @@ export const Details: React.FC = () => {
                {/* Timeline Line */}
                <div className="absolute left-[24px] md:left-[320px] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#F3E5AB]/30 to-transparent"></div>
 
-               <div className="space-y-12">
+               {/* MOBILE UPDATE: Reduced spacing (space-y-5) */}
+               <div className="space-y-5 md:space-y-12">
                  {events.map((event, idx) => (
                    <FadeInUp key={idx} delay={`${idx * 150}ms`}>
                      <div className="relative flex items-center group">
@@ -288,7 +291,7 @@ export const Details: React.FC = () => {
           {/* =========================================
               SECTION 2: LOCATION & VENUE
              ========================================= */}
-          <div className="border-t border-cream/20 pt-16 md:pt-24">
+          <div className="border-t border-cream/20 pt-10 md:pt-24">
              <FadeInUp>
                <div className="text-center mb-12">
                   {/* DESIGN RULE: SECTION HEADER - Mobile: text-3xl */}
