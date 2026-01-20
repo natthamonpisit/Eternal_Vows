@@ -138,16 +138,30 @@ export default function App() {
 
   useEffect(() => {
     // SCROLLBAR MANAGEMENT
-    if (isLiveMode) {
-      // FIX: FORCE HIDDEN ON LIVE MODE to remove the pink dash/ghost scrollbar
-      document.body.style.overflow = 'hidden'; 
-    } else if (showContent) {
-      // Allow default scrolling for main site
-      document.body.style.overflow = ''; 
-    } else {
-      // Envelope closed
-      document.body.style.overflow = 'hidden';
-    }
+    const applyScrollSettings = () => {
+      if (isLiveMode) {
+        // FIX: FORCE HIDDEN ON BOTH HTML & BODY for Live Mode
+        // This removes the pink scrollbar ghost completely
+        document.documentElement.style.overflow = 'hidden'; 
+        document.body.style.overflow = 'hidden'; 
+      } else if (showContent) {
+        // Allow default scrolling for main site
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = ''; 
+      } else {
+        // Envelope closed
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+      }
+    };
+
+    applyScrollSettings();
+
+    // Cleanup function
+    return () => {
+       document.documentElement.style.overflow = '';
+       document.body.style.overflow = '';
+    };
   }, [showContent, isLiveMode]);
 
   // If in Live Mode, render ONLY the Live Wall

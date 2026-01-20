@@ -150,39 +150,36 @@ export const LiveWall: React.FC = () => {
           <div className="w-full h-full flex items-center justify-center">
              <div 
                key={activeIndex} 
-               className="
+               className={`
                  relative bg-white shadow-2xl rounded-2xl overflow-hidden animate-fade-in border border-white/50 ring-1 ring-gold/10
                  
-                 /* FLEX LAYOUT: Column on Mobile Portrait, Row on Landscape */
-                 flex flex-col landscape:flex-row
-                 
-                 /* WIDTH CONTROLS */
-                 /* Portrait: Full width but capped */
+                 /* ================================================= */
+                 /* 📱 MOBILE PORTRAIT STYLES                        */
+                 /* ================================================= */
+                 flex flex-col 
                  w-full max-w-[340px] 
-                 /* Landscape: Auto width (shrink to fit content) + Max width cap to prevent over-stretching */
+                 h-full /* Stretch to fill available vertical space on mobile */
+                 
+                 /* ================================================= */
+                 /* 💻 DESKTOP LANDSCAPE STYLES                      */
+                 /* ================================================= */
+                 landscape:flex-row 
                  landscape:w-auto landscape:max-w-[85vw]
+                 landscape:h-[65vh] /* Fixed optimized height for desktop projector */
+                 landscape:my-auto /* Center vertically in the container */
                  
-                 /* HEIGHT CONTROLS */
-                 /* Portrait: 'h-full' to fill the available space (consuming the gap below) */
-                 /* This makes the card taller on mobile, allowing text section to expand via flex-1 */
-                 h-full 
-                 /* Landscape: Fixed viewport height percentage to drive the aspect ratio */
-                 landscape:h-[75vh] md:landscape:h-[60vh]
-                 
-                 /* Centering */
-                 my-auto mx-auto
-               "
+                 mx-auto
+               `}
              >
                 {/* Image Section */}
                 {currentWish?.imageUrl ? (
                   <div className="
                     relative bg-gray-100 overflow-hidden flex-shrink-0
                     
-                    /* Portrait: Full width, REDUCED ASPECT RATIO (Taller than square, but shorter visually in flex) */
-                    /* aspect-[10/9] keeps the image height controlled so text has more room when card is tall */
+                    /* Portrait: Full width, aspect ratio tuned for mobile balance */
                     w-full aspect-[10/9] 
                     
-                    /* Landscape: Height matches container (100%), Width auto, Aspect Ratio 4:3 (or 1:1) */
+                    /* Landscape: Height follows container, Width auto, Ratio 4:3 */
                     landscape:h-full landscape:w-auto landscape:aspect-[4/3]
                   ">
                     {/* Layer 1: Blurred Background (To fill any gaps nicely) */}
@@ -218,8 +215,8 @@ export const LiveWall: React.FC = () => {
                    landscape:flex-none landscape:w-[280px] md:landscape:w-[320px]
                    
                    relative flex flex-col justify-center overflow-hidden
-                   /* UPDATED PADDING: Reduced on mobile to give more space for text */
-                   p-4 md:p-6 landscape:p-6
+                   
+                   p-4 md:p-6 landscape:p-8
                    
                    ${!currentWish?.imageUrl ? 'items-center text-center' : ''}
                    min-h-0
