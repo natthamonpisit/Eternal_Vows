@@ -39,12 +39,15 @@ export const MoneyGift: React.FC = () => {
           <div className="text-center mb-8">
              {/* 
                  DESIGN RULE UPDATE:
-                 Mobile: text-3xl (30px) -> Fixes line wrap issue for "Gift with Love"
+                 Mobile: text-2xl (24px)
                  Desktop: text-5xl (48px)
              */}
-             <h2 className="font-sans text-3xl md:text-5xl text-gold-shine leading-normal py-2 uppercase tracking-wider font-bold">Gift with Love</h2>
+             <h2 className="font-sans text-2xl md:text-5xl text-gold-shine leading-normal py-2 uppercase tracking-wider font-bold">Gift with Love</h2>
              {view === 'info' && (
-                <p className="font-sans text-xs md:text-base text-gray-500 leading-relaxed px-0 md:px-12 mt-2 font-medium tracking-wide">
+                // TYPOGRAPHY UPDATE:
+                // 1. Reduced size: text-[10px] (Mobile) / text-sm (Desktop)
+                // 2. Kept leading-relaxed for readability
+                <p className="font-sans text-[10px] md:text-sm text-gray-500 leading-relaxed px-0 md:px-12 mt-2 font-medium tracking-wide">
                   Your presence is the most precious gift to us. For those who wish to offer a gift of celebration, we have provided this digital option for you.
                 </p>
              )}
@@ -69,8 +72,11 @@ export const MoneyGift: React.FC = () => {
               
               <div className="mb-8">
                 <p className="font-sans text-xs text-gold uppercase tracking-widest font-bold mb-2">KASIKORN BANK</p>
-                {/* DESIGN UPDATE: Changed to Sans-serif & Bold for better readability */}
-                <p className="font-sans text-sm md:text-base text-charcoal font-semibold tracking-wide leading-relaxed">
+                {/* 
+                   TYPOGRAPHY UPDATE:
+                   - Changed font-semibold -> font-normal (Thinner/Lighter)
+                */}
+                <p className="font-sans text-sm md:text-base text-charcoal font-normal tracking-wide leading-relaxed">
                   Sorot Meesukanukul and<br/>Natthamonpisit Burakrai
                 </p>
               </div>
@@ -297,7 +303,7 @@ const SlipUploadForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             Shape: rounded-full
         */}
         <button 
-          type="submit"
+          type="submit" 
           disabled={status === 'processing' || status === 'submitting'}
           className="w-full bg-gold text-white py-4 font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#E6DABF] hover:text-charcoal transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md rounded-full border border-transparent hover:border-gold/20 hover:shadow-lg"
         >
