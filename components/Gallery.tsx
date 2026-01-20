@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { fetchGallery } from '../services/api';
 import { GalleryItem } from '../types';
 import { MOCK_GALLERY_IMAGES } from '../constants';
@@ -12,14 +12,12 @@ export const Gallery: React.FC = () => {
   useEffect(() => {
     const loadImages = async () => {
       // 1. Explicitly fetch from 'Wedding_OukBew/Ourmoment' folder
-      // Fixed: Removed the hardcoded length check (rawItems.length !== 17)
-      // Now it supports ANY number of images.
       const rawItems = await fetchGallery('Wedding_OukBew/Ourmoment');
       
       if (rawItems.length > 0) {
         setImages(rawItems);
       } else {
-        // Fallback only if strictly empty (e.g. API fail or empty folder)
+        // Fallback
         console.log("No images found in Ourmoment, using Mock Data.");
         const mocks = MOCK_GALLERY_IMAGES.map(url => ({ thumb: url, full: url }));
         setImages(mocks);
@@ -30,46 +28,55 @@ export const Gallery: React.FC = () => {
     loadImages();
   }, []);
 
-  // 🍱 LAYOUT LOGIC
-  // Mobile: CSS Columns (Masonry)
-  // Desktop: CSS Grid with Dynamic Pattern (Supports infinite images)
-  const getResponsiveClass = (index: number) => {
-    // Base Classes
-    const base = "relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10 mb-3 break-inside-avoid md:mb-0";
+  // 🍱 LOGIC: Image Distribution for Mobile (Manual Balance)
+  // แทนที่จะใช้ columns-2 (ที่เรียงบนลงล่างแล้วทำให้สูงต่ำไม่เท่ากัน)
+  // เจเปลี่ยนมาใช้การแยก Array เป็น "ซ้าย" (Index คู่) และ "ขวา" (Index คี่)
+  // วิธีนี้จะช่วยเกลี่ยรูปสุดท้ายให้ไปลงในฝั่งที่ว่างกว่าโดยอัตโนมัติตามลำดับการโหลดครับ
+  const mobileColumns = useMemo(() => {
+    const left: GalleryItem[] = [];
+    const right: GalleryItem[] = [];
     
-    // Desktop Grid Logic (Dynamic Repeating Pattern)
-    // Instead of hardcoding indices [0,3,8...], we use Modulo (%)
-    // This creates a repeating pattern every 12 images, so it looks good with 10, 20, or 100 images.
-    let desktopClass = "md:col-span-1 md:row-span-1";
+    images.forEach((img, i) => {
+      // สลับฟันปลา: รูปที่ 1 ลงซ้าย, รูปที่ 2 ลงขวา, รูปที่ 3 ลงซ้าย ...
+      if (i % 2 === 0) {
+        left.push(img);
+      } else {
+        right.push(img);
+      }
+    });
     
+    return { left, right };
+  }, [images]);
+
+  // 🍱 LOGIC: Desktop Grid Pattern
+  const getDesktopClass = (index: number) => {
+    const base = "relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110";
+    
+    // Grid Spanning Logic
+    let spanClass = "col-span-1 row-span-1";
     const mod = index % 12;
 
     if (mod === 0 || mod === 7) {
-        // Big Highlight (2x2) -> Used twice per cycle
-        desktopClass = "md:col-span-2 md:row-span-2"; 
+        spanClass = "col-span-2 row-span-2"; // Big Highlight (2x2)
     } 
     else if (mod === 3) {
-        // Tall Portrait (1x2) -> Adds vertical rhythm
-        desktopClass = "md:col-span-1 md:row-span-2";
+        spanClass = "col-span-1 row-span-2"; // Tall Portrait (1x2)
     }
     else if (mod === 10) {
-        // Wide Landscape (2x1) -> Adds horizontal rhythm
-        desktopClass = "md:col-span-2 md:row-span-1";
+        spanClass = "col-span-2 row-span-1"; // Wide Landscape (2x1)
     }
 
-    return `${base} ${desktopClass}`;
+    return { container: `relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10 ${spanClass}`, img: "w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" };
   };
 
   return (
     // Section uses transparent background to show App global texture
-    // DESIGN FIX: Added 'md:pt-24' to push content down on desktop, preventing overlap with Hero Star
     <section className="pt-0 md:pt-24 pb-16 px-4 relative flex flex-col justify-center">
       
       <FadeInUp>
         <div className="text-center mb-16 md:mb-20 relative z-10">
-          {/* Main Heading First - Updated to Mobile text-3xl */}
+          {/* Main Heading */}
           <h2 className="font-sans text-3xl md:text-5xl text-gold-shine mb-3 uppercase tracking-wider font-bold">Our Moments</h2>
-          {/* Subheading Moved Below */}
           <p className="font-sans text-gray-500 text-sm md:text-base tracking-[0.3em] uppercase font-medium">Pre-Wedding Gallery</p>
         </div>
       </FadeInUp>
@@ -77,36 +84,82 @@ export const Gallery: React.FC = () => {
       <div className="max-w-[1400px] mx-auto w-full px-0 relative z-10">
         
         {loading ? (
-          // FIX: Changed to 'min-h-screen' (100vh) to ensure the page has enough height to scroll
-          // immediately, fixing the "Stuck at Hero" issue while waiting for images.
           <div className="w-full min-h-screen bg-white/5 backdrop-blur-sm rounded-sm flex flex-col justify-start pt-32 items-center shadow-none border border-gold/10">
             <div className="w-12 h-12 border-4 border-gold/30 border-t-gold rounded-full animate-spin mb-4"></div>
             <p className="font-sans text-charcoal/60 uppercase tracking-widest text-xs">Loading gallery...</p>
           </div>
         ) : (
           <FadeInUp delay="200ms">
+             
              {/* 
-                LAYOUT STRATEGY:
-                Desktop uses 'grid-flow-dense' to pack images tightly without gaps,
-                even with our dynamic spanning logic.
+                📱 MOBILE LAYOUT: DUAL COLUMN FLEX (Manual Masonry)
+                แก้ปัญหา Column สูงต่ำไม่เท่ากันด้วยการสลับรูปซ้ายขวา
              */}
-             <div className="columns-2 gap-3 md:columns-auto md:grid md:grid-cols-4 lg:grid-cols-6 md:gap-4 md:auto-rows-[160px] lg:auto-rows-[180px] grid-flow-dense">
-               {images.map((img, idx) => (
-                 <div 
-                   key={idx} 
-                   className={getResponsiveClass(idx)}
-                   onClick={() => setSelectedImage(img.full)}
-                 >
-                   <img 
-                     src={img.thumb} 
-                     alt={`Moment ${idx + 1}`} 
-                     className="w-full transition-transform duration-700 group-hover:scale-110 h-auto md:h-full md:object-cover"
-                     loading="lazy"
-                   />
-                   <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-500"></div>
-                 </div>
-               ))}
+             <div className="flex md:hidden gap-3 items-start">
+                {/* Left Column (Even Indices: 0, 2, 4...) */}
+                <div className="flex-1 flex flex-col gap-3">
+                   {mobileColumns.left.map((img, idx) => (
+                      <div 
+                        key={`m-left-${idx}`}
+                        className="relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10"
+                        onClick={() => setSelectedImage(img.full)}
+                      >
+                         <img 
+                           src={img.thumb} 
+                           alt={`Moment L${idx}`} 
+                           className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
+                           loading="lazy"
+                         />
+                         <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-500"></div>
+                      </div>
+                   ))}
+                </div>
+
+                {/* Right Column (Odd Indices: 1, 3, 5...) */}
+                <div className="flex-1 flex flex-col gap-3">
+                   {mobileColumns.right.map((img, idx) => (
+                      <div 
+                        key={`m-right-${idx}`}
+                        className="relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10"
+                        onClick={() => setSelectedImage(img.full)}
+                      >
+                         <img 
+                           src={img.thumb} 
+                           alt={`Moment R${idx}`} 
+                           className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
+                           loading="lazy"
+                         />
+                         <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-500"></div>
+                      </div>
+                   ))}
+                </div>
              </div>
+
+             {/* 
+                💻 DESKTOP LAYOUT: CSS GRID (Complex Pattern)
+                คง Layout เดิมที่พี่ชอบไว้ครับ
+             */}
+             <div className="hidden md:grid md:grid-cols-4 lg:grid-cols-6 md:gap-4 md:auto-rows-[160px] lg:auto-rows-[180px] grid-flow-dense">
+               {images.map((img, idx) => {
+                 const styles = getDesktopClass(idx);
+                 return (
+                   <div 
+                     key={`d-${idx}`} 
+                     className={styles.container}
+                     onClick={() => setSelectedImage(img.full)}
+                   >
+                     <img 
+                       src={img.thumb} 
+                       alt={`Moment ${idx + 1}`} 
+                       className={styles.img}
+                       loading="lazy"
+                     />
+                     <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-500"></div>
+                   </div>
+                 );
+               })}
+             </div>
+
           </FadeInUp>
         )}
 
@@ -129,7 +182,7 @@ export const Gallery: React.FC = () => {
           </div>
         </FadeInUp>
 
-        {/* Closing Divider for Visual Flow */}
+        {/* Closing Divider */}
         <FadeInUp delay="500ms">
            <div className="w-24 h-px bg-gold/30 mx-auto mt-20"></div>
         </FadeInUp>
