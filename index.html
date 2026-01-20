@@ -67,55 +67,57 @@
     <style>
       /* 
          FIX: SCROLLBAR & LAYOUT
-         1. Strict single scroll container on HTML.
-         2. Background color match to prevent white lines.
+         1. Removed strict height/overflow on html to fix 'Double Scrollbar' issue.
+         2. Body handles the layout flow naturally.
       */
       html {
         background-color: #FDFBF7; /* Match body color */
-        overflow-y: auto; /* Standard scroll */
-        overflow-x: hidden;
         scroll-behavior: smooth;
-        height: 100%;
+        /* Firefox Support */
+        scrollbar-width: thin; 
+        scrollbar-color: rgba(183, 138, 125, 0.5) transparent;
       }
       
       body {
         background-color: #FDFBF7;
         margin: 0;
         padding: 0;
-        overflow-y: visible; /* Let html handle scroll */
+        min-height: 100vh;
         overflow-x: hidden;
-        min-height: 100%;
       }
 
       /* 
          PREMIUM GHOST SCROLLBAR
-         Style: Invisible by default, appears as thin Rose Gold line on interaction
+         Width: 14px (Wider, easy to grab - approx 1cm visual feel)
+         Style: Invisible track, Floating Rose Gold Pill
       */
       
       ::-webkit-scrollbar {
-        width: 4px; /* Ultra thin */
+        width: 14px; 
         background: transparent;
       }
       
       ::-webkit-scrollbar-track {
         background: transparent; /* Completely invisible track */
-        margin: 4px 0;
       }
       
       ::-webkit-scrollbar-thumb {
-        background-color: transparent; /* Invisible by default */
+        background-color: transparent; /* Hidden by default */
         border-radius: 20px;
-        transition: background-color 0.3s ease;
+        border: 4px solid transparent; /* Creates padding for 'floating' effect */
+        background-clip: content-box; /* Only paints inside border */
+        transition: background-color 0.3s ease, border-width 0.3s ease;
       }
 
-      /* Show ONLY when user hovers anywhere on the page (simulates active use) */
+      /* Show ONLY when hovering the window (simulates 'on use') */
       html:hover ::-webkit-scrollbar-thumb {
-        background-color: rgba(183, 138, 125, 0.4); /* Faint Rose Gold */
+        background-color: rgba(183, 138, 125, 0.5); /* Faint Rose Gold */
       }
       
-      /* Darker when actually clicking/dragging the scrollbar */
+      /* Darker & Thicker when actually clicking/dragging */
       ::-webkit-scrollbar-thumb:active {
         background-color: rgba(183, 138, 125, 0.8);
+        border-width: 2px; /* Expands slightly */
       }
 
       /* Metallic Rose Gold Shine Effect */
