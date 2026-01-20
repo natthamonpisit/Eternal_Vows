@@ -219,8 +219,15 @@ export const LiveWall: React.FC = () => {
                   <svg className="w-6 h-6 md:w-12 md:h-12 text-gold/20 absolute bottom-3 right-3 md:bottom-6 md:right-6 rotate-180" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 13.1216 16 12.017 16H9C9.04875 12.2882 11.2359 10.3204 12.8225 9.7042L12.0833 7.79979C9.25625 8.89708 7 12.1932 7 16V21H14.017ZM21 21L21 18C21 16.8954 20.1046 16 19 16H15.9829C16.0317 12.2882 18.2189 10.3204 19.8054 9.7042L19.0662 7.79979C16.2392 8.89708 13.9829 12.1932 13.9829 16V21H21Z" /></svg>
 
                   <div className="relative z-10 w-full max-h-full overflow-y-auto custom-scrollbar px-2 md:px-4 flex flex-col justify-center">
-                    <p className="font-serif text-lg sm:text-xl md:text-3xl lg:text-4xl text-charcoal italic leading-relaxed md:leading-relaxed mb-4 md:mb-6 break-words text-center md:text-left">
-                      "{currentWish?.message}"
+                    {/* 
+                       UPDATES:
+                       1. Changed font-serif -> font-sans
+                       2. Removed italic
+                       3. Reduced mobile font size (text-lg -> text-[13px] / sm:text-base) to fit more text
+                       4. Removed quotation marks around message
+                    */}
+                    <p className="font-sans text-[13px] sm:text-base md:text-2xl lg:text-3xl text-charcoal font-medium leading-relaxed md:leading-relaxed mb-4 md:mb-6 break-words text-center md:text-left">
+                      {currentWish?.message}
                     </p>
                     
                     <div className="inline-block border-t border-gold/30 pt-3 md:pt-4 px-4 text-center md:text-left">
