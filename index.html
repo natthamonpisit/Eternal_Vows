@@ -65,43 +65,52 @@
       }
     </script>
     <style>
+      /* 
+         FIX: DOUBLE SCROLLBAR REMOVAL 
+         Logic: Only 'html' should handle scrolling. 'body' must be visible to let content flow.
+      */
       html {
+        height: 100%;
+        overflow-y: auto; /* Master scrollbar */
+        overflow-x: hidden;
         scroll-behavior: smooth;
-        overflow-y: auto; /* Standard scrolling */
-        
-        /* Firefox specific */
-        scrollbar-width: thin;
-        scrollbar-color: rgba(197, 144, 142, 0.5) transparent;
       }
       
-      /* Webkit (Chrome, Safari, Edge) - Floating & Invisible Track */
-      ::-webkit-scrollbar {
-        width: 4px; /* Make it very thin */
-        background-color: transparent;
-      }
-      
-      /* Strictly hide the track */
-      ::-webkit-scrollbar-track {
-        background-color: transparent;
-        border-radius: 0;
+      body {
+        min-height: 100%;
         margin: 0;
-      }
-      
-      /* Thumb styling */
-      ::-webkit-scrollbar-thumb {
-        background-color: rgba(197, 144, 142, 0.5); /* Dusty Pinkish Alpha */
-        border-radius: 100vh; /* Pill shape */
-        border: none;
-      }
-      
-      /* Darker on hover */
-      ::-webkit-scrollbar-thumb:hover {
-        background-color: rgba(197, 144, 142, 0.8);
+        padding: 0;
+        overflow-y: visible !important; /* Force body NOT to scroll */
+        overflow-x: hidden;
+        background-color: #FDFBF7;
       }
 
-      body {
-        background-color: #FDFBF7; /* Cream Beige Base - Extra Light */
+      /* 
+         PREMIUM SCROLLBAR STYLING 
+         Style: Ultra Thin & Auto-hiding (Rose Gold)
+      */
+      
+      /* The Scrollbar Track (Background) -> Transparent */
+      ::-webkit-scrollbar {
+        width: 4px; /* Very thin */
+        height: 4px;
       }
+      ::-webkit-scrollbar-track {
+        background: transparent; 
+      }
+      
+      /* The Scrollbar Thumb (The moving part) */
+      ::-webkit-scrollbar-thumb {
+        background: rgba(183, 138, 125, 0.3); /* Very faint Rose Gold */
+        border-radius: 10px;
+        transition: background 0.3s ease;
+      }
+
+      /* Hover State: Make it slightly more visible when user interacts */
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(183, 138, 125, 0.8); /* Solid Rose Gold */
+      }
+
       /* Metallic Rose Gold Shine Effect */
       .text-gold-shine {
         background: linear-gradient(to right, #8E5B50, #B78A7D, #EBCBC5, #B78A7D, #8E5B50);

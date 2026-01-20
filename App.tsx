@@ -105,15 +105,16 @@ export default function App() {
 
   const handleOpen = () => {
     setIsEnvelopeOpen(true);
-    // Delay showing content slightly for animation smoothness
-    setTimeout(() => {
-      setShowContent(true);
-    }, 800);
+    // FIX: Removed 800ms delay. Content is shown immediately when envelope logic finishes.
+    setShowContent(true);
   };
 
   useEffect(() => {
+    // SCROLLBAR MANAGEMENT
     if (showContent || isLiveMode) {
-      document.body.style.overflow = 'auto';
+      // FIX: Explicitly set to 'visible' to ensure body doesn't create a secondary scroll container.
+      // The main scrolling happens on 'html'.
+      document.body.style.overflow = 'visible';
     } else {
       document.body.style.overflow = 'hidden';
     }
