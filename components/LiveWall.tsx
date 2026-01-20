@@ -169,8 +169,9 @@ export const LiveWall: React.FC = () => {
                   <div className="
                     relative bg-gray-100 overflow-hidden flex-shrink-0
                     
-                    /* Portrait: Full width, Square Aspect */
-                    w-full aspect-square 
+                    /* Portrait: Full width, REDUCED ASPECT RATIO (Taller than square, but shorter visually in flex) */
+                    /* UPDATED: aspect-[10/9] creates a slightly shorter image container than aspect-square (1:1) */
+                    w-full aspect-[10/9] 
                     
                     /* Landscape: Height matches container (100%), Width auto, Aspect Ratio 4:3 (or 1:1) */
                     landscape:h-full landscape:w-auto landscape:aspect-[4/3]
@@ -208,7 +209,8 @@ export const LiveWall: React.FC = () => {
                    landscape:flex-none landscape:w-[280px] md:landscape:w-[320px]
                    
                    relative flex flex-col justify-center overflow-hidden
-                   p-6 landscape:p-6
+                   /* UPDATED PADDING: Reduced on mobile to give more space for text */
+                   p-4 md:p-6 landscape:p-6
                    
                    ${!currentWish?.imageUrl ? 'items-center text-center' : ''}
                    min-h-0
@@ -221,12 +223,10 @@ export const LiveWall: React.FC = () => {
                   <div className="relative z-10 w-full max-h-full overflow-y-auto custom-scrollbar px-2 md:px-4 flex flex-col justify-center">
                     {/* 
                        UPDATES:
-                       1. Changed font-serif -> font-sans
-                       2. Removed italic
-                       3. Reduced mobile font size (text-lg -> text-[13px] / sm:text-base) to fit more text
-                       4. Removed quotation marks around message
+                       1. Reduced Mobile Font Size: text-[11px] (was 13px)
+                       2. Reduced Desktop Font Size: md:text-xl lg:text-2xl (was 2xl/3xl) - ~15% reduction
                     */}
-                    <p className="font-sans text-[13px] sm:text-base md:text-2xl lg:text-3xl text-charcoal font-medium leading-relaxed md:leading-relaxed mb-4 md:mb-6 break-words text-center md:text-left">
+                    <p className="font-sans text-[11px] sm:text-sm md:text-xl lg:text-2xl text-charcoal font-medium leading-relaxed md:leading-relaxed mb-4 md:mb-6 break-words text-center md:text-left">
                       {currentWish?.message}
                     </p>
                     
