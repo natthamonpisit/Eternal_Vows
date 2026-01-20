@@ -80,6 +80,19 @@ import { MusicPlayer } from './components/MusicPlayer';
     * Width: max-w-3xl (เท่ากันหมด)
 
   ----------------------------------------------------------------------------------------
+  4. SCROLLING ARCHITECTURE (⛔️ กฏเหล็กเรื่อง SCROLLBAR ห้ามลืมเด็ดขาด)
+  ----------------------------------------------------------------------------------------
+  Problem: เคยเกิดปัญหา "Double Scrollbar" (มี Scrollbar 2 เส้นซ้อนกัน) และ "Scroll Lag" (เลื่อนแล้วหน่วง)
+           โดยเฉพาะบน Safari iOS และ Chrome Mobile
+  
+  Cause:   การใส่ class `overflow-x-hidden` หรือ `overflow-y-auto` ลงใน Main Container (<div className="min-h-screen ...">)
+           ทำให้ Div นั้นกลายเป็น Scroll Container ตัวที่ 2 ซ้อนทับกับ Browser Window Body
+  
+  RULE:    *** ห้ามใส่ overflow property ใดๆ ที่ Main Container ของ App.tsx เด็ดขาด ***
+           - ปล่อยให้ `body` (ใน index.html) เป็นผู้จัดการ Scroll เพียงผู้เดียว
+           - ถ้าต้องการซ่อน overflow แนวนอน ให้จัดการที่ index.html หรือเฉพาะ component ลูกเท่านั้น
+
+  ----------------------------------------------------------------------------------------
 */
 
 export default function App() {
@@ -127,6 +140,7 @@ export default function App() {
 
   // Normal Wedding Website Flow
   return (
+    // ⚠️ CRITICAL: DO NOT ADD 'overflow-x-hidden' HERE. SEE RULE #4 ABOVE.
     <div className="min-h-screen relative font-serif text-charcoal">
       
       {/* 
