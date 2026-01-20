@@ -2,6 +2,41 @@ import React, { useEffect, useState } from 'react';
 import { fetchWishes } from '../services/api';
 import { GuestWishes } from '../types';
 
+/*
+  ========================================================================================
+  📺 COMPONENT: LIVE WALL (Digital Guestbook Projector)
+  ========================================================================================
+  
+  [Concept]
+  - หน้าจอสำหรับเปิดขึ้น Projector ในงานแต่ง
+  - แสดงคำอวยพรจาก Google Sheets แบบ Real-time Slideshow
+  
+  [Data Flow & Logic]
+  1. Data Source: ดึงข้อมูลจาก Google Sheets ผ่าน `services/api.ts` -> `fetchWishes()`
+  2. Polling: ดึงข้อมูลใหม่ทุกๆ 15 วินาที (setInterval)
+  3. Slideshow: เปลี่ยนการ์ดอวยพรทุกๆ 6 วินาที
+  
+  [QR Code Strategy]
+  - URL: `https://eternal-vows-pi.vercel.app/#guestbook`
+  - Purpose: เมื่อแขกสแกน จะข้ามหน้าซองจดหมาย (Envelope) และเลื่อนลงไปที่ฟอร์มเขียนคำอวยพรทันที (Auto-scroll to #guestbook-section)
+  - Generation: ใช้ API `api.qrserver.com` สร้าง QR แบบ Dynamic
+  
+  [Layout Architecture]
+  1. Mobile (Portrait): 
+     - Style: `h-full`, `flex-col`
+     - Behavior: ยืดเต็มจอแนวตั้ง ใช้พื้นที่ว่างด้านล่างให้คุ้มค่าเพื่อให้ข้อความยาวๆ มีที่อยู่
+  2. Desktop (Landscape/Projector):
+     - Style: `h-[55vh]`, `landscape:flex-row`, `mx-auto`
+     - Behavior: ความสูง Fix ไว้ที่ 55vh เพื่อไม่ให้ชน Footer เวลาเปิดบน Browser (Non-fullscreen)
+                 และดูสมส่วนเมื่อขึ้นจอใหญ่
+  
+  [Key Colors]
+  - Background: Cream (#FDFBF7)
+  - Text: Charcoal (#36454F)
+  - Accents: Rose Gold (#B78A7D), Old Rose (#C08E86)
+  ========================================================================================
+*/
+
 export const LiveWall: React.FC = () => {
   const [wishes, setWishes] = useState<GuestWishes[]>([]);
   const [loading, setLoading] = useState(true);
