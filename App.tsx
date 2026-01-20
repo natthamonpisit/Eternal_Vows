@@ -127,7 +127,7 @@ export default function App() {
 
   // Normal Wedding Website Flow
   return (
-    <div className="min-h-screen relative font-serif text-charcoal overflow-x-hidden">
+    <div className="min-h-screen relative font-serif text-charcoal">
       
       {/* 
           GLOBAL BACKGROUND TEXTURE 
