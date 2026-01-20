@@ -6,7 +6,7 @@ export const MoneyGift: React.FC = () => {
   const [view, setView] = useState<'info' | 'upload'>('info');
   const [copied, setCopied] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-  const ACCOUNT_NUMBER = "123-456-7890"; // พี่นัทอย่าลืมแก้เลขบัญชีจริงตรงนี้นะครับ
+  const ACCOUNT_NUMBER = "224-1-24727-1"; 
 
   useEffect(() => {
     const loadQr = async () => {
