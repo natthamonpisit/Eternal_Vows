@@ -103,7 +103,21 @@ export default function App() {
   useEffect(() => {
     // Function to check hash and set mode
     const checkHash = () => {
-      setIsLiveMode(window.location.hash === '#live');
+      const hash = window.location.hash;
+      setIsLiveMode(hash === '#live');
+
+      // Special Route: #guestbook (Skip envelope & Scroll to guestbook)
+      if (hash === '#guestbook') {
+        setIsEnvelopeOpen(true);
+        setShowContent(true);
+        // Delay slightly to ensure rendering is complete
+        setTimeout(() => {
+           const element = document.getElementById('guestbook-section');
+           if (element) {
+             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+           }
+        }, 800);
+      }
     };
 
     // Check on mount
@@ -198,7 +212,8 @@ export default function App() {
              </div>
           </div>
 
-          <div className="border-t border-gold/30 pt-20 pb-24 px-4 sm:px-6">
+          {/* ID ADDED: guestbook-section for Auto-scroll */}
+          <div id="guestbook-section" className="border-t border-gold/30 pt-20 pb-24 px-4 sm:px-6 scroll-mt-20">
              <div className="max-w-7xl mx-auto">
                <Guestbook />
              </div>

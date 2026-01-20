@@ -64,9 +64,13 @@ export const LiveWall: React.FC = () => {
   // Current Wish to Display
   const currentWish = wishes.length > 0 ? wishes[activeIndex] : null;
 
+  // URL for QR Code that skips envelope
+  const QR_URL = "https://eternal-vows-pi.vercel.app/#guestbook";
+
   return (
     // MAIN CONTAINER: 3 BOX LAYOUT (Header / Main / Footer)
-    <div className="fixed inset-0 w-full h-full bg-[#FDFBF7] text-charcoal font-serif overflow-hidden flex flex-col">
+    // ADDED: [&::-webkit-scrollbar]:hidden to hide any stray scrollbars
+    <div className="fixed inset-0 w-full h-full bg-[#FDFBF7] text-charcoal font-serif overflow-hidden flex flex-col [&::-webkit-scrollbar]:hidden">
       
       {/* Background Texture & Decor */}
       <div className="absolute inset-0 opacity-40 pointer-events-none" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
@@ -102,7 +106,7 @@ export const LiveWall: React.FC = () => {
           </button>
         </div>
 
-        {/* Names - Reduced size and increased padding/line-height to prevent clipping */}
+        {/* Names */}
         <div className="py-1 landscape:py-2 mt-1 landscape:mt-2">
           <h1 className="font-script text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-gold-shine mb-1 leading-loose py-2 drop-shadow-sm px-4">
             Natthamonpisit & Sorot
@@ -119,8 +123,12 @@ export const LiveWall: React.FC = () => {
       </header>
 
       {/* --- BOX 2: MAIN CONTENT (Flexible, Fills space, No Overflow overlap) --- */}
-      {/* Added larger bottom padding (pb-12 md:pb-24) to visually lift the center content up */}
-      <main className="flex-1 w-full relative z-10 flex flex-col justify-center items-center overflow-hidden px-4 pt-2 pb-12 md:pb-24">
+      {/* 
+         UPDATES:
+         1. Reduced bottom padding on mobile: pb-2 (was pb-12)
+         2. Keeps md:pb-24 for desktop breathing room
+      */}
+      <main className="flex-1 w-full relative z-10 flex flex-col justify-center items-center overflow-hidden px-4 pt-2 pb-2 md:pb-24">
         
         {/* Loading State */}
         {loading && wishes.length === 0 ? (
@@ -230,13 +238,21 @@ export const LiveWall: React.FC = () => {
                       {currentWish?.message}
                     </p>
                     
-                    <div className="inline-block border-t border-gold/30 pt-3 md:pt-4 px-4 text-center md:text-left">
-                      <p className="font-sans font-bold text-sm md:text-xl uppercase text-gold tracking-widest">
-                        {currentWish?.name}
-                      </p>
-                      <p className="font-sans text-[10px] md:text-[10px] text-gray-400 mt-1 md:mt-2 tracking-wide">
-                        {currentWish?.timestamp ? new Date(currentWish.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}
-                      </p>
+                    <div className="inline-block border-t border-gold/30 pt-3 md:pt-4 px-4">
+                       {/* 
+                          MOBILE LAYOUT: Flex Row (Name + Time same line)
+                          DESKTOP LAYOUT: Block (Time below name)
+                       */}
+                       <div className="flex flex-row md:flex-col items-baseline md:items-start justify-center md:justify-start gap-2 md:gap-0">
+                          {/* Name: Font size reduced to text-[11px] (20% smaller than text-sm) */}
+                          <p className="font-sans font-bold text-[11px] md:text-xl uppercase text-gold tracking-widest whitespace-nowrap">
+                            {currentWish?.name}
+                          </p>
+                          {/* Time: Smaller font, same line on mobile */}
+                          <p className="font-sans text-[9px] md:text-[10px] text-gray-400 md:mt-2 tracking-wide whitespace-nowrap">
+                            {currentWish?.timestamp ? new Date(currentWish.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}
+                          </p>
+                       </div>
                     </div>
                   </div>
 
@@ -247,11 +263,12 @@ export const LiveWall: React.FC = () => {
       </main>
 
       {/* --- BOX 3: FOOTER (Fixed Height, No Shrink) --- */}
-      <footer className="flex-none relative z-20 w-full bg-white/80 backdrop-blur-md border-t border-gold/10 py-2 landscape:py-3 px-6 flex justify-between items-center">
+      <footer className="flex-none relative z-20 w-full bg-white/80 backdrop-blur-md border-t border-gold/10 py-2 landscape:py-3 px-6 flex justify-between items-center overflow-hidden">
         <div className="flex items-center gap-4 md:gap-6">
           <div className="p-1 bg-white rounded-lg shadow-sm border border-gold/10">
+            {/* UPDATED: QR Code now links to #guestbook */}
             <img 
-              src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://eternal-vows-pi.vercel.app/" 
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(QR_URL)}`} 
               alt="Scan to Wish" 
               className="w-8 h-8 md:w-14 md:h-14 mix-blend-multiply"
             />
