@@ -9,6 +9,8 @@ export interface GuestWishes {
 export interface GalleryItem {
   thumb: string;
   full: string;
+  width?: number;  // Added for masonry layout calculation
+  height?: number; // Added for masonry layout calculation
 }
 
 // Deprecated: kept for backward compatibility if needed, but GalleryItem is preferred

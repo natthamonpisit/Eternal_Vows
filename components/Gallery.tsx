@@ -19,7 +19,8 @@ export const Gallery: React.FC = () => {
       } else {
         // Fallback
         console.log("No images found in Ourmoment, using Mock Data.");
-        const mocks = MOCK_GALLERY_IMAGES.map(url => ({ thumb: url, full: url }));
+        // Mocks don't have dimensions, so we default to 1:1 ratio
+        const mocks = MOCK_GALLERY_IMAGES.map(url => ({ thumb: url, full: url, width: 800, height: 800 }));
         setImages(mocks);
       }
 
@@ -30,6 +31,7 @@ export const Gallery: React.FC = () => {
 
   // 📱 MOBILE LOGIC: 2 Columns (Left/Right Distribution)
   const mobileColumns = useMemo(() => {
+    // ใช้ Logic เดิมสำหรับมือถือเพราะจอแคบ การสลับฟันปลา work สุดแล้ว
     const left: GalleryItem[] = [];
     const right: GalleryItem[] = [];
     images.forEach((img, i) => {
@@ -39,23 +41,38 @@ export const Gallery: React.FC = () => {
     return { left, right };
   }, [images]);
 
-  // 💻 DESKTOP LOGIC: 3 Columns Masonry (Pinterest Style)
-  // วิธีนี้ช่วย "เกลี่ย" ความสูงของทั้ง 3 แถวให้ใกล้เคียงกันที่สุดโดยอัตโนมัติ
-  // และยังโชว์สัดส่วนภาพจริง (Portrait/Landscape) ได้สวยงามกว่าแบบ Grid
+  // 💻 DESKTOP LOGIC: Smart Masonry (Shortest Column First)
+  // Logic: คำนวณความสูงสะสมของแต่ละเสา แล้วหย่อนรูปลงในเสาที่ "เตี้ยที่สุด" ณ ขณะนั้น
   const desktopColumns = useMemo(() => {
+    // 1. สร้างถังเก็บรูป 3 ใบ
     const col1: GalleryItem[] = [];
     const col2: GalleryItem[] = [];
     const col3: GalleryItem[] = [];
+    
+    // 2. ตัวแปรเก็บความสูงสะสมของแต่ละเสา (เริ่มต้น 0)
+    // เราใช้ Aspect Ratio เป็นหน่วยความสูง (Height / Width)
+    const colHeights = [0, 0, 0]; 
 
-    images.forEach((img, i) => {
-      const remainder = i % 3;
-      if (remainder === 0) {
+    images.forEach((img) => {
+      // คำนวณความสูงสัมพัทธ์ (Aspect Ratio)
+      // ถ้าไม่มีข้อมูล (Mock data) ให้สมมติว่าเป็นสี่เหลี่ยมจัตุรัส (1)
+      const ratio = (img.height && img.width) ? (img.height / img.width) : 1;
+
+      // 3. หาเสาที่เตี้ยที่สุด (Find index of min height)
+      const minHeight = Math.min(...colHeights);
+      const shortestColIndex = colHeights.indexOf(minHeight);
+
+      // 4. หย่อนรูปลงเสานั้น และบวกความสูงเพิ่ม
+      if (shortestColIndex === 0) {
         col1.push(img);
-      } else if (remainder === 1) {
+      } else if (shortestColIndex === 1) {
         col2.push(img);
       } else {
         col3.push(img);
       }
+
+      // Update ความสูงของเสานั้น
+      colHeights[shortestColIndex] += ratio;
     });
 
     return [col1, col2, col3];
@@ -100,8 +117,9 @@ export const Gallery: React.FC = () => {
              </div>
 
              {/* 
-                💻 DESKTOP LAYOUT: TRIPLE COLUMN (Manual Masonry)
-                เปลี่ยนจาก Grid เป็น Flex 3 Columns เพื่อเกลี่ยความสูงให้เท่ากัน
+                💻 DESKTOP LAYOUT: TRIPLE COLUMN (Smart Masonry)
+                ใช้ Logic ใหม่: "Shortest Column First" 
+                เกลี่ยความสูงเสาให้เท่ากัน โดยดูจาก Ratio จริงของรูป
              */}
              <div className="hidden md:flex gap-6 items-start">
                {desktopColumns.map((col, colIdx) => (

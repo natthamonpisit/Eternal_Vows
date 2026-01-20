@@ -47,6 +47,7 @@ export default async function handler(req, res) {
     const targetFolder = req.query.folder || 'Wedding_OukBew/Ourmoment';
 
     // Search API execution
+    // Added 'context' to sort fields if needed, but mainly we need width/height which comes by default
     const result = await cloudinary.search
       .expression(`folder:${targetFolder}`)
       .sort_by('public_id', 'desc')
@@ -58,7 +59,10 @@ export default async function handler(req, res) {
       // thumb: รูปเล็กสำหรับ Grid (width: 600px)
       thumb: cloudinary.url(file.public_id, { width: 600, quality: 'auto', fetch_format: 'auto', crop: 'scale' }),
       // full: รูปใหญ่สำหรับ Lightbox (width: 1920px)
-      full: cloudinary.url(file.public_id, { width: 1920, quality: 'auto', fetch_format: 'auto', crop: 'scale' })
+      full: cloudinary.url(file.public_id, { width: 1920, quality: 'auto', fetch_format: 'auto', crop: 'scale' }),
+      // Dimensions for Masonry Layout
+      width: file.width,
+      height: file.height
     }));
 
     res.status(200).json({ success: true, data: images });
