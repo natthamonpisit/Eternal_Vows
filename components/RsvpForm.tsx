@@ -51,7 +51,8 @@ export const RsvpForm: React.FC = () => {
           <div className="text-center mb-10 md:mb-12">
             {/* DESIGN RULE UPDATE: Mobile text-3xl, Desktop text-5xl */}
             <h2 className="font-sans text-3xl md:text-5xl text-gold-shine font-bold tracking-wider uppercase mb-3">R.S.V.P</h2>
-            <p className="font-sans text-gray-500 text-xs md:text-base uppercase tracking-[0.2em] font-medium">Please respond by February 21st</p>
+            {/* DESIGN FIX: Shortened text + Uppercase as per new request */}
+            <p className="font-sans text-gray-500 text-xs md:text-base uppercase tracking-[0.2em] font-medium">PLEASE RESPOND BY FEB 21ST</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8 md:space-y-10 max-w-xl mx-auto">
@@ -60,8 +61,9 @@ export const RsvpForm: React.FC = () => {
               <input 
                 type="text" 
                 required
-                className="w-full border-b border-gray-300 bg-transparent py-3 px-1 text-lg md:text-2xl font-serif text-charcoal focus:border-gold focus:outline-none transition-all rounded-none placeholder-gray-200"
-                placeholder="Mr. & Mrs. John Doe"
+                // DESIGN FIX: Changed to font-sans uppercase to match stationery style
+                className="w-full border-b border-gray-300 bg-transparent py-3 px-1 text-sm md:text-base font-sans font-bold uppercase tracking-wider text-charcoal focus:border-gold focus:outline-none transition-all rounded-none placeholder-gray-300"
+                placeholder="MR. & MRS. JOHN DOE"
                 value={formData.name}
                 onChange={e => setFormData({...formData, name: e.target.value})}
               />
@@ -82,7 +84,8 @@ export const RsvpForm: React.FC = () => {
                       onChange={() => setFormData({...formData, attending: 'yes'})}
                       className="hidden"
                     />
-                    <span className={`ml-3 font-serif text-lg md:text-xl transition-colors ${formData.attending === 'yes' ? 'text-charcoal' : 'text-gray-400'}`}>Joyfully Accept</span>
+                    {/* DESIGN FIX: Matching Font size (text-sm md:text-base) and tracking (wider) */}
+                    <span className={`ml-3 font-sans text-sm md:text-base font-bold uppercase tracking-wider transition-colors ${formData.attending === 'yes' ? 'text-charcoal' : 'text-gray-400'}`}>JOYFULLY ACCEPT</span>
                   </label>
                   
                   <label className="flex items-center cursor-pointer group">
@@ -96,7 +99,8 @@ export const RsvpForm: React.FC = () => {
                       onChange={() => setFormData({...formData, attending: 'no'})}
                       className="hidden"
                     />
-                    <span className={`ml-3 font-serif text-lg md:text-xl transition-colors ${formData.attending === 'no' ? 'text-charcoal' : 'text-gray-400'}`}>Regretfully Decline</span>
+                    {/* DESIGN FIX: Matching Font size (text-sm md:text-base) and tracking (wider) */}
+                    <span className={`ml-3 font-sans text-sm md:text-base font-bold uppercase tracking-wider transition-colors ${formData.attending === 'no' ? 'text-charcoal' : 'text-gray-400'}`}>REGRETFULLY DECLINE</span>
                   </label>
                 </div>
               </div>
@@ -105,12 +109,13 @@ export const RsvpForm: React.FC = () => {
                 <div className="flex-1 animate-fade-in">
                   <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gold/80 mb-3">Number of Guests</label>
                   <select 
-                    className="w-full border-b border-gray-300 bg-transparent py-3 px-1 text-lg md:text-2xl font-serif text-charcoal focus:border-gold focus:outline-none rounded-none cursor-pointer"
+                    // DESIGN FIX: Matches Guest Name input style perfectly (tracking-wider)
+                    className="w-full border-b border-gray-300 bg-transparent py-3 px-1 text-sm md:text-base font-sans font-bold uppercase tracking-wider text-charcoal focus:border-gold focus:outline-none rounded-none cursor-pointer"
                     value={formData.attendees}
                     onChange={e => setFormData({...formData, attendees: parseInt(e.target.value)})}
                   >
                     {[1, 2, 3, 4, 5].map(num => (
-                      <option key={num} value={num}>{num} {num === 1 ? 'Guest' : 'Guests'}</option>
+                      <option key={num} value={num}>{num} {num === 1 ? 'GUEST' : 'GUESTS'}</option>
                     ))}
                   </select>
                 </div>
@@ -118,12 +123,12 @@ export const RsvpForm: React.FC = () => {
             </div>
 
             <div className="pt-4">
-              {/* UPDATED LABEL: Changed from "Dietary Requirements / Note" to "Note" */}
               <label className="block font-sans text-xs font-bold uppercase tracking-wider text-gold/80 mb-2">Note</label>
               <textarea 
                 rows={2}
-                className="w-full border border-gray-200 bg-gray-50/30 p-4 rounded-sm font-serif text-lg focus:border-gold focus:outline-none transition-colors placeholder-gray-300 resize-none"
-                placeholder="Allergies, special requests..."
+                // DESIGN FIX: Changed font weight to bold, updated placeholder to remove food reference
+                className="w-full border border-gray-200 bg-gray-50/30 p-4 rounded-sm font-sans text-sm font-bold uppercase tracking-wide focus:border-gold focus:outline-none transition-colors placeholder-gray-300 resize-none text-charcoal"
+                placeholder="SONG REQUESTS & WELL WISHES"
                 value={formData.note}
                 onChange={e => setFormData({...formData, note: e.target.value})}
               ></textarea>

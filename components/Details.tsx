@@ -244,30 +244,36 @@ export const Details: React.FC = () => {
                         </div>
 
                         {/* --- MOBILE LAYOUT (Timeline Icon + Time above) --- */}
-                        {/* 1. Mobile Timeline Icon (Milestone) */}
-                        <div className="md:hidden absolute left-[24px] -translate-x-1/2 flex items-center justify-center w-12 h-12 bg-old-rose border-2 border-[#F3E5AB] rounded-full z-10 text-[#F3E5AB] shadow-lg p-2.5">
+                        {/* 
+                           MOBILE ICON UPDATE:
+                           - Size: w-12 h-12 (Fixed container size)
+                           - Padding: p-2 (Reduced from p-2.5) -> This makes the inner Icon LARGER by ~10%
+                        */}
+                        <div className="md:hidden absolute left-[24px] -translate-x-1/2 flex items-center justify-center w-12 h-12 bg-old-rose border-2 border-[#F3E5AB] rounded-full z-10 text-[#F3E5AB] shadow-lg p-2">
                             {event.icon}
                         </div>
 
                         {/* 2. Content */}
                         <div className="flex-1 pl-16 md:pl-24 pt-1">
                            {/* 
-                              DESIGN RULE: EVENT TIME
-                              Mobile: text-lg (Reduced from xl)
+                              MOBILE TYPOGRAPHY UPDATE (-15% Size):
+                              - Time: text-lg (18px) -> text-base (16px)
                            */}
-                           <span className="md:hidden block font-sans text-lg text-[#F3E5AB] font-bold mb-1">
+                           <span className="md:hidden block font-sans text-base text-[#F3E5AB] font-bold mb-1">
                               {event.time}
                            </span>
 
                            {/* 
-                              DESIGN RULE: EVENT TITLES
-                              Mobile: text-xl (Reduced from 2xl)
-                              Desktop: text-3xl
+                              - Title: text-xl (20px) -> text-lg (18px)
                            */}
-                           <h3 className="font-sans text-xl md:text-3xl text-[#FDFBF7] mb-1 drop-shadow-sm group-hover:translate-x-1 transition-transform duration-300 font-bold uppercase tracking-wide">
+                           <h3 className="font-sans text-lg md:text-3xl text-[#FDFBF7] mb-1 drop-shadow-sm group-hover:translate-x-1 transition-transform duration-300 font-bold uppercase tracking-wide">
                               {event.title}
                            </h3>
-                           <p className="font-sans text-[#F3E5AB]/70 uppercase tracking-widest text-xs font-medium border-t border-white/10 inline-block pt-2">
+                           
+                           {/* 
+                              - Desc: text-xs (12px) -> text-[10px]
+                           */}
+                           <p className="font-sans text-[#F3E5AB]/70 uppercase tracking-widest text-[10px] md:text-xs font-medium border-t border-white/10 inline-block pt-2">
                              {event.desc}
                            </p>
                         </div>
@@ -366,8 +372,9 @@ export const Details: React.FC = () => {
                       )}
                    </div>
                    <FadeInUp delay="600ms">
+                     {/* Shortened Venue Description */}
                      <p className="text-center lg:text-left font-sans text-cream/80 italic text-sm tracking-wide">
-                       "A classic and elegant atmosphere to celebrate our special day."
+                       "A classic and elegant celebration."
                      </p>
                    </FadeInUp>
                 </div>
@@ -379,11 +386,23 @@ export const Details: React.FC = () => {
               SECTION 3: DRESS CODE
              ========================================= */}
           <FadeInUp>
-            <div className="py-12 bg-white/95 backdrop-blur-sm rounded-xl shadow-xl text-center relative mx-0 border border-white/40">
-              {/* DESIGN RULE: SECTION HEADER - Mobile: text-3xl */}
-              <h3 className="font-sans text-3xl md:text-5xl text-gold-shine mb-8 uppercase tracking-wider font-bold">Dress Code</h3>
+            {/* 
+              MOBILE COMPACT UPDATE:
+              - Padding: py-12 -> py-8
+            */}
+            <div className="py-8 md:py-12 bg-white/95 backdrop-blur-sm rounded-xl shadow-xl text-center relative mx-0 border border-white/40">
+              {/* 
+                 MOBILE COMPACT UPDATE:
+                 - Font Size: text-3xl -> text-2xl
+                 - Margin: mb-8 -> mb-6
+              */}
+              <h3 className="font-sans text-2xl md:text-5xl text-gold-shine mb-6 md:mb-8 uppercase tracking-wider font-bold">Dress Code</h3>
               
-              <div className="flex justify-center items-start gap-4 md:gap-8 flex-wrap px-2">
+              {/* 
+                 MOBILE COMPACT UPDATE:
+                 - Spacing: gap-4 -> gap-x-3 gap-y-5
+              */}
+              <div className="flex justify-center items-start gap-x-3 gap-y-5 md:gap-8 flex-wrap px-2">
                  {[
                    { color: '#C08E86', name: 'Pink Taupe' },
                    { color: '#C5908E', name: 'Dusty Pink' }, 
@@ -392,12 +411,19 @@ export const Details: React.FC = () => {
                    { color: '#E6DABF', name: 'Cream Beige' }, 
                    { color: '#DBC895', name: 'Light Gold' },
                  ].map((swatch, i) => (
-                   <div key={i} className="flex flex-col items-center gap-2 group w-20 sm:w-24">
+                   // Wrapper width: w-20 -> w-16
+                   <div key={i} className="flex flex-col items-center gap-2 group w-16 sm:w-20 md:w-24">
+                     {/* 
+                        Circle Size: w-12 -> w-10 (~17% Reduction)
+                     */}
                      <div 
-                       className="w-12 h-12 md:w-16 md:h-16 rounded-full shadow-md border border-gray-200 group-hover:scale-110 group-hover:shadow-xl transition-all duration-300"
+                       className="w-10 h-10 md:w-16 md:h-16 rounded-full shadow-md border border-gray-200 group-hover:scale-110 group-hover:shadow-xl transition-all duration-300"
                        style={{ backgroundColor: swatch.color }}
                      ></div>
-                     <span className="font-sans text-[10px] uppercase tracking-wider text-charcoal/60 group-hover:text-charcoal transition-colors whitespace-nowrap font-semibold">
+                     {/* 
+                        Text Size: text-[10px] -> text-[9px]
+                     */}
+                     <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-wider text-charcoal/60 group-hover:text-charcoal transition-colors whitespace-nowrap font-semibold">
                        {swatch.name}
                      </span>
                    </div>
