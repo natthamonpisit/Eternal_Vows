@@ -36,8 +36,13 @@ export const Guestbook: React.FC = () => {
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                        </div>
                        <div className="text-left flex-1">
-                          <span className="block font-sans text-lg md:text-xl text-charcoal group-hover:text-gold transition-colors font-bold uppercase tracking-wide">View Live Wall</span>
-                          <span className="block font-sans text-[10px] text-gray-400 uppercase tracking-wider mt-1">See all wishes on projector mode</span>
+                          {/* 
+                              MOBILE FONT SIZE UPDATE (-30%):
+                              Title: text-lg (18px) -> text-xs (12px)
+                              Subtitle: text-[10px] -> text-[7px]
+                          */}
+                          <span className="block font-sans text-xs md:text-xl text-charcoal group-hover:text-gold transition-colors font-bold uppercase tracking-wide">View Live Wall</span>
+                          <span className="block font-sans text-[7px] md:text-[10px] text-gray-400 uppercase tracking-wider mt-1">See all wishes on projector mode</span>
                        </div>
                        <svg className="w-5 h-5 text-gray-300 group-hover:text-gold transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                     </button>
@@ -57,8 +62,13 @@ export const Guestbook: React.FC = () => {
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                        </div>
                        <div className="text-left flex-1">
-                          <span className="block font-sans text-lg md:text-xl font-bold uppercase tracking-wide">Leave a Wish</span>
-                          <span className="block font-sans text-[10px] opacity-70 uppercase tracking-wider mt-1">Sign the guestbook</span>
+                          {/* 
+                              MOBILE FONT SIZE UPDATE (-20%):
+                              Title: text-lg (18px) -> text-sm (14px)
+                              Subtitle: text-[10px] -> text-[8px]
+                          */}
+                          <span className="block font-sans text-sm md:text-xl font-bold uppercase tracking-wide">Leave a Wish</span>
+                          <span className="block font-sans text-[8px] md:text-[10px] opacity-70 uppercase tracking-wider mt-1">Sign the guestbook</span>
                        </div>
                     </button>
 

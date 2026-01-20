@@ -75,13 +75,15 @@ export const MoneyGift: React.FC = () => {
                 </p>
               </div>
               
-              {/* Copyable Account Number - REDESIGNED */}
-              <div className="relative mb-10 group max-w-sm mx-auto">
-                <div className="flex items-center justify-between bg-[#FAF9F6] border border-gold/30 rounded-lg p-3 pl-6 shadow-sm hover:shadow-md transition-all duration-300 gap-4">
+              {/* Copyable Account Number - REDESIGNED & RESIZED (-20%) */}
+              {/* Changed max-w-sm to max-w-xs to reduce width */}
+              <div className="relative mb-8 group max-w-xs mx-auto">
+                {/* Reduced padding p-3 pl-6 -> p-2 pl-4 and gap-4 -> gap-3 */}
+                <div className="flex items-center justify-between bg-[#FAF9F6] border border-gold/30 rounded-lg p-2 pl-4 shadow-sm hover:shadow-md transition-all duration-300 gap-3">
                   {/* Account Number */}
                   <div className="flex-1 text-left overflow-hidden">
-                     {/* DESIGN UPDATE: Reduced font size (text-base md:text-lg) */}
-                     <span className="font-sans text-base md:text-lg text-charcoal font-bold tracking-[0.15em] tabular-nums truncate block">
+                     {/* Reduced font size: text-base -> text-sm, md:text-lg -> md:text-base */}
+                     <span className="font-sans text-sm md:text-base text-charcoal font-bold tracking-[0.15em] tabular-nums truncate block">
                         {ACCOUNT_NUMBER}
                      </span>
                   </div>
@@ -90,7 +92,7 @@ export const MoneyGift: React.FC = () => {
                   <button 
                     onClick={handleCopy}
                     className={`
-                      flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-300 shrink-0
+                      flex items-center gap-2 px-2.5 py-1.5 rounded-md transition-all duration-300 shrink-0
                       ${copied 
                         ? 'bg-green-500 text-white' 
                         : 'bg-white text-gold hover:bg-gold hover:text-white border border-gold/20'
@@ -99,17 +101,17 @@ export const MoneyGift: React.FC = () => {
                   >
                     {copied ? (
                       <>
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                        <span className="text-[10px] font-sans font-bold uppercase tracking-wider">Copied</span>
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                        <span className="text-[9px] font-sans font-bold uppercase tracking-wider">Copied</span>
                       </>
                     ) : (
                       <>
                         {/* New Cleaner Copy Icon */}
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <rect x="9" y="9" width="13" height="13" rx="2" ry="2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></rect>
                           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
                         </svg>
-                        <span className="text-[10px] font-sans font-bold uppercase tracking-wider">Copy</span>
+                        <span className="text-[9px] font-sans font-bold uppercase tracking-wider">Copy</span>
                       </>
                     )}
                   </button>
