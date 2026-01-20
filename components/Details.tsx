@@ -315,8 +315,8 @@ export const Details: React.FC = () => {
                     */}
                     <div className="relative drop-shadow-2xl w-full max-w-[240px] md:max-w-[320px]">
                        
-                       {/* Outer Frame (Charcoal) */}
-                       <div className="w-full aspect-[360/500] bg-charcoal rounded-t-[120px] md:rounded-t-[160px] rounded-b-xl p-3 md:p-4 flex flex-col relative shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+                       {/* Outer Frame (UPDATED: White Border as requested) */}
+                       <div className="w-full aspect-[360/500] bg-white rounded-t-[120px] md:rounded-t-[160px] rounded-b-xl p-3 md:p-4 flex flex-col relative shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
                           
                           {/* Inner Matte (White) */}
                           <div className="flex-1 bg-white rounded-t-[108px] md:rounded-t-[144px] rounded-b-lg p-2 overflow-hidden relative">

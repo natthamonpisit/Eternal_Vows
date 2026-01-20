@@ -11,43 +11,51 @@ export const Gallery: React.FC = () => {
 
   useEffect(() => {
     const loadImages = async () => {
-      let rawItems = await fetchGallery();
+      // 1. Explicitly fetch from 'Wedding_OukBew/Ourmoment' folder
+      // Fixed: Removed the hardcoded length check (rawItems.length !== 17)
+      // Now it supports ANY number of images.
+      const rawItems = await fetchGallery('Wedding_OukBew/Ourmoment');
       
-      // Fallback for Preview
-      if (rawItems.length === 0 || rawItems.length !== 17) {
-        console.log("Preview Mode: Loading 17 Mock Images for Bento Layout");
-        rawItems = Array.from({ length: 17 }).map((_, i) => ({
-           thumb: MOCK_GALLERY_IMAGES[i % MOCK_GALLERY_IMAGES.length],
-           full: MOCK_GALLERY_IMAGES[i % MOCK_GALLERY_IMAGES.length]
-        }));
+      if (rawItems.length > 0) {
+        setImages(rawItems);
+      } else {
+        // Fallback only if strictly empty (e.g. API fail or empty folder)
+        console.log("No images found in Ourmoment, using Mock Data.");
+        const mocks = MOCK_GALLERY_IMAGES.map(url => ({ thumb: url, full: url }));
+        setImages(mocks);
       }
 
-      setImages(rawItems);
       setLoading(false);
     };
     loadImages();
   }, []);
 
   // 🍱 LAYOUT LOGIC
-  // Mobile: Uses CSS Columns (Pinterest Style) - Class handled in JSX
-  // Desktop: Uses CSS Grid (Bento Style) - Class handled here
+  // Mobile: CSS Columns (Masonry)
+  // Desktop: CSS Grid with Dynamic Pattern (Supports infinite images)
   const getResponsiveClass = (index: number) => {
     // Base Classes
-    // Mobile: 'mb-3 break-inside-avoid' creates the Masonry spacing and prevents column breaking
-    // Desktop: 'md:mb-0' removes the bottom margin because Grid handles the gap
     const base = "relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10 mb-3 break-inside-avoid md:mb-0";
     
-    // Desktop Grid Logic (Bento Spans)
-    // These classes are prefixed with 'md:' so they ONLY apply on Desktop
+    // Desktop Grid Logic (Dynamic Repeating Pattern)
+    // Instead of hardcoding indices [0,3,8...], we use Modulo (%)
+    // This creates a repeating pattern every 12 images, so it looks good with 10, 20, or 100 images.
     let desktopClass = "md:col-span-1 md:row-span-1";
     
-    if ([0, 3, 8, 11, 14].includes(index)) {
+    const mod = index % 12;
+
+    if (mod === 0 || mod === 7) {
+        // Big Highlight (2x2) -> Used twice per cycle
         desktopClass = "md:col-span-2 md:row-span-2"; 
     } 
-    if (index === 1) desktopClass = "md:col-span-2 md:row-span-1"; 
-    if (index === 2) desktopClass = "md:col-span-1 md:row-span-1";
-    if (index === 5) desktopClass = "md:col-span-1 md:row-span-2"; 
-    if (index === 16) desktopClass = "md:col-span-2 md:row-span-1"; 
+    else if (mod === 3) {
+        // Tall Portrait (1x2) -> Adds vertical rhythm
+        desktopClass = "md:col-span-1 md:row-span-2";
+    }
+    else if (mod === 10) {
+        // Wide Landscape (2x1) -> Adds horizontal rhythm
+        desktopClass = "md:col-span-2 md:row-span-1";
+    }
 
     return `${base} ${desktopClass}`;
   };
@@ -76,19 +84,11 @@ export const Gallery: React.FC = () => {
         ) : (
           <FadeInUp delay="200ms">
              {/* 
-                LAYOUT STRATEGY SWAP:
-                
-                1. Mobile (Default): 'columns-2 gap-3'
-                   - Creates a Masonry/Pinterest layout.
-                   - Images stack vertically in columns.
-                   - Respects natural aspect ratio (Height auto).
-                
-                2. Desktop (md:): 'md:columns-auto md:grid ...'
-                   - Resets columns.
-                   - Activates CSS Grid.
-                   - Enforces fixed row heights (auto-rows) for the Bento look.
+                LAYOUT STRATEGY:
+                Desktop uses 'grid-flow-dense' to pack images tightly without gaps,
+                even with our dynamic spanning logic.
              */}
-             <div className="columns-2 gap-3 md:columns-auto md:grid md:grid-cols-4 lg:grid-cols-8 md:gap-4 md:auto-rows-[160px] lg:auto-rows-[180px] grid-flow-dense">
+             <div className="columns-2 gap-3 md:columns-auto md:grid md:grid-cols-4 lg:grid-cols-6 md:gap-4 md:auto-rows-[160px] lg:auto-rows-[180px] grid-flow-dense">
                {images.map((img, idx) => (
                  <div 
                    key={idx} 
