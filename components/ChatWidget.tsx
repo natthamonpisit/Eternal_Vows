@@ -171,7 +171,8 @@ export const ChatWidget: React.FC = () => {
                <img src={COUPLE_AVATAR_URL} alt="Assistant" className="w-full h-full object-cover rounded-full scale-[2.0] translate-y-5" />
             </div>
             <div>
-              <h3 className="font-serif text-white text-lg font-medium">Natthamonpisit & Sorot</h3>
+              {/* DESIGN UPDATE: Changed to font-sans (Montserrat) and added tracking */}
+              <h3 className="font-sans text-white text-lg font-bold tracking-wide">Natthamonpisit & Sorot</h3>
               <p className="font-sans text-white/70 text-[10px] uppercase tracking-widest flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span> Online
               </p>
@@ -190,7 +191,8 @@ export const ChatWidget: React.FC = () => {
           {messages.map((msg, idx) => (
             <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div 
-                className={`max-w-[85%] p-3 rounded-2xl text-sm md:text-base font-serif leading-relaxed shadow-sm flex gap-2 ${
+                // DESIGN UPDATE: Changed font-serif to font-sans for better readability on chat
+                className={`max-w-[85%] p-3 rounded-2xl text-sm md:text-base font-sans leading-relaxed shadow-sm flex gap-2 ${
                   msg.role === 'user' 
                     ? 'bg-gold text-white rounded-br-none flex-row-reverse' 
                     : 'bg-white text-charcoal border border-gray-100 rounded-bl-none block'
@@ -246,7 +248,8 @@ export const ChatWidget: React.FC = () => {
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="สอบถามข้อมูล..."
-              className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-4 py-2 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/20 font-serif text-charcoal text-sm transition-all"
+              // DESIGN UPDATE: Changed to font-sans
+              className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-4 py-2 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/20 font-sans text-charcoal text-sm transition-all"
               disabled={isLoading}
             />
             <button 
