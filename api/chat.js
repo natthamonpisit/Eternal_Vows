@@ -12,7 +12,6 @@
   [Capabilities]
   - ตอบคำถามเกี่ยวกับงานแต่ง (Date, Location, Schedule)
   - ค้นหาข้อมูลด้วย Google Search
-  - หาแผนที่ด้วย Google Maps
 */
 
 import { GoogleGenAI } from "@google/genai";
@@ -60,6 +59,7 @@ export default async function handler(req, res) {
   try {
     const { message, history, image } = req.body;
 
+    // Initialization: Always use explicit apiKey parameter
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     // -------------------------------------------------------------------------
@@ -99,7 +99,7 @@ export default async function handler(req, res) {
 
       **Information & Tools:**
       - งานจัดที่: "Dalva le ville", Bangkok (เสาร์ที่ 21 มีนาคม 2026)
-      - **คำสั่งพิเศษ:** หากถาม "สถานที่", "แผนที่", "เดินทางยังไง" -> ใช้ Google Maps หาพิกัด Dalva le ville และแนบ Link
+      - **คำสั่งพิเศษ:** หากถาม "สถานที่", "แผนที่", "เดินทางยังไง" -> ให้ใช้ Google Search หาแผนที่ Google Maps ของ "Dalva le ville Bangkok" มาแปะให้
       - **การค้นหาข้อมูล:** หากถามเรื่องอื่นๆ ที่ต้องการข้อมูลภายนอก -> ใช้ Google Search
 
       **Knowledge Base (ข้อมูลงาน):**
@@ -114,15 +114,16 @@ export default async function handler(req, res) {
       parts: [{ text: msg.content }]
     }));
 
+    // Start Chat Session
+    // Update: Using 'gemini-3-flash-preview' for best text performance
     const chat = ai.chats.create({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3-flash-preview',
       config: {
         systemInstruction: systemInstruction,
         temperature: 0.7,
-        // Enable Google Search and Google Maps Grounding
+        // Tools: Only use googleSearch for Gemini 3 series (Maps grounding is specific to 2.5)
         tools: [
-          { googleSearch: {} }, 
-          { googleMaps: {} }
+          { googleSearch: {} }
         ],
       },
       history: chatHistory
@@ -131,7 +132,7 @@ export default async function handler(req, res) {
     // Prepare content parts
     let contentParts = [];
     
-    // 1. If image URL is provided (e.g. from Cloudinary), convert to Base64 for Gemini
+    // 1. If image URL is provided, convert to Base64
     if (image) {
       const imagePart = await urlToGenerativePart(image);
       if (imagePart) {
@@ -142,37 +143,32 @@ export default async function handler(req, res) {
     // 2. Add text message
     contentParts.push({ text: message });
 
-    // Send to Gemini (Pass array of parts)
-    const result = await chat.sendMessage(contentParts);
+    // Send to Gemini
+    // CRITICAL FIX: The new SDK requires passing an object with a 'message' property
+    const result = await chat.sendMessage({ message: contentParts });
     let responseText = result.text;
 
     // -------------------------------------------------------------------------
     // 🗺️ GROUNDING METADATA EXTRACTION
-    // ดึง Link จาก Google Search / Maps มาต่อท้ายข้อความ (ตามกฏ Google GenAI SDK)
+    // Extract links from Google Search grounding
     // -------------------------------------------------------------------------
     const groundingMetadata = result.candidates?.[0]?.groundingMetadata;
     const links = [];
 
     if (groundingMetadata?.groundingChunks) {
       groundingMetadata.groundingChunks.forEach(chunk => {
-        // กรณีเป็น Web Search
         if (chunk.web?.uri) {
           links.push(chunk.web.uri);
-        }
-        // กรณีเป็น Maps
-        if (chunk.maps?.uri) {
-          links.push(chunk.maps.uri);
         }
       });
     }
 
-    // ถ้ามี Link ใหม่ๆ ที่ยังไม่มีในข้อความ ให้เอามาต่อท้าย
     if (links.length > 0) {
       const uniqueLinks = [...new Set(links)];
       const newLinks = uniqueLinks.filter(link => !responseText.includes(link));
       
       if (newLinks.length > 0) {
-        responseText += "\n\n📍 ข้อมูลเพิ่มเติม & แผนที่:\n" + newLinks.join("\n");
+        responseText += "\n\n📍 ข้อมูลเพิ่มเติม:\n" + newLinks.join("\n");
       }
     }
 
