@@ -77,9 +77,9 @@ export const Gallery: React.FC = () => {
       <div className="max-w-[1400px] mx-auto w-full px-0 relative z-10">
         
         {loading ? (
-          // FIX: Added 'min-h-[50vh]' so user can scroll down immediately even if images are loading.
-          // This prevents the "Scroll Lock" feeling at Hero section.
-          <div className="w-full min-h-[50vh] aspect-video bg-white/10 backdrop-blur-sm rounded-sm flex flex-col justify-center items-center shadow-lg border border-gold/10">
+          // FIX: Changed to 'min-h-screen' (100vh) to ensure the page has enough height to scroll
+          // immediately, fixing the "Stuck at Hero" issue while waiting for images.
+          <div className="w-full min-h-screen bg-white/5 backdrop-blur-sm rounded-sm flex flex-col justify-start pt-32 items-center shadow-none border border-gold/10">
             <div className="w-12 h-12 border-4 border-gold/30 border-t-gold rounded-full animate-spin mb-4"></div>
             <p className="font-sans text-charcoal/60 uppercase tracking-widest text-xs">Loading gallery...</p>
           </div>
