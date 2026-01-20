@@ -28,46 +28,38 @@ export const Gallery: React.FC = () => {
     loadImages();
   }, []);
 
-  // 🍱 LOGIC: Image Distribution for Mobile (Manual Balance)
-  // แทนที่จะใช้ columns-2 (ที่เรียงบนลงล่างแล้วทำให้สูงต่ำไม่เท่ากัน)
-  // เจเปลี่ยนมาใช้การแยก Array เป็น "ซ้าย" (Index คู่) และ "ขวา" (Index คี่)
-  // วิธีนี้จะช่วยเกลี่ยรูปสุดท้ายให้ไปลงในฝั่งที่ว่างกว่าโดยอัตโนมัติตามลำดับการโหลดครับ
+  // 📱 MOBILE LOGIC: 2 Columns (Left/Right Distribution)
   const mobileColumns = useMemo(() => {
     const left: GalleryItem[] = [];
     const right: GalleryItem[] = [];
-    
     images.forEach((img, i) => {
-      // สลับฟันปลา: รูปที่ 1 ลงซ้าย, รูปที่ 2 ลงขวา, รูปที่ 3 ลงซ้าย ...
-      if (i % 2 === 0) {
-        left.push(img);
-      } else {
-        right.push(img);
-      }
+      if (i % 2 === 0) left.push(img);
+      else right.push(img);
     });
-    
     return { left, right };
   }, [images]);
 
-  // 🍱 LOGIC: Desktop Grid Pattern
-  const getDesktopClass = (index: number) => {
-    const base = "relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110";
-    
-    // Grid Spanning Logic
-    let spanClass = "col-span-1 row-span-1";
-    const mod = index % 12;
+  // 💻 DESKTOP LOGIC: 3 Columns Masonry (Pinterest Style)
+  // วิธีนี้ช่วย "เกลี่ย" ความสูงของทั้ง 3 แถวให้ใกล้เคียงกันที่สุดโดยอัตโนมัติ
+  // และยังโชว์สัดส่วนภาพจริง (Portrait/Landscape) ได้สวยงามกว่าแบบ Grid
+  const desktopColumns = useMemo(() => {
+    const col1: GalleryItem[] = [];
+    const col2: GalleryItem[] = [];
+    const col3: GalleryItem[] = [];
 
-    if (mod === 0 || mod === 7) {
-        spanClass = "col-span-2 row-span-2"; // Big Highlight (2x2)
-    } 
-    else if (mod === 3) {
-        spanClass = "col-span-1 row-span-2"; // Tall Portrait (1x2)
-    }
-    else if (mod === 10) {
-        spanClass = "col-span-2 row-span-1"; // Wide Landscape (2x1)
-    }
+    images.forEach((img, i) => {
+      const remainder = i % 3;
+      if (remainder === 0) {
+        col1.push(img);
+      } else if (remainder === 1) {
+        col2.push(img);
+      } else {
+        col3.push(img);
+      }
+    });
 
-    return { container: `relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10 ${spanClass}`, img: "w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" };
-  };
+    return [col1, col2, col3];
+  }, [images]);
 
   return (
     // Section uses transparent background to show App global texture
@@ -92,72 +84,37 @@ export const Gallery: React.FC = () => {
           <FadeInUp delay="200ms">
              
              {/* 
-                📱 MOBILE LAYOUT: DUAL COLUMN FLEX (Manual Masonry)
-                แก้ปัญหา Column สูงต่ำไม่เท่ากันด้วยการสลับรูปซ้ายขวา
+                📱 MOBILE LAYOUT: DUAL COLUMN (Manual Masonry)
              */}
              <div className="flex md:hidden gap-3 items-start">
-                {/* Left Column (Even Indices: 0, 2, 4...) */}
                 <div className="flex-1 flex flex-col gap-3">
                    {mobileColumns.left.map((img, idx) => (
-                      <div 
-                        key={`m-left-${idx}`}
-                        className="relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10"
-                        onClick={() => setSelectedImage(img.full)}
-                      >
-                         <img 
-                           src={img.thumb} 
-                           alt={`Moment L${idx}`} 
-                           className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
-                           loading="lazy"
-                         />
-                         <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-500"></div>
-                      </div>
+                      <ImageCard key={`m-l-${idx}`} img={img} onClick={() => setSelectedImage(img.full)} />
                    ))}
                 </div>
-
-                {/* Right Column (Odd Indices: 1, 3, 5...) */}
                 <div className="flex-1 flex flex-col gap-3">
                    {mobileColumns.right.map((img, idx) => (
-                      <div 
-                        key={`m-right-${idx}`}
-                        className="relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10"
-                        onClick={() => setSelectedImage(img.full)}
-                      >
-                         <img 
-                           src={img.thumb} 
-                           alt={`Moment R${idx}`} 
-                           className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
-                           loading="lazy"
-                         />
-                         <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-500"></div>
-                      </div>
+                      <ImageCard key={`m-r-${idx}`} img={img} onClick={() => setSelectedImage(img.full)} />
                    ))}
                 </div>
              </div>
 
              {/* 
-                💻 DESKTOP LAYOUT: CSS GRID (Complex Pattern)
-                คง Layout เดิมที่พี่ชอบไว้ครับ
+                💻 DESKTOP LAYOUT: TRIPLE COLUMN (Manual Masonry)
+                เปลี่ยนจาก Grid เป็น Flex 3 Columns เพื่อเกลี่ยความสูงให้เท่ากัน
              */}
-             <div className="hidden md:grid md:grid-cols-4 lg:grid-cols-6 md:gap-4 md:auto-rows-[160px] lg:auto-rows-[180px] grid-flow-dense">
-               {images.map((img, idx) => {
-                 const styles = getDesktopClass(idx);
-                 return (
-                   <div 
-                     key={`d-${idx}`} 
-                     className={styles.container}
-                     onClick={() => setSelectedImage(img.full)}
-                   >
-                     <img 
-                       src={img.thumb} 
-                       alt={`Moment ${idx + 1}`} 
-                       className={styles.img}
-                       loading="lazy"
-                     />
-                     <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-500"></div>
-                   </div>
-                 );
-               })}
+             <div className="hidden md:flex gap-6 items-start">
+               {desktopColumns.map((col, colIdx) => (
+                 <div key={`d-col-${colIdx}`} className="flex-1 flex flex-col gap-6">
+                    {col.map((img, imgIdx) => (
+                      <ImageCard 
+                        key={`d-${colIdx}-${imgIdx}`} 
+                        img={img} 
+                        onClick={() => setSelectedImage(img.full)} 
+                      />
+                    ))}
+                 </div>
+               ))}
              </div>
 
           </FadeInUp>
@@ -210,3 +167,20 @@ export const Gallery: React.FC = () => {
     </section>
   );
 };
+
+// 🖼️ Reusable Image Component to keep code clean
+const ImageCard: React.FC<{ img: GalleryItem; onClick: () => void }> = ({ img, onClick }) => (
+  <div 
+    className="relative overflow-hidden group cursor-zoom-in rounded-sm border border-white/30 shadow-sm bg-white/10 w-full"
+    onClick={onClick}
+  >
+     {/* w-full h-auto allows natural aspect ratio */}
+     <img 
+       src={img.thumb} 
+       alt="Moment" 
+       className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+       loading="lazy"
+     />
+     <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/10 transition-colors duration-500"></div>
+  </div>
+);
