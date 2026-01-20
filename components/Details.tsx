@@ -359,7 +359,12 @@ export const Details: React.FC = () => {
                 </FadeInUp>
 
                 <div className="space-y-6">
-                   <div className="grid grid-cols-2 gap-6">
+                   {/* 
+                      GRID UPDATE:
+                      - Changed gap-6 to gap-x-6 gap-y-10
+                      - This increases vertical spacing between the top 2 images and bottom 2 images.
+                   */}
+                   <div className="grid grid-cols-2 gap-x-6 gap-y-10">
                       {loadingVenue ? (
                          Array.from({length: 4}).map((_, i) => (
                            <div key={i} className="aspect-[4/3] bg-white/10 rounded-sm animate-pulse"></div>
