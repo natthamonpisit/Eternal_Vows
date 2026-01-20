@@ -139,8 +139,8 @@ export const ChatWidget: React.FC = () => {
            <img 
              src={COUPLE_AVATAR_URL}
              alt="Chat with us"
-             // VISUAL FIX: Adjusted translate-y-9 to translate-y-3 to move image UP (reduce top space)
-             className="w-full h-full object-cover rounded-full bg-white transform scale-[2.5] translate-y-3 hover:scale-[2.6] transition-transform duration-500"
+             // VISUAL FIX: Adjusted translate-y-3 to translate-y-6 to move image DOWN slightly
+             className="w-full h-full object-cover rounded-full bg-white transform scale-[2.5] translate-y-6 hover:scale-[2.6] transition-transform duration-500"
              onError={(e) => {
                // Fallback if image fails to load
                (e.target as HTMLImageElement).src = "https://placehold.co/200x200/FDFBF7/B78A7D?text=Couple";
@@ -169,8 +169,8 @@ export const ChatWidget: React.FC = () => {
           <div className="flex items-center gap-3 relative z-10">
             <div className="w-12 h-12 rounded-full border-2 border-white/50 overflow-hidden bg-white/90 backdrop-blur-sm">
                {/* Small Avatar in Header */}
-               {/* VISUAL FIX: Adjusted translate-y-5 to translate-y-2 to move image UP */}
-               <img src={COUPLE_AVATAR_URL} alt="Assistant" className="w-full h-full object-cover rounded-full scale-[2.0] translate-y-2" />
+               {/* VISUAL FIX: Adjusted translate-y-2 to translate-y-3 to move image DOWN slightly */}
+               <img src={COUPLE_AVATAR_URL} alt="Assistant" className="w-full h-full object-cover rounded-full scale-[2.0] translate-y-3" />
             </div>
             <div>
               {/* DESIGN UPDATE: Changed to font-sans (Montserrat) and added tracking */}
