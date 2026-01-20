@@ -133,25 +133,28 @@ export const ChatWidget: React.FC = () => {
         className={`fixed bottom-6 right-6 md:bottom-12 md:right-12 z-50 p-0 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 group ${isOpen ? 'rotate-12 scale-0 opacity-0' : 'scale-100 opacity-100'}`}
         aria-label="Open Wedding Concierge"
       >
-        {/* Container for Avatar */}
-        <div className="w-16 h-16 md:w-28 md:h-28 rounded-full bg-white border-4 border-gold shadow-[0_4px_25px_rgba(183,138,125,0.6)] overflow-hidden relative flex items-center justify-center">
-           {/* Cartoon Image */}
-           <img 
-             src={COUPLE_AVATAR_URL}
-             alt="Chat with us"
-             // VISUAL FIX: Adjusted translate-y-3 to translate-y-6 to move image DOWN slightly
-             className="w-full h-full object-cover rounded-full bg-white transform scale-[2.5] translate-y-6 hover:scale-[2.6] transition-transform duration-500"
-             onError={(e) => {
-               // Fallback if image fails to load
-               (e.target as HTMLImageElement).src = "https://placehold.co/200x200/FDFBF7/B78A7D?text=Couple";
-             }}
-           />
-           
-           {/* Online Status Dot */}
-           <div className="absolute bottom-2 right-2 md:bottom-3 md:right-3 w-4 h-4 md:w-5 md:h-5 bg-green-500 border-[3px] border-white rounded-full animate-pulse z-10 shadow-sm"></div>
-           
-           {/* Shine Overlay */}
-           <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-white/20 pointer-events-none rounded-full"></div>
+        <div className="relative">
+          {/* Container for Avatar */}
+          <div className="w-16 h-16 md:w-28 md:h-28 rounded-full bg-white border-4 border-gold shadow-[0_4px_25px_rgba(183,138,125,0.6)] overflow-hidden relative flex items-center justify-center">
+            {/* Cartoon Image */}
+            <img 
+              src={COUPLE_AVATAR_URL}
+              alt="Chat with us"
+              // VISUAL FIX: Adjusted translate-y-3 to translate-y-5 to move image DOWN slightly (fixing "too high" issue)
+              className="w-full h-full object-cover rounded-full bg-white transform scale-[2.5] translate-y-5 hover:scale-[2.6] transition-transform duration-500"
+              onError={(e) => {
+                // Fallback if image fails to load
+                (e.target as HTMLImageElement).src = "https://placehold.co/200x200/FDFBF7/B78A7D?text=Couple";
+              }}
+            />
+            
+            {/* Shine Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-white/20 pointer-events-none rounded-full"></div>
+          </div>
+
+          {/* Online Status Dot - MOVED OUTSIDE CONTAINER */}
+          {/* VISUAL FIX: Sits on top of border, size increased by ~5% (w-[18px]/[23px]) */}
+          <div className="absolute bottom-0 right-0 md:bottom-1 md:right-1 w-[18px] h-[18px] md:w-[23px] md:h-[23px] bg-green-500 border-[3px] border-white rounded-full animate-pulse z-20 shadow-sm"></div>
         </div>
       </button>
 
