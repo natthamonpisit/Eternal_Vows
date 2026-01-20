@@ -140,8 +140,10 @@ export const ChatWidget: React.FC = () => {
             <img 
               src={COUPLE_AVATAR_URL}
               alt="Chat with us"
-              // VISUAL FIX: Adjusted translate-y-3 to translate-y-5 to move image DOWN slightly (fixing "too high" issue)
-              className="w-full h-full object-cover rounded-full bg-white transform scale-[2.5] translate-y-5 hover:scale-[2.6] transition-transform duration-500"
+              // VISUAL FIX: 
+              // Mobile: translate-y-5 (Unchanged - Shows faces/cats correctly on small screens)
+              // Desktop: md:translate-y-9 (Move down further to prevent cutting off heads/cats on larger containers)
+              className="w-full h-full object-cover rounded-full bg-white transform scale-[2.5] translate-y-5 md:translate-y-9 hover:scale-[2.6] transition-transform duration-500"
               onError={(e) => {
                 // Fallback if image fails to load
                 (e.target as HTMLImageElement).src = "https://placehold.co/200x200/FDFBF7/B78A7D?text=Couple";
