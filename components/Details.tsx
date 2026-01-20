@@ -307,20 +307,24 @@ export const Details: React.FC = () => {
                     
                     {/* 
                        MOBILE FINE-TUNING:
-                       1. Size Reduction: max-w from 320px -> 240px (Approx 25% smaller on mobile)
-                       2. Border Geometry: Calculated precise radii for perfect semi-circle arch
-                          - Mobile Width: 240px -> Outer Radius: 120px
-                          - Padding: p-3 (12px) -> Inner Radius: 108px
-                          - Inner Padding: p-2 (8px) -> Map Radius: 100px
+                       1. Size Reduction: max-w from 320px -> 240px
+                       2. White Picture Frame:
+                          - Changed bg-charcoal to bg-white
+                          - Increased padding (p-4 md:p-6) for frame thickness
+                          - Recalculated Inner Radius:
+                            Mobile: 120 (outer) - 16 (padding) = 104 (inner)
+                            Desktop: 160 (outer) - 24 (padding) = 136 (inner)
                     */}
                     <div className="relative drop-shadow-2xl w-full max-w-[240px] md:max-w-[320px]">
                        
-                       {/* Outer Frame (RESTORED: Charcoal Border) */}
-                       {/* Changed bg-white to bg-charcoal to create the dark frame effect */}
-                       <div className="w-full aspect-[360/500] bg-charcoal rounded-t-[120px] md:rounded-t-[160px] rounded-b-xl p-3 md:p-4 flex flex-col relative shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+                       {/* 
+                          REVERT: Outer Frame back to Charcoal (Dark Frame)
+                          Updated padding to p-2 md:p-3 for a cleaner dark frame look
+                       */}
+                       <div className="w-full aspect-[360/500] bg-charcoal rounded-t-[120px] md:rounded-t-[160px] rounded-b-xl p-2 md:p-3 flex flex-col relative shadow-[0_20px_50px_rgba(0,0,0,0.4)] border border-white/10">
                           
-                          {/* Inner Matte (White) */}
-                          <div className="flex-1 bg-white rounded-t-[108px] md:rounded-t-[144px] rounded-b-lg p-2 overflow-hidden relative">
+                          {/* Inner Matte (White/5) */}
+                          <div className="flex-1 bg-white/5 rounded-t-[110px] md:rounded-t-[148px] rounded-b-lg p-2 overflow-hidden relative backdrop-blur-sm">
                               
                               {/* Map Container */}
                               <div className="w-full h-full rounded-t-[100px] md:rounded-t-[136px] rounded-b-md overflow-hidden bg-gray-100 relative isolate">
@@ -355,7 +359,7 @@ export const Details: React.FC = () => {
                 </FadeInUp>
 
                 <div className="space-y-6">
-                   <div className="grid grid-cols-2 gap-4">
+                   <div className="grid grid-cols-2 gap-6">
                       {loadingVenue ? (
                          Array.from({length: 4}).map((_, i) => (
                            <div key={i} className="aspect-[4/3] bg-white/10 rounded-sm animate-pulse"></div>
@@ -363,13 +367,20 @@ export const Details: React.FC = () => {
                       ) : (
                          venueImages.map((img, idx) => (
                            <FadeInUp key={idx} delay={`${idx * 150}ms`}>
-                             <div className="aspect-[4/3] relative group overflow-hidden rounded-sm border-2 border-white/20 shadow-md">
-                                <img 
-                                  src={img.thumb} 
-                                  alt="Venue Atmosphere" 
-                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors"></div>
+                             {/* 
+                                🖼️ UPDATE: VENUE IMAGES WITH WHITE FRAME
+                                Added bg-white, p-2 (mobile) / p-3 (desktop), and shadow-lg
+                                to create a "Photo Frame" look as requested.
+                             */}
+                             <div className="bg-white p-2 md:p-3 shadow-lg rounded-sm transform transition-transform duration-500 hover:scale-[1.02] hover:-rotate-1">
+                               <div className="aspect-[4/3] w-full h-full relative overflow-hidden group">
+                                  <img 
+                                    src={img.thumb} 
+                                    alt="Venue Atmosphere" 
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                  />
+                                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+                               </div>
                              </div>
                            </FadeInUp>
                          ))
