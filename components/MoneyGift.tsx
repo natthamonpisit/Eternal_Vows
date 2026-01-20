@@ -1,11 +1,26 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FadeInUp } from './FadeInUp';
-import { submitSlip } from '../services/api';
+import { submitSlip, fetchGallery } from '../services/api';
 
 export const MoneyGift: React.FC = () => {
   const [view, setView] = useState<'info' | 'upload'>('info');
   const [copied, setCopied] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
   const ACCOUNT_NUMBER = "123-456-7890"; // พี่นัทอย่าลืมแก้เลขบัญชีจริงตรงนี้นะครับ
+
+  useEffect(() => {
+    const loadQr = async () => {
+      try {
+        const images = await fetchGallery('Wedding_OukBew/QR');
+        if (images.length > 0) {
+          setQrCodeUrl(images[0].full);
+        }
+      } catch (e) {
+        console.error("Failed to load QR code", e);
+      }
+    };
+    loadQr();
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(ACCOUNT_NUMBER.replace(/-/g, ''));
@@ -30,7 +45,7 @@ export const MoneyGift: React.FC = () => {
              <h2 className="font-sans text-3xl md:text-5xl text-gold-shine leading-normal py-2 uppercase tracking-wider font-bold">Gift with Love</h2>
              {view === 'info' && (
                 <p className="font-sans text-xs md:text-base text-gray-500 leading-relaxed px-0 md:px-12 mt-2 font-medium tracking-wide">
-                  Your presence is the most precious gift to us. For those who wish to offer a token of celebration, we have provided this digital option.
+                  Your presence is the most precious gift to us. For those who wish to offer a gift of celebration, we have provided this digital option for you.
                 </p>
              )}
           </div>
@@ -40,35 +55,65 @@ export const MoneyGift: React.FC = () => {
             // VIEW 1: INFO & QR CODE
             // ===================================
             <div className="py-2 text-center animate-fade-in max-w-md mx-auto">
-              <div className="relative w-48 h-48 md:w-56 md:h-56 mx-auto bg-white p-3 md:p-4 rounded-sm shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-100 flex items-center justify-center mb-8 rotate-0 hover:rotate-2 transition-transform duration-500">
-                {/* QR Code Placeholder */}
-                <div className="w-full h-full bg-[#FAF9F6] flex flex-col items-center justify-center text-gold/40 border border-dashed border-gold/30 rounded-sm">
-                   <svg className="w-12 h-12 mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 4v1m6 11h2m-6 0h-2v4h2v-4zM5 21v-4m4 4v-4m4 4v-4m-4-4h4m-4 4h4m-4-4v4m4-4v4m-5 0V3m-4 0v18m18 0V3" /></svg>
-                   <span className="text-[10px] font-sans font-bold uppercase tracking-widest">Bank QR Code</span>
-                </div>
+              <div className="relative w-48 h-48 md:w-56 md:h-56 mx-auto bg-white p-2 rounded-sm shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-100 flex items-center justify-center mb-8 rotate-0 hover:rotate-1 transition-transform duration-500">
+                {/* QR Code Logic */}
+                {qrCodeUrl ? (
+                   <img src={qrCodeUrl} alt="Bank QR Code" className="w-full h-full object-contain" />
+                ) : (
+                   <div className="w-full h-full bg-[#FAF9F6] flex flex-col items-center justify-center text-gold/40 border border-dashed border-gold/30 rounded-sm">
+                      <svg className="w-12 h-12 mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 4v1m6 11h2m-6 0h-2v4h2v-4zM5 21v-4m4 4v-4m4 4v-4m-4-4h4m-4 4h4m-4-4v4m4-4v4m-5 0V3m-4 0v18m18 0V3" /></svg>
+                      <span className="text-[10px] font-sans font-bold uppercase tracking-widest">Loading QR...</span>
+                   </div>
+                )}
               </div>
               
               <div className="mb-8">
-                <p className="font-sans text-xs text-gold uppercase tracking-widest font-bold mb-1">Bank of America</p>
-                <p className="font-serif text-xl text-charcoal">Natthamonpisit & Sorot</p>
+                <p className="font-sans text-xs text-gold uppercase tracking-widest font-bold mb-2">KASIKORN BANK</p>
+                {/* DESIGN UPDATE: Changed to Sans-serif & Bold for better readability */}
+                <p className="font-sans text-sm md:text-base text-charcoal font-semibold tracking-wide leading-relaxed">
+                  Sorot Meesukanukul and<br/>Natthamonpisit Burakrai
+                </p>
               </div>
               
-              {/* Copyable Account Number */}
-              <div className="relative mb-10 group">
-                <button 
-                  onClick={handleCopy}
-                  className="flex items-center justify-center gap-3 w-full px-6 py-4 bg-[#FAF9F6] border border-gold/20 rounded-sm hover:border-gold hover:shadow-md transition-all group-hover:-translate-y-0.5"
-                >
-                  <span className="font-sans text-lg md:text-2xl text-charcoal font-bold tracking-widest">{ACCOUNT_NUMBER}</span>
-                  <div className="w-8 h-8 rounded-full bg-white border border-gold/20 flex items-center justify-center text-gold">
-                    {copied ? (
-                      <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                    ) : (
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012-2h8a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    )}
+              {/* Copyable Account Number - REDESIGNED */}
+              <div className="relative mb-10 group max-w-sm mx-auto">
+                <div className="flex items-center justify-between bg-[#FAF9F6] border border-gold/30 rounded-lg p-3 pl-6 shadow-sm hover:shadow-md transition-all duration-300 gap-4">
+                  {/* Account Number */}
+                  <div className="flex-1 text-left overflow-hidden">
+                     {/* DESIGN UPDATE: Reduced font size (text-base md:text-lg) */}
+                     <span className="font-sans text-base md:text-lg text-charcoal font-bold tracking-[0.15em] tabular-nums truncate block">
+                        {ACCOUNT_NUMBER}
+                     </span>
                   </div>
-                </button>
-                {copied && <span className="absolute left-1/2 -translate-x-1/2 -bottom-6 text-[10px] text-green-600 font-sans uppercase tracking-widest animate-fade-in">Copied to clipboard</span>}
+
+                  {/* Copy Button */}
+                  <button 
+                    onClick={handleCopy}
+                    className={`
+                      flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-300 shrink-0
+                      ${copied 
+                        ? 'bg-green-500 text-white' 
+                        : 'bg-white text-gold hover:bg-gold hover:text-white border border-gold/20'
+                      }
+                    `}
+                  >
+                    {copied ? (
+                      <>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                        <span className="text-[10px] font-sans font-bold uppercase tracking-wider">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        {/* New Cleaner Copy Icon */}
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></rect>
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+                        </svg>
+                        <span className="text-[10px] font-sans font-bold uppercase tracking-wider">Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
 
               {/* Attach Slip Button */}
