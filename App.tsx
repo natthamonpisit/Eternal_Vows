@@ -112,9 +112,9 @@ export default function App() {
   useEffect(() => {
     // SCROLLBAR MANAGEMENT
     if (showContent || isLiveMode) {
-      // FIX: Explicitly set to 'visible' to ensure body doesn't create a secondary scroll container.
-      // The main scrolling happens on 'html'.
-      document.body.style.overflow = 'visible';
+      // FIX: Reset to empty string (default) to let CSS in index.html control the scroll behavior.
+      // Do not force 'visible' or 'auto' via inline styles to avoid conflicts.
+      document.body.style.overflow = ''; 
     } else {
       document.body.style.overflow = 'hidden';
     }

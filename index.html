@@ -66,49 +66,52 @@
     </script>
     <style>
       /* 
-         FIX: DOUBLE SCROLLBAR REMOVAL 
-         Logic: Only 'html' should handle scrolling. 'body' must be visible to let content flow.
+         FIX: SCROLLBAR & SCROLL LOCK
+         1. Remove 'height: 100%' from html to allow natural document flow (Fixes double scrollbar).
+         2. Use 'overflow-y: overlay' for Webkit/Chrome to make scrollbar float on top and auto-hide.
       */
       html {
-        height: 100%;
-        overflow-y: auto; /* Master scrollbar */
+        /* Default height: auto */
+        overflow-y: overlay; /* Chrome/Edge: Scrollbar floats over content */
         overflow-x: hidden;
         scroll-behavior: smooth;
       }
       
       body {
-        min-height: 100%;
+        min-height: 100vh;
         margin: 0;
         padding: 0;
-        overflow-y: visible !important; /* Force body NOT to scroll */
         overflow-x: hidden;
         background-color: #FDFBF7;
       }
 
       /* 
-         PREMIUM SCROLLBAR STYLING 
-         Style: Ultra Thin & Auto-hiding (Rose Gold)
+         PREMIUM INVISIBLE SCROLLBAR
+         Style: Transparent track, minimal thumb.
       */
       
-      /* The Scrollbar Track (Background) -> Transparent */
       ::-webkit-scrollbar {
-        width: 4px; /* Very thin */
-        height: 4px;
-      }
-      ::-webkit-scrollbar-track {
-        background: transparent; 
+        width: 6px; /* Slightly wider for usability but invisible track */
+        height: 6px;
       }
       
-      /* The Scrollbar Thumb (The moving part) */
+      ::-webkit-scrollbar-track {
+        background: transparent; /* Completely invisible track */
+      }
+      
       ::-webkit-scrollbar-thumb {
-        background: rgba(183, 138, 125, 0.3); /* Very faint Rose Gold */
+        background: rgba(183, 138, 125, 0.0); /* Hidden by default */
         border-radius: 10px;
         transition: background 0.3s ease;
       }
 
-      /* Hover State: Make it slightly more visible when user interacts */
+      /* Show scrollbar ONLY when scrolling (simulated via hover on desktop) or active */
+      html:hover ::-webkit-scrollbar-thumb {
+        background: rgba(183, 138, 125, 0.5); /* Rose gold tint when interacting */
+      }
+      
       ::-webkit-scrollbar-thumb:hover {
-        background: rgba(183, 138, 125, 0.8); /* Solid Rose Gold */
+        background: rgba(183, 138, 125, 0.8); /* Darker on direct hover */
       }
 
       /* Metallic Rose Gold Shine Effect */
