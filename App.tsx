@@ -138,11 +138,14 @@ export default function App() {
 
   useEffect(() => {
     // SCROLLBAR MANAGEMENT
-    if (showContent || isLiveMode) {
-      // FIX: Reset to empty string (default) to let CSS in index.html control the scroll behavior.
-      // Do not force 'visible' or 'auto' via inline styles to avoid conflicts.
+    if (isLiveMode) {
+      // FIX: FORCE HIDDEN ON LIVE MODE to remove the pink dash/ghost scrollbar
+      document.body.style.overflow = 'hidden'; 
+    } else if (showContent) {
+      // Allow default scrolling for main site
       document.body.style.overflow = ''; 
     } else {
+      // Envelope closed
       document.body.style.overflow = 'hidden';
     }
   }, [showContent, isLiveMode]);

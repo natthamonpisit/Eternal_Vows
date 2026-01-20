@@ -163,8 +163,9 @@ export const LiveWall: React.FC = () => {
                  landscape:w-auto landscape:max-w-[85vw]
                  
                  /* HEIGHT CONTROLS */
-                 /* Portrait: Auto height */
-                 h-auto max-h-full 
+                 /* Portrait: 'h-full' to fill the available space (consuming the gap below) */
+                 /* This makes the card taller on mobile, allowing text section to expand via flex-1 */
+                 h-full 
                  /* Landscape: Fixed viewport height percentage to drive the aspect ratio */
                  landscape:h-[75vh] md:landscape:h-[60vh]
                  
@@ -178,7 +179,7 @@ export const LiveWall: React.FC = () => {
                     relative bg-gray-100 overflow-hidden flex-shrink-0
                     
                     /* Portrait: Full width, REDUCED ASPECT RATIO (Taller than square, but shorter visually in flex) */
-                    /* UPDATED: aspect-[10/9] creates a slightly shorter image container than aspect-square (1:1) */
+                    /* aspect-[10/9] keeps the image height controlled so text has more room when card is tall */
                     w-full aspect-[10/9] 
                     
                     /* Landscape: Height matches container (100%), Width auto, Aspect Ratio 4:3 (or 1:1) */
@@ -210,7 +211,7 @@ export const LiveWall: React.FC = () => {
 
                 {/* Message Section */}
                 <div className={`
-                   /* Portrait: Flex-1 to fill height */
+                   /* Portrait: Flex-1 to fill height (Expands to fill the extra height from h-full) */
                    flex-1 
                    
                    /* Landscape: Fixed Width! Do not grow. Keeps card compact. */
