@@ -140,18 +140,19 @@ export default function App() {
     // SCROLLBAR MANAGEMENT
     const applyScrollSettings = () => {
       if (isLiveMode) {
-        // FIX: FORCE HIDDEN ON BOTH HTML & BODY for Live Mode
-        // This removes the pink scrollbar ghost completely
+        // FIX: ADD 'live-mode' CLASS
+        // This triggers the CSS rule in index.html that sets display:none on scrollbars
+        document.body.classList.add('live-mode');
         document.documentElement.style.overflow = 'hidden'; 
-        document.body.style.overflow = 'hidden'; 
-      } else if (showContent) {
-        // Allow default scrolling for main site
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = ''; 
       } else {
-        // Envelope closed
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.overflow = 'hidden';
+        // REMOVE 'live-mode' CLASS
+        document.body.classList.remove('live-mode');
+        
+        if (showContent) {
+           document.documentElement.style.overflow = '';
+        } else {
+           document.documentElement.style.overflow = 'hidden';
+        }
       }
     };
 
@@ -159,8 +160,8 @@ export default function App() {
 
     // Cleanup function
     return () => {
+       document.body.classList.remove('live-mode');
        document.documentElement.style.overflow = '';
-       document.body.style.overflow = '';
     };
   }, [showContent, isLiveMode]);
 

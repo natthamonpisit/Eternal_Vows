@@ -120,6 +120,28 @@
         border-width: 2px; /* Expands slightly */
       }
 
+      /* 
+         ⛔️ LIVE MODE OVERRIDE (For Guestbook Wall)
+         This class completely kills the scrollbar to prevent the pink line artifact
+      */
+      body.live-mode {
+        overflow: hidden !important;
+        scrollbar-width: none !important; /* Firefox */
+        -ms-overflow-style: none !important; /* IE/Edge */
+      }
+      
+      body.live-mode ::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        background: transparent !important;
+      }
+
+      body.live-mode ::-webkit-scrollbar-thumb {
+        display: none !important;
+        background-color: transparent !important;
+      }
+
       /* Metallic Rose Gold Shine Effect */
       .text-gold-shine {
         background: linear-gradient(to right, #8E5B50, #B78A7D, #EBCBC5, #B78A7D, #8E5B50);

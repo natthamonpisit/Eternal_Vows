@@ -125,10 +125,10 @@ export const LiveWall: React.FC = () => {
       {/* --- BOX 2: MAIN CONTENT (Flexible, Fills space, No Overflow overlap) --- */}
       {/* 
          UPDATES:
-         1. Reduced bottom padding on mobile: pb-2 (was pb-12)
-         2. Keeps md:pb-24 for desktop breathing room
+         1. Reduced bottom padding on mobile: pb-2
+         2. REDUCED DESKTOP PADDING: md:pb-4 (Was pb-24). This centers the card correctly in the available space.
       */}
-      <main className="flex-1 w-full relative z-10 flex flex-col justify-center items-center overflow-hidden px-4 pt-2 pb-2 md:pb-24">
+      <main className="flex-1 w-full relative z-10 flex flex-col justify-center items-center overflow-hidden px-4 pt-2 pb-2 md:pb-4">
         
         {/* Loading State */}
         {loading && wishes.length === 0 ? (
@@ -165,7 +165,10 @@ export const LiveWall: React.FC = () => {
                  /* ================================================= */
                  landscape:flex-row 
                  landscape:w-auto landscape:max-w-[85vw]
-                 landscape:h-[65vh] /* Fixed optimized height for desktop projector */
+                 
+                 /* UPDATED HEIGHT: Reduced to 55vh to prevent footer collision in windowed mode */
+                 landscape:h-[55vh] 
+                 
                  landscape:my-auto /* Center vertically in the container */
                  
                  mx-auto
