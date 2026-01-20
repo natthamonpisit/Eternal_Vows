@@ -90,7 +90,8 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ shouldPlay }) => {
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50 animate-fade-in mix-blend-multiply">
+    // DESIGN UPDATE: Moved from right-4 to left-4
+    <div className="fixed top-4 left-4 z-50 animate-fade-in mix-blend-multiply">
       {/* Remove crossOrigin attribute to allow redirects */}
       <audio 
         ref={audioRef} 
