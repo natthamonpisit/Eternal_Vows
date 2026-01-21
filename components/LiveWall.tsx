@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { fetchWishes } from '../services/api';
 import { GuestWishes } from '../types';
 
@@ -7,34 +7,15 @@ import { GuestWishes } from '../types';
   📺 COMPONENT: LIVE WALL (Digital Guestbook Projector)
   ========================================================================================
   
-  [Concept]
-  - หน้าจอสำหรับเปิดขึ้น Projector ในงานแต่ง
-  - แสดงคำอวยพรจาก Google Sheets แบบ Real-time Slideshow
+  [Updated Logic: "The Invisible Box" Auto-Scale]
+  - Concept: "วัดตัวตัดสูท" (One-Shot Area Calculation)
+  - ไม่ใช้ Scrollbar แต่ใช้วิธีคำนวณพื้นที่กล่อง (Width x Height) เทียบกับจำนวนตัวอักษร
+  - ใช้ useLayoutEffect เพื่อคำนวณและปรับขนาด Font *ก่อน* Browser จะวาดภาพ (Paint)
+    ทำให้ User ไม่เห็นจังหวะกระพริบ หรือตัวหนังสือยืดหด
   
-  [Data Flow & Logic]
-  1. Data Source: ดึงข้อมูลจาก Google Sheets ผ่าน `services/api.ts` -> `fetchWishes()`
-  2. Polling: ดึงข้อมูลใหม่ทุกๆ 15 วินาที (setInterval)
-  3. Slideshow: เปลี่ยนการ์ดอวยพรทุกๆ 6 วินาที
-  
-  [QR Code Strategy]
-  - URL: `https://eternal-vows-pi.vercel.app/#guestbook`
-  - Purpose: เมื่อแขกสแกน จะข้ามหน้าซองจดหมาย (Envelope) และเลื่อนลงไปที่ฟอร์มเขียนคำอวยพรทันที (Auto-scroll to #guestbook-section)
-  - Generation: ใช้ API `api.qrserver.com` สร้าง QR แบบ Dynamic
-  
-  [Layout Architecture]
-  1. Mobile (Portrait): 
-     - Style: `h-full`, `flex-col`
-     - Behavior: ยืดเต็มจอแนวตั้ง ใช้พื้นที่ว่างด้านล่างให้คุ้มค่าเพื่อให้ข้อความยาวๆ มีที่อยู่
-  2. Desktop (Landscape/Projector):
-     - Style: `h-[55vh]`, `landscape:flex-row`, `mx-auto`
-     - Behavior: ความสูง Fix ไว้ที่ 55vh เพื่อไม่ให้ชน Footer เวลาเปิดบน Browser (Non-fullscreen)
-                 และดูสมส่วนเมื่อขึ้นจอใหญ่
-  
-  [Key Colors]
-  - Background: Cream (#FDFBF7)
-  - Text: Charcoal (#36454F)
-  - Accents: Rose Gold (#B78A7D), Old Rose (#C08E86)
-  ========================================================================================
+  [Layout Structure]
+  - Card Body = Flexible Height (Invisible Box) -> พื้นที่สำหรับคำอวยพร
+  - Card Footer = Fixed Height -> พื้นที่สำหรับชื่อและเวลา (อยู่ติดล่างเสมอ)
 */
 
 export const LiveWall: React.FC = () => {
@@ -46,22 +27,21 @@ export const LiveWall: React.FC = () => {
   // Slideshow State
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // 📐 Auto-Scale Logic State
+  const messageBoxRef = useRef<HTMLDivElement>(null);
+  const [dynamicFontSize, setDynamicFontSize] = useState(24); // Default start size
+
   const loadWishes = async () => {
     setIsRefreshing(true);
     const data = await fetchWishes();
-    
-    // Check if new data is different to avoid unnecessary re-renders/resets
-    setWishes(prev => {
-      return data;
-    });
-    
+    setWishes(prev => data);
     setLoading(false);
     setIsRefreshing(false);
   };
 
   useEffect(() => {
     loadWishes();
-    const interval = setInterval(loadWishes, 15000); // Fetch new data every 15s
+    const interval = setInterval(loadWishes, 15000); 
     
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -74,7 +54,7 @@ export const LiveWall: React.FC = () => {
     };
   }, []);
 
-  // Auto-Rotate Slideshow (Every 6 seconds)
+  // Auto-Rotate Slideshow
   useEffect(() => {
     if (wishes.length > 0) {
       const timer = setInterval(() => {
@@ -83,6 +63,40 @@ export const LiveWall: React.FC = () => {
       return () => clearInterval(timer);
     }
   }, [wishes.length]);
+
+  // 🧠 CORE ALGORITHM: "The Tailored Suit" (Area Calculation)
+  // ทำงานทันทีที่ DOM ถูกสร้าง แต่ก่อนที่จะ Paint ลงหน้าจอ
+  useLayoutEffect(() => {
+    if (messageBoxRef.current && wishes.length > 0) {
+      const currentText = wishes[activeIndex]?.message || "";
+      const { clientWidth, clientHeight } = messageBoxRef.current;
+      
+      // 1. Calculate Area (พื้นที่กล่อง)
+      const boxArea = clientWidth * clientHeight;
+      
+      // 2. Count Chars (จำนวนตัวอักษร)
+      const charCount = Math.max(currentText.length, 1); // ป้องกันการหารด้วย 0
+
+      /* 
+         3. The Magic Formula:
+         FontSize ~= Sqrt( (BoxArea * FillFactor) / (CharCount * AspectRatioFactor) )
+         
+         - FillFactor (1.6): ค่าชดเชยเพื่อให้ตัวหนังสือดูเต็มแน่น (เพิ่มได้ถ้าอยากให้แน่นขึ้น)
+         - AspectRatioFactor: ค่าเฉลี่ยความกว้างต่อนึงตัวอักษร
+      */
+      const calculatedSize = Math.sqrt((boxArea * 1.6) / charCount);
+
+      // 4. Clamping (กำหนดเพดานบน-ล่าง)
+      // Desktop: ยอมให้ใหญ่สุด 64px, เล็กสุด 18px
+      // Mobile: อาจจะเล็กกว่านี้ได้นิดหน่อย แต่ 18px กำลังอ่านง่าย
+      const minSize = 18;
+      const maxSize = 64; 
+      
+      const finalSize = Math.min(Math.max(calculatedSize, minSize), maxSize);
+      
+      setDynamicFontSize(finalSize);
+    }
+  }, [activeIndex, wishes, isFullscreen]); // Recalculate whenever slide changes or screen resizes
 
   const toggleFullScreen = () => {
     if (!document.fullscreenElement) {
@@ -96,28 +110,21 @@ export const LiveWall: React.FC = () => {
     }
   };
 
-  // Current Wish to Display
   const currentWish = wishes.length > 0 ? wishes[activeIndex] : null;
-
-  // URL for QR Code that skips envelope
   const QR_URL = "https://eternal-vows-pi.vercel.app/#guestbook";
 
   return (
-    // MAIN CONTAINER: 3 BOX LAYOUT (Header / Main / Footer)
-    // ADDED: [&::-webkit-scrollbar]:hidden to hide any stray scrollbars
     <div className="fixed inset-0 w-full h-full bg-[#FDFBF7] text-charcoal font-serif overflow-hidden flex flex-col [&::-webkit-scrollbar]:hidden">
       
-      {/* Background Texture & Decor */}
+      {/* Background Texture */}
       <div className="absolute inset-0 opacity-40 pointer-events-none" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/cream-paper.png")` }}></div>
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
          <div className="absolute top-10 left-10 w-64 h-64 bg-gold/5 rounded-full blur-3xl animate-pulse"></div>
          <div className="absolute bottom-20 right-20 w-80 h-80 bg-old-rose/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      {/* --- BOX 1: HEADER (Fixed Height, No Shrink) --- */}
+      {/* HEADER */}
       <header className="flex-none relative z-20 w-full pt-2 landscape:pt-4 pb-2 px-4 text-center bg-gradient-to-b from-[#FDFBF7] via-[#FDFBF7]/95 to-transparent">
-        
-        {/* Navigation Controls */}
         <div className="absolute top-4 left-4 md:top-6 md:left-6 flex gap-3 z-30">
            <button 
              onClick={() => window.location.hash = ''}
@@ -141,7 +148,6 @@ export const LiveWall: React.FC = () => {
           </button>
         </div>
 
-        {/* Names */}
         <div className="py-1 landscape:py-2 mt-1 landscape:mt-2">
           <h1 className="font-script text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-gold-shine mb-1 leading-loose py-2 drop-shadow-sm px-4">
             Natthamonpisit & Sorot
@@ -157,22 +163,15 @@ export const LiveWall: React.FC = () => {
         </div>
       </header>
 
-      {/* --- BOX 2: MAIN CONTENT (Flexible, Fills space, No Overflow overlap) --- */}
-      {/* 
-         UPDATES:
-         1. Reduced bottom padding on mobile: pb-2
-         2. REDUCED DESKTOP PADDING: md:pb-4 (Was pb-24). This centers the card correctly in the available space.
-      */}
+      {/* MAIN CONTENT AREA */}
       <main className="flex-1 w-full relative z-10 flex flex-col justify-center items-center overflow-hidden px-4 pt-2 pb-2 md:pb-4">
         
-        {/* Loading State */}
         {loading && wishes.length === 0 ? (
           <div className="flex flex-col items-center gap-4">
             <div className="w-16 h-16 border-4 border-gold/30 border-t-gold rounded-full animate-spin"></div>
             <p className="font-serif text-xl text-gold animate-pulse">Loading wishes...</p>
           </div>
         ) : wishes.length === 0 ? (
-          // Empty State
           <div className="text-center py-12 bg-white/50 backdrop-blur-sm px-12 rounded-3xl border border-gold/20 shadow-xl max-w-[90%]">
              <div className="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <svg className="w-10 h-10 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
@@ -181,54 +180,29 @@ export const LiveWall: React.FC = () => {
              <p className="font-sans text-xs md:text-sm text-gold uppercase tracking-[0.2em]">Scan QR code to send your love</p>
           </div>
         ) : (
-          // Slideshow Card
           <div className="w-full h-full flex items-center justify-center">
              <div 
                key={activeIndex} 
                className={`
                  relative bg-white shadow-2xl rounded-2xl overflow-hidden animate-fade-in border border-white/50 ring-1 ring-gold/10
-                 
-                 /* ================================================= */
-                 /* 📱 MOBILE PORTRAIT STYLES                        */
-                 /* ================================================= */
-                 flex flex-col 
-                 w-full max-w-[340px] 
-                 h-full /* Stretch to fill available vertical space on mobile */
-                 
-                 /* ================================================= */
-                 /* 💻 DESKTOP LANDSCAPE STYLES                      */
-                 /* ================================================= */
-                 landscape:flex-row 
-                 landscape:w-auto landscape:max-w-[85vw]
-                 
-                 /* UPDATED HEIGHT: Reduced to 55vh to prevent footer collision in windowed mode */
-                 landscape:h-[55vh] 
-                 
-                 landscape:my-auto /* Center vertically in the container */
-                 
-                 mx-auto
+                 flex flex-col w-full max-w-[340px] h-full
+                 landscape:flex-row landscape:w-auto landscape:max-w-[85vw] landscape:h-[55vh]
+                 landscape:my-auto mx-auto
                `}
              >
-                {/* Image Section */}
+                {/* 1. Image Section */}
                 {currentWish?.imageUrl ? (
                   <div className="
                     relative bg-gray-100 overflow-hidden flex-shrink-0
-                    
-                    /* Portrait: Full width, aspect ratio tuned for mobile balance */
                     w-full aspect-[10/9] 
-                    
-                    /* Landscape: Height follows container, Width auto, Ratio 4:3 */
                     landscape:h-full landscape:w-auto landscape:aspect-[4/3]
                   ">
-                    {/* Layer 1: Blurred Background (To fill any gaps nicely) */}
                     <img 
                       src={currentWish.imageUrl} 
                       alt="Background" 
                       className="absolute inset-0 w-full h-full object-cover blur-xl opacity-60 scale-110"
                       referrerPolicy="no-referrer"
                     />
-
-                    {/* Layer 2: Main Image (Contained - Shows WHOLE picture) */}
                     <img 
                       src={currentWish.imageUrl} 
                       alt="Memory" 
@@ -237,59 +211,53 @@ export const LiveWall: React.FC = () => {
                     />
                   </div>
                 ) : (
-                  // Fallback decoration
                   <div className="hidden landscape:flex w-64 bg-[#FAF9F6] items-center justify-center border-r border-gold/10 relative overflow-hidden flex-shrink-0">
                      <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]"></div>
                      <svg className="w-32 h-32 text-gold/20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                   </div>
                 )}
 
-                {/* Message Section */}
+                {/* 2. Text Section (Flex Column) */}
                 <div className={`
-                   /* Portrait: Flex-1 to fill height (Expands to fill the extra height from h-full) */
                    flex-1 
-                   
-                   /* Landscape: Fixed Width! Do not grow. Keeps card compact. */
                    landscape:flex-none landscape:w-[280px] md:landscape:w-[320px]
-                   
-                   relative flex flex-col justify-center overflow-hidden
-                   
+                   relative flex flex-col overflow-hidden
                    p-4 md:p-6 landscape:p-8
-                   
                    ${!currentWish?.imageUrl ? 'items-center text-center' : ''}
-                   min-h-0
                 `}>
                   
-                  {/* Quotes */}
-                  <svg className="w-6 h-6 md:w-12 md:h-12 text-gold/20 absolute top-3 left-3 md:top-6 md:left-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 13.1216 16 12.017 16H9C9.04875 12.2882 11.2359 10.3204 12.8225 9.7042L12.0833 7.79979C9.25625 8.89708 7 12.1932 7 16V21H14.017ZM21 21L21 18C21 16.8954 20.1046 16 19 16H15.9829C16.0317 12.2882 18.2189 10.3204 19.8054 9.7042L19.0662 7.79979C16.2392 8.89708 13.9829 12.1932 13.9829 16V21H21Z" /></svg>
-                  <svg className="w-6 h-6 md:w-12 md:h-12 text-gold/20 absolute bottom-3 right-3 md:bottom-6 md:right-6 rotate-180" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 13.1216 16 12.017 16H9C9.04875 12.2882 11.2359 10.3204 12.8225 9.7042L12.0833 7.79979C9.25625 8.89708 7 12.1932 7 16V21H14.017ZM21 21L21 18C21 16.8954 20.1046 16 19 16H15.9829C16.0317 12.2882 18.2189 10.3204 19.8054 9.7042L19.0662 7.79979C16.2392 8.89708 13.9829 12.1932 13.9829 16V21H21Z" /></svg>
+                  {/* Decorative Quotes */}
+                  <svg className="w-6 h-6 md:w-10 md:h-10 text-gold/20 absolute top-2 left-2 md:top-4 md:left-4" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 13.1216 16 12.017 16H9C9.04875 12.2882 11.2359 10.3204 12.8225 9.7042L12.0833 7.79979C9.25625 8.89708 7 12.1932 7 16V21H14.017ZM21 21L21 18C21 16.8954 20.1046 16 19 16H15.9829C16.0317 12.2882 18.2189 10.3204 19.8054 9.7042L19.0662 7.79979C16.2392 8.89708 13.9829 12.1932 13.9829 16V21H21Z" /></svg>
+                  <svg className="w-6 h-6 md:w-10 md:h-10 text-gold/20 absolute bottom-2 right-2 md:bottom-4 md:right-4 rotate-180" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 13.1216 16 12.017 16H9C9.04875 12.2882 11.2359 10.3204 12.8225 9.7042L12.0833 7.79979C9.25625 8.89708 7 12.1932 7 16V21H14.017ZM21 21L21 18C21 16.8954 20.1046 16 19 16H15.9829C16.0317 12.2882 18.2189 10.3204 19.8054 9.7042L19.0662 7.79979C16.2392 8.89708 13.9829 12.1932 13.9829 16V21H21Z" /></svg>
 
-                  <div className="relative z-10 w-full max-h-full overflow-y-auto custom-scrollbar px-2 md:px-4 flex flex-col justify-center">
-                    {/* 
-                       UPDATES:
-                       1. Reduced Mobile Font Size: text-[11px] (was 13px)
-                       2. Reduced Desktop Font Size: md:text-xl lg:text-2xl (was 2xl/3xl) - ~15% reduction
-                    */}
-                    <p className="font-sans text-[11px] sm:text-sm md:text-xl lg:text-2xl text-charcoal font-medium leading-relaxed md:leading-relaxed mb-4 md:mb-6 break-words text-center md:text-left">
+                  {/* 
+                     📦 THE INVISIBLE BOX (Message Container)
+                     - Flex-1: Expands to fill all available space above the footer.
+                     - Overflow-hidden: Ensures text doesn't spill out (though size calc prevents this).
+                     - Flex center: Centers text vertically and horizontally.
+                  */}
+                  <div 
+                    ref={messageBoxRef}
+                    className="flex-1 w-full flex items-center justify-center overflow-hidden relative z-10 px-2 py-2"
+                  >
+                    <p 
+                      className="font-sans text-charcoal font-medium leading-snug break-words text-center w-full transition-all duration-300 ease-out"
+                      style={{ fontSize: `${dynamicFontSize}px` }}
+                    >
                       {currentWish?.message}
                     </p>
-                    
-                    <div className="inline-block border-t border-gold/30 pt-3 md:pt-4 px-4">
-                       {/* 
-                          MOBILE LAYOUT: Flex Row (Name + Time same line)
-                          DESKTOP LAYOUT: Block (Time below name)
-                       */}
-                       <div className="flex flex-row md:flex-col items-baseline md:items-start justify-center md:justify-start gap-2 md:gap-0">
-                          {/* Name: Font size reduced to text-[11px] (20% smaller than text-sm) */}
-                          <p className="font-sans font-bold text-[11px] md:text-xl uppercase text-gold tracking-widest whitespace-nowrap">
-                            {currentWish?.name}
-                          </p>
-                          {/* Time: Smaller font, same line on mobile */}
-                          <p className="font-sans text-[9px] md:text-[10px] text-gray-400 md:mt-2 tracking-wide whitespace-nowrap">
-                            {currentWish?.timestamp ? new Date(currentWish.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}
-                          </p>
-                       </div>
-                    </div>
+                  </div>
+                  
+                  {/* Footer Section (Name & Time) - Fixed at bottom */}
+                  <div className="flex-none pt-3 md:pt-4 px-2 border-t border-gold/30 w-full mt-2 relative z-10">
+                     <div className="flex flex-col items-center justify-center text-center">
+                        <p className="font-sans font-bold text-sm md:text-xl uppercase text-gold tracking-widest whitespace-nowrap truncate w-full">
+                          {currentWish?.name}
+                        </p>
+                        <p className="font-sans text-[10px] md:text-xs text-gray-400 mt-1 tracking-wide">
+                          {currentWish?.timestamp ? new Date(currentWish.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}
+                        </p>
+                     </div>
                   </div>
 
                 </div>
@@ -298,11 +266,10 @@ export const LiveWall: React.FC = () => {
         )}
       </main>
 
-      {/* --- BOX 3: FOOTER (Fixed Height, No Shrink) --- */}
+      {/* FOOTER */}
       <footer className="flex-none relative z-20 w-full bg-white/80 backdrop-blur-md border-t border-gold/10 py-2 landscape:py-3 px-6 flex justify-between items-center overflow-hidden">
         <div className="flex items-center gap-4 md:gap-6">
           <div className="p-1 bg-white rounded-lg shadow-sm border border-gold/10">
-            {/* UPDATED: QR Code now links to #guestbook */}
             <img 
               src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(QR_URL)}`} 
               alt="Scan to Wish" 
@@ -317,7 +284,6 @@ export const LiveWall: React.FC = () => {
           </div>
         </div>
         
-        {/* Progress Indicator */}
         {wishes.length > 0 && (
           <div className="flex gap-1.5">
             {wishes.map((_, idx) => (
@@ -337,16 +303,6 @@ export const LiveWall: React.FC = () => {
         @keyframes scale-in {
           0% { transform: scale(1); }
           100% { transform: scale(1.1); }
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: rgba(183, 138, 125, 0.3);
-          border-radius: 20px;
         }
       `}</style>
     </div>
