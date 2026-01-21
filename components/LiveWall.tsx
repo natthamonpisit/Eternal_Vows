@@ -7,12 +7,13 @@ import { GuestWishes } from '../types';
   📺 COMPONENT: LIVE WALL (Digital Guestbook Projector)
   ========================================================================================
   
-  [Updated Logic: "Shrink to Fit" Auto-Scale]
-  - Concept: "ปกติไว้ก่อน เกินค่อยลด" (Max Size Cap -> Shrink if overflow)
-  - Default: เริ่มต้นที่ 30px (ตามบรีฟพี่อุ๊ก)
-  - Min Size: 10px (ถ้าข้อความยาวมาก ให้ลดได้ถึงขนาดนี้)
-  - Overflow Check: ถ้าข้อความล้นกล่อง (scrollHeight > clientHeight) -> ลดขนาด Font ลง
-  - Performance: ใช้ useLayoutEffect จัดการ DOM โดยตรงเพื่อความเนียน (ไม่กระพริบ)
+  [Updated Logic: "Smart Buckets" Auto-Scale]
+  - Concept: แบ่งเกรดความยาวข้อความ เพื่อเลือกจุดเริ่มต้น (Starting Point) ที่เหมาะสม
+  - S (Short < 60 chars):   Start 32px (เน้นตัวใหญ่ให้อ่านง่าย)
+  - M (Medium 60-120):      Start 24px
+  - L (Long > 120):         Start 16px (และปรับ Line-height ให้ชิดขึ้น)
+  
+  - Overflow Guard: หลังจากเลือก Start Size แล้ว ก็ยังคงเช็คว่าล้นกรอบไหม ถ้าล้นก็ลดลงอีก (Min 5px ตาม request ล่าสุด)
 */
 
 export const LiveWall: React.FC = () => {
@@ -61,29 +62,47 @@ export const LiveWall: React.FC = () => {
     }
   }, [wishes.length]);
 
-  // 🧠 CORE ALGORITHM: "Shrink to Fit" (Configured: Max 30px, Min 10px)
+  // 🧠 CORE ALGORITHM: "Smart Buckets"
   useLayoutEffect(() => {
     const container = containerRef.current;
     const text = textRef.current;
+    const message = wishes[activeIndex]?.message || "";
+    const charCount = message.length;
 
     if (container && text && wishes.length > 0) {
-      // 1. Define Constraints (ขนาดสูงสุด-ต่ำสุด ตามบรีฟ)
-      const MAX_SIZE = 30; 
-      const MIN_SIZE = 10;
+      // 1. Determine Starting Bucket (เลือกถังเริ่มต้น)
+      let startSize = 24;
+      let lineHeight = 1.5;
+
+      if (charCount < 60) {
+         // Case 1: ข้อความสั้น (Hello...) -> เอาใหญ่หน่อย
+         startSize = 32;
+         lineHeight = 1.4;
+      } else if (charCount < 150) {
+         // Case 2: กลางๆ -> ขนาดมาตรฐาน
+         startSize = 22;
+         lineHeight = 1.4;
+      } else {
+         // Case 3: ยาวมาก (The Poem) -> เริ่มเล็กเลย + บรรทัดชิดขึ้น
+         startSize = 16; 
+         lineHeight = 1.3; // Tighter lines for long text
+      }
       
-      let currentSize = MAX_SIZE;
+      // Update Min Size to 5px as requested
+      const MIN_SIZE = 5;
+      let currentSize = startSize;
 
-      // 2. Reset to Max Size first (ลองใส่ไซส์ปกติก่อน)
+      // 2. Apply Initial Styles
       text.style.fontSize = `${currentSize}px`;
-      text.style.lineHeight = '1.5';
+      text.style.lineHeight = String(lineHeight);
 
-      // 3. Check Overflow Loop (ถ้าล้น ให้ลด)
+      // 3. Overflow Check (ถ้ายังล้นอีก ให้ลดลง)
       // วนลูปเช็คว่า "ความสูงข้อความ" > "ความสูงกล่อง" หรือไม่
       while (
         (text.scrollHeight > container.clientHeight) && 
         currentSize > MIN_SIZE
       ) {
-        currentSize--; // ลดทีละ 1px
+        currentSize--; 
         text.style.fontSize = `${currentSize}px`;
       }
     }
@@ -235,8 +254,8 @@ export const LiveWall: React.FC = () => {
                     */}
                     <p 
                       ref={textRef}
-                      className="font-sans text-charcoal font-medium leading-snug break-words text-center w-full transition-colors duration-300"
-                      // Remove inline style dynamicFontSize, handled by useLayoutEffect
+                      className="font-sans text-charcoal font-medium leading-snug break-words text-center w-full transition-colors duration-300 whitespace-pre-line"
+                      // whitespace-pre-line: รองรับการขึ้นบรรทัดใหม่ตามที่ User พิมพ์มา (สำหรับกลอน)
                     >
                       {currentWish?.message}
                     </p>
