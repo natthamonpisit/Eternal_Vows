@@ -7,15 +7,11 @@ import { GuestWishes } from '../types';
   📺 COMPONENT: LIVE WALL (Digital Guestbook Projector)
   ========================================================================================
   
-  [Updated Logic: "The Invisible Box" Auto-Scale]
-  - Concept: "วัดตัวตัดสูท" (One-Shot Area Calculation)
-  - ไม่ใช้ Scrollbar แต่ใช้วิธีคำนวณพื้นที่กล่อง (Width x Height) เทียบกับจำนวนตัวอักษร
-  - ใช้ useLayoutEffect เพื่อคำนวณและปรับขนาด Font *ก่อน* Browser จะวาดภาพ (Paint)
-    ทำให้ User ไม่เห็นจังหวะกระพริบ หรือตัวหนังสือยืดหด
-  
-  [Layout Structure]
-  - Card Body = Flexible Height (Invisible Box) -> พื้นที่สำหรับคำอวยพร
-  - Card Footer = Fixed Height -> พื้นที่สำหรับชื่อและเวลา (อยู่ติดล่างเสมอ)
+  [Updated Logic: "Shrink to Fit" Auto-Scale]
+  - Concept: "ปกติไว้ก่อน เกินค่อยลด" (Max Size Cap -> Shrink if overflow)
+  - Default: เริ่มต้นที่ Max Font Size เสมอ (ไม่ขยายใหญ่เวอร์วัง)
+  - Overflow Check: ถ้าข้อความล้นกล่อง (scrollHeight > clientHeight) -> ลดขนาด Font ลง
+  - Performance: ใช้ useLayoutEffect จัดการ DOM โดยตรงเพื่อความเนียน (ไม่กระพริบ)
 */
 
 export const LiveWall: React.FC = () => {
@@ -27,9 +23,9 @@ export const LiveWall: React.FC = () => {
   // Slideshow State
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // 📐 Auto-Scale Logic State
-  const messageBoxRef = useRef<HTMLDivElement>(null);
-  const [dynamicFontSize, setDynamicFontSize] = useState(24); // Default start size
+  // 📐 Auto-Scale Refs
+  const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
 
   const loadWishes = async () => {
     setIsRefreshing(true);
@@ -64,39 +60,35 @@ export const LiveWall: React.FC = () => {
     }
   }, [wishes.length]);
 
-  // 🧠 CORE ALGORITHM: "The Tailored Suit" (Area Calculation)
-  // ทำงานทันทีที่ DOM ถูกสร้าง แต่ก่อนที่จะ Paint ลงหน้าจอ
+  // 🧠 CORE ALGORITHM: "Shrink to Fit"
   useLayoutEffect(() => {
-    if (messageBoxRef.current && wishes.length > 0) {
-      const currentText = wishes[activeIndex]?.message || "";
-      const { clientWidth, clientHeight } = messageBoxRef.current;
-      
-      // 1. Calculate Area (พื้นที่กล่อง)
-      const boxArea = clientWidth * clientHeight;
-      
-      // 2. Count Chars (จำนวนตัวอักษร)
-      const charCount = Math.max(currentText.length, 1); // ป้องกันการหารด้วย 0
+    const container = containerRef.current;
+    const text = textRef.current;
 
-      /* 
-         3. The Magic Formula:
-         FontSize ~= Sqrt( (BoxArea * FillFactor) / (CharCount * AspectRatioFactor) )
-         
-         - FillFactor (1.6): ค่าชดเชยเพื่อให้ตัวหนังสือดูเต็มแน่น (เพิ่มได้ถ้าอยากให้แน่นขึ้น)
-         - AspectRatioFactor: ค่าเฉลี่ยความกว้างต่อนึงตัวอักษร
-      */
-      const calculatedSize = Math.sqrt((boxArea * 1.6) / charCount);
+    if (container && text && wishes.length > 0) {
+      // 1. Define Constraints (ขนาดสูงสุด-ต่ำสุด)
+      // Mobile: Max 24px / Desktop: Max 48px (ขนาดปกติที่ดูสวย)
+      const isMobile = window.innerWidth < 768;
+      const MAX_SIZE = isMobile ? 24 : 48; 
+      const MIN_SIZE = 16;
+      
+      let currentSize = MAX_SIZE;
 
-      // 4. Clamping (กำหนดเพดานบน-ล่าง)
-      // Desktop: ยอมให้ใหญ่สุด 64px, เล็กสุด 18px
-      // Mobile: อาจจะเล็กกว่านี้ได้นิดหน่อย แต่ 18px กำลังอ่านง่าย
-      const minSize = 18;
-      const maxSize = 64; 
-      
-      const finalSize = Math.min(Math.max(calculatedSize, minSize), maxSize);
-      
-      setDynamicFontSize(finalSize);
+      // 2. Reset to Max Size first (ลองใส่ไซส์ปกติก่อน)
+      text.style.fontSize = `${currentSize}px`;
+      text.style.lineHeight = '1.5';
+
+      // 3. Check Overflow Loop (ถ้าล้น ให้ลด)
+      // วนลูปเช็คว่า "ความสูงข้อความ" > "ความสูงกล่อง" หรือไม่
+      while (
+        (text.scrollHeight > container.clientHeight) && 
+        currentSize > MIN_SIZE
+      ) {
+        currentSize--; // ลดทีละ 1px
+        text.style.fontSize = `${currentSize}px`;
+      }
     }
-  }, [activeIndex, wishes, isFullscreen]); // Recalculate whenever slide changes or screen resizes
+  }, [activeIndex, wishes, isFullscreen]); // Recalculate on slide change or resize
 
   const toggleFullScreen = () => {
     if (!document.fullscreenElement) {
@@ -232,23 +224,26 @@ export const LiveWall: React.FC = () => {
 
                   {/* 
                      📦 THE INVISIBLE BOX (Message Container)
-                     - Flex-1: Expands to fill all available space above the footer.
-                     - Overflow-hidden: Ensures text doesn't spill out (though size calc prevents this).
-                     - Flex center: Centers text vertically and horizontally.
+                     - ref={containerRef}: ใช้วัดขนาดกล่อง
                   */}
                   <div 
-                    ref={messageBoxRef}
+                    ref={containerRef}
                     className="flex-1 w-full flex items-center justify-center overflow-hidden relative z-10 px-2 py-2"
                   >
+                    {/* 
+                       📝 THE TEXT (Auto-Scaled)
+                       - ref={textRef}: ใช้ปรับ font-size
+                    */}
                     <p 
-                      className="font-sans text-charcoal font-medium leading-snug break-words text-center w-full transition-all duration-300 ease-out"
-                      style={{ fontSize: `${dynamicFontSize}px` }}
+                      ref={textRef}
+                      className="font-sans text-charcoal font-medium leading-snug break-words text-center w-full transition-colors duration-300"
+                      // Remove inline style dynamicFontSize, handled by useLayoutEffect
                     >
                       {currentWish?.message}
                     </p>
                   </div>
                   
-                  {/* Footer Section (Name & Time) - Fixed at bottom */}
+                  {/* Footer Section (Name & Time) */}
                   <div className="flex-none pt-3 md:pt-4 px-2 border-t border-gold/30 w-full mt-2 relative z-10">
                      <div className="flex flex-col items-center justify-center text-center">
                         <p className="font-sans font-bold text-sm md:text-xl uppercase text-gold tracking-widest whitespace-nowrap truncate w-full">
