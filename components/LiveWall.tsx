@@ -9,7 +9,8 @@ import { GuestWishes } from '../types';
   
   [Updated Logic: "Shrink to Fit" Auto-Scale]
   - Concept: "ปกติไว้ก่อน เกินค่อยลด" (Max Size Cap -> Shrink if overflow)
-  - Default: เริ่มต้นที่ Max Font Size เสมอ (ไม่ขยายใหญ่เวอร์วัง)
+  - Default: เริ่มต้นที่ 30px (ตามบรีฟพี่อุ๊ก)
+  - Min Size: 10px (ถ้าข้อความยาวมาก ให้ลดได้ถึงขนาดนี้)
   - Overflow Check: ถ้าข้อความล้นกล่อง (scrollHeight > clientHeight) -> ลดขนาด Font ลง
   - Performance: ใช้ useLayoutEffect จัดการ DOM โดยตรงเพื่อความเนียน (ไม่กระพริบ)
 */
@@ -60,17 +61,15 @@ export const LiveWall: React.FC = () => {
     }
   }, [wishes.length]);
 
-  // 🧠 CORE ALGORITHM: "Shrink to Fit"
+  // 🧠 CORE ALGORITHM: "Shrink to Fit" (Configured: Max 30px, Min 10px)
   useLayoutEffect(() => {
     const container = containerRef.current;
     const text = textRef.current;
 
     if (container && text && wishes.length > 0) {
-      // 1. Define Constraints (ขนาดสูงสุด-ต่ำสุด)
-      // Mobile: Max 24px / Desktop: Max 48px (ขนาดปกติที่ดูสวย)
-      const isMobile = window.innerWidth < 768;
-      const MAX_SIZE = isMobile ? 24 : 48; 
-      const MIN_SIZE = 16;
+      // 1. Define Constraints (ขนาดสูงสุด-ต่ำสุด ตามบรีฟ)
+      const MAX_SIZE = 30; 
+      const MIN_SIZE = 10;
       
       let currentSize = MAX_SIZE;
 
