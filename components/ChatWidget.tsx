@@ -162,7 +162,7 @@ export const ChatWidget: React.FC = () => {
 
       {/* Chat Window */}
       <div 
-        className={`fixed bottom-6 right-6 md:bottom-10 md:right-10 z-50 w-[90vw] md:w-[400px] h-[500px] max-h-[80vh] bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gold/20 flex flex-col overflow-hidden transition-all duration-500 origin-bottom-right transform ${
+        className={`fixed bottom-6 right-6 md:bottom-10 md:right-10 z-50 w-[calc(100vw-1.5rem)] max-w-[400px] h-[70dvh] max-h-[500px] md:h-[500px] bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gold/20 flex flex-col overflow-hidden transition-all duration-500 origin-bottom-right transform ${
           isOpen 
             ? 'opacity-100 scale-100 translate-y-0' 
             : 'opacity-0 scale-90 translate-y-10 pointer-events-none'
